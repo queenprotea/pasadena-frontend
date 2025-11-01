@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="pasadena_vistas.vistas.Usuario.PerfilUsuarioPage"
+             Title="Perfil y Configuración"
+             BackgroundColor="#121212">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+
+            <Label Text="Cuenta"
+                   TextColor="White"
+                   FontSize="20"
+                   FontAttributes="Bold"/>
+
+            <Frame Padding="15" CornerRadius="10" BackgroundColor="#222222">
+                <VerticalStackLayout Spacing="20">
+                    <Grid ColumnDefinitions="Auto, *, Auto">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="EditarPerfil_Tapped"/>
+                        </Grid.GestureRecognizers>
+                        <Image Source="edit_icon.png" HeightRequest="20" WidthRequest="20" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Editar Información Personal" TextColor="White" VerticalOptions="Center" Margin="15,0"/>
+                        <Label Grid.Column="2" Text=">" TextColor="Gray" FontSize="18" VerticalOptions="Center"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="Auto, *, Auto">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Social_Tapped"/>
+                        </Grid.GestureRecognizers>
+                        <Image Source="social_icon.png" HeightRequest="20" WidthRequest="20" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Social" TextColor="White" VerticalOptions="Center" Margin="15,0"/>
+                        <Label Grid.Column="2" Text=">" TextColor="Gray" FontSize="18" VerticalOptions="Center"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+
+            <Label Text="Seguridad"
+                   TextColor="White"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   Margin="0,20,0,0"/>
+
+            <Frame Padding="15" CornerRadius="10" BackgroundColor="#222222">
+                <Grid ColumnDefinitions="Auto, *, Auto">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="AdminPanel_Tapped"/>
+                    </Grid.GestureRecognizers>
+                    <Image Source="admin_icon.png" HeightRequest="20" WidthRequest="20" VerticalOptions="Center"/>
+                    <Label Grid.Column="1" Text="Gestionar Usuarios" TextColor="White" VerticalOptions="Center" Margin="15,0"/>
+                    <Label Grid.Column="2" Text=">" TextColor="Gray" FontSize="18" VerticalOptions="Center"/>
+                </Grid>
+            </Frame>
+
+
+            <Button Text="Cerrar Sesión"
+                    TextColor="Red"
+                    FontAttributes="Bold"
+                    BackgroundColor="#222222"
+                    CornerRadius="10"
+                    Margin="0,20,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
