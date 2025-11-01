@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="pasadena_vistas.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:pasadena_vistas"
+    
+    xmlns:usuario="clr-namespace:pasadena_vistas.vistas.Usuario" 
+    
+    Shell.FlyoutBehavior="Disabled"
+    Title="pasadena_vistas">
+
+    <ShellContent
+        Title="Home"
+        
+        ContentTemplate="{DataTemplate usuario:PantallaInicio}"
+        
+        Route="PantallaInicio" />
+
+</Shell>
