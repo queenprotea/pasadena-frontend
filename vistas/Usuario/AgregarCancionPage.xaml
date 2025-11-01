@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="pasadena_vistas.vistas.Usuario.AgregarCancionPage"
+             Title="Agregar Canciones"
+             BackgroundColor="#121212">
+
+    <VerticalStackLayout Spacing="10" Padding="15">
+
+        <Label Text="Buscar canciones" TextColor="White" FontSize="24" FontAttributes="Bold"/>
+
+        <SearchBar Placeholder="Busca por nombre o artista..." x:Name="SearchBar" SearchButtonPressed="SearchBar_SearchButtonPressed"/>
+
+        <BoxView HeightRequest="1" Color="#282828" Margin="0,5"/>
+
+        <CollectionView x:Name="ResultadosBusquedaCollection">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10" ColumnDefinitions="*, Auto">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="{Binding NombreCancion}" TextColor="White" FontSize="16" FontAttributes="Bold"/>
+                            <Label Text="{Binding NombreArtista}" TextColor="Gray" FontSize="14"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="1" 
+                                Text="+" 
+                                TextColor="White"
+                                BackgroundColor="#28a745"
+                                FontAttributes="Bold"
+                                CornerRadius="20"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                Clicked="AgregarCancion_Clicked"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentPage>

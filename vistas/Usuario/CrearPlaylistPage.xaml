@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="pasadena_vistas.vistas.Usuario.CrearPlaylistPage"
+             Title="Crear nueva playlist"
+             BackgroundColor="#121212">
+
+    <VerticalStackLayout Spacing="15" Padding="25" VerticalOptions="Start" Margin="0,20,0,0">
+
+        <Label Text="Crea tu playlist"
+               TextColor="White"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"/>
+
+        <Label Text="Nombre" TextColor="Gray" Margin="0,20,0,0"/>
+        <Entry x:Name="NombreEntry" 
+               Placeholder="El nombre de tu playlist" 
+               TextColor="White" 
+               PlaceholderColor="Gray" />
+
+        <Label x:Name="NombreErrorLabel"
+               Text="Campo faltante"
+               TextColor="Red"
+               IsVisible="False" 
+               FontSize="12"/>
+
+        <Label Text="Descripción" TextColor="Gray" Margin="0,15,0,0"/>
+        <Editor x:Name="DescripcionEntry" 
+                Placeholder="Añade una descripción (opcional)" 
+                TextColor="White" 
+                PlaceholderColor="Gray"
+                HeightRequest="100"
+                AutoSize="Disabled"/>
+
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,30,0,0">
+
+            <Button Grid.Column="0"
+                    Text="Cancelar"
+                    BackgroundColor="#535353"
+                    TextColor="White"
+                    CornerRadius="25"
+                    Clicked="CancelButton_Clicked"/>
+
+            <Button Grid.Column="1"
+                    Text="Aceptar"
+                    BackgroundColor="White"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    CornerRadius="25"
+                    Clicked="AcceptButton_Clicked"/>
+        </Grid>
+
+    </VerticalStackLayout>
+</ContentPage>
