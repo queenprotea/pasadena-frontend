@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="pasadena_vistas.vistas.Administrador.GestionarUsuariosPage"
+             Title="Gestionar Usuarios"
+             BackgroundColor="#121212">
+
+    <VerticalStackLayout Spacing="15" Padding="20">
+
+        <Label Text="Panel de Administración" TextColor="Gray" FontSize="14"/>
+        <Label Text="Gestionar Usuarios"
+               TextColor="White"
+               FontSize="22"
+               FontAttributes="Bold"/>
+
+        <SearchBar Placeholder="Buscar usuario por nombre..." />
+
+        <BoxView HeightRequest="1" Color="#282828" Margin="0,5"/>
+
+        <CollectionView x:Name="UsersCollectionView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="0,10" ColumnDefinitions="Auto, *, Auto">
+
+                        <Frame Grid.Column="0" HeightRequest="50" WidthRequest="50" CornerRadius="25" IsClippedToBounds="True" Padding="0">
+                            <Image Source="{Binding ProfilePicture}" Aspect="AspectFill"/>
+                        </Frame>
+                        <Label Grid.Column="1" Text="{Binding Username}" TextColor="White" FontSize="16" VerticalOptions="Center" Margin="15,0"/>
+
+                        <Button Grid.Column="2"
+                                Text="{Binding BanButtonText}"
+                                BackgroundColor="{Binding BanButtonColor}"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="20"
+                                Padding="20,5"
+                                CommandParameter="{Binding .}"
+                                Clicked="BanButton_Clicked"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>
