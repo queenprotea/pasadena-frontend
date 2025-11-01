@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="pasadena_vistas.vistas.Administrador.GestionarCancionesPage"
+             Title="Gestionar Canciones"
+             BackgroundColor="#121212">
+
+    <Grid RowDefinitions="Auto, *">
+        <VerticalStackLayout Grid.Row="0" Spacing="15" Padding="20">
+            <Label Text="Gestionar Canciones" TextColor="White" FontSize="22" FontAttributes="Bold"/>
+            <Button Text="+ Agregar Nueva Canción"
+                    BackgroundColor="#28a745"
+                    TextColor="White"
+                    CornerRadius="20"
+                    FontAttributes="Bold"
+                    Clicked="AgregarCancion_Clicked"/>
+            <SearchBar Placeholder="Buscar canción para eliminar..." Margin="0,10,0,0"/>
+            <BoxView HeightRequest="1" Color="#282828"/>
+        </VerticalStackLayout>
+
+        <CollectionView Grid.Row="1" x:Name="SongsCollectionView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="20,10" ColumnDefinitions="*, Auto">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="{Binding NombreCancion}" TextColor="White" FontSize="16" FontAttributes="Bold"/>
+                            <Label Text="{Binding NombreArtista}" TextColor="Gray" FontSize="14"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="1"
+                                Text="Eliminar"
+                                BackgroundColor="Red"
+                                TextColor="White"
+                                CornerRadius="20"
+                                Padding="15,5"
+                                CommandParameter="{Binding .}"
+                                Clicked="Eliminar_Clicked"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
