@@ -1,3 +1,9 @@
 ﻿## Ignorar carpetas de compilación de .NET
 [Bb]in/
 [Oo]bj/
+
+## Ignorar archivos de configuración de Visual Studio
+/.vs/
+*.user
+*.csproj.user
+*.sln.docstates
