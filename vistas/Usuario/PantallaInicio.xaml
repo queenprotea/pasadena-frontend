@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="pasadena_vistas.vistas.Usuario.PantallaInicio"
+             Title="PantallaInicio"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#121212">
+
+    <Grid ColumnDefinitions="0.25*, 0.75*"
+          RowDefinitions="*, 80">
+
+        <VerticalStackLayout Grid.Column="0" Grid.Row="0" BackgroundColor="#000000" Spacing="10" Padding="10">
+
+            <Button Text="+ Crear Playlist"
+                    BackgroundColor="#222222"
+                    TextColor="White"
+                    CornerRadius="20"
+                    FontAttributes="Bold"
+                    Clicked="CrearPlaylist_Clicked"/>
+
+            <Label Text="TU BIBLIOTECA" TextColor="Gray" FontSize="12" FontAttributes="Bold"/>
+
+            <CollectionView x:Name="PlaylistsCollection"
+                            SelectionMode="Single"
+                            SelectionChanged="Playlist_SelectionChanged">
+                <CollectionView.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>🎵 Tus me gusta</x:String>
+                        <x:String>🎧 Canciones tristes</x:String>
+                        <x:String>🎸 Rock Clásico</x:String>
+                    </x:Array>
+                </CollectionView.ItemsSource>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}" TextColor="White" Padding="10,5" FontSize="16"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <VerticalStackLayout Margin="0,30,0,0" Spacing="10">
+                <Label Text="PANEL DE ADMIN" TextColor="Gray" FontSize="12" FontAttributes="Bold"/>
+
+                <Button x:Name="AdminUsuariosButton"
+                        Text="Gestionar Usuarios"
+                        BackgroundColor="#181818"
+                        TextColor="White"
+                        HorizontalOptions="Fill"
+                        Clicked="AdminUsuarios_Clicked"/>
+
+                <Button x:Name="AdminCancionesButton"
+                        Text="Gestionar Canciones"
+                        BackgroundColor="#181818"
+                        TextColor="White"
+                        HorizontalOptions="Fill"
+                        Clicked="AdminCanciones_Clicked"/>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+
+        <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+            <ScrollView>
+                <VerticalStackLayout Spacing="20" Padding="20">
+
+                    <Grid ColumnDefinitions="*, Auto">
+                        <SearchBar Grid.Column="0" Placeholder="¿Qué quieres escuchar?"/>
+                        <ImageButton Grid.Column="1" Source="user_profile_icon.png" HeightRequest="40" WidthRequest="40" Aspect="AspectFill" CornerRadius="20" Margin="10,0,0,0" x:Name="ProfileButton" Clicked="ProfileButton_Clicked"/>
+                    </Grid>
+
+                    <VerticalStackLayout>
+                        <Label Text="Esto puede gustarte" TextColor="White" FontSize="22" FontAttributes="Bold"/>
+                        <CollectionView HeightRequest="220">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="15"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Álbum 1</x:String>
+                                    <x:String>Álbum 2</x:String>
+                                    <x:String>Álbum 3</x:String>
+                                    <x:String>Álbum 4</x:String>
+                                </x:Array>
+                            </CollectionView.ItemsSource>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <VerticalStackLayout WidthRequest="160">
+                                        <Image Source="album_art_placeholder.png" HeightRequest="160" WidthRequest="160" Aspect="AspectFill"/>
+                                        <Label Text="{Binding .}" TextColor="White" FontAttributes="Bold" Margin="0,10,0,0"/>
+                                        <Label Text="Artista" TextColor="Gray"/>
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+
+
+        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" BackgroundColor="#181818" StrokeThickness="0">
+            <Grid ColumnDefinitions="Auto, *, Auto" Padding="15,0" VerticalOptions="Center">
+
+                <HorizontalStackLayout Grid.Column="0" Spacing="10">
+                    <Image Source="current_song_art.png" HeightRequest="50" WidthRequest="50" Aspect="AspectFill"/>
+                    <VerticalStackLayout VerticalOptions="Center">
+                        <Label Text="Nombre de la canción" TextColor="White" FontAttributes="Bold"/>
+                        <Label Text="Nombre del artista" TextColor="Gray"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="20" VerticalOptions="Center">
+                    <ImageButton Source="previous_icon.png" HeightRequest="30"/>
+                    <ImageButton Source="play_icon.png" HeightRequest="40"/>
+                    <ImageButton Source="next_icon.png" HeightRequest="30"/>
+                </HorizontalStackLayout>
+
+                <Slider Grid.Column="2" WidthRequest="150" MinimumTrackColor="White" MaximumTrackColor="Gray"/>
+
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>
