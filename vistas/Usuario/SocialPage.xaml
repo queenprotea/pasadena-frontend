@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="pasadena_vistas.vistas.Usuario.SocialPage"
+             Title="Social"
+             BackgroundColor="#121212">
+
+    <VerticalStackLayout Spacing="15" Padding="20">
+
+        <Label Text="Encontrar Amigos"
+               TextColor="White"
+               FontSize="22"
+               FontAttributes="Bold"/>
+
+        <SearchBar Placeholder="Buscar usuarios..." />
+
+        <BoxView HeightRequest="1" Color="#282828" Margin="0,5"/>
+
+        <CollectionView x:Name="UsersCollectionView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="0,10" ColumnDefinitions="Auto, *, Auto">
+
+                        <Frame Grid.Column="0" 
+                               HeightRequest="50" 
+                               WidthRequest="50" 
+                               CornerRadius="25" 
+                               IsClippedToBounds="True"
+                               Padding="0">
+                            <Image Source="{Binding ProfilePicture}" Aspect="AspectFill"/>
+                        </Frame>
+
+                        <Label Grid.Column="1" 
+                               Text="{Binding Username}" 
+                               TextColor="White"
+                               FontSize="16"
+                               VerticalOptions="Center"
+                               Margin="15,0"/>
+
+                        <Button Grid.Column="2"
+                                Text="{Binding ButtonText}"
+                                BackgroundColor="{Binding ButtonColor}"
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                                CornerRadius="20"
+                                Padding="20,5"
+                                CommandParameter="{Binding .}"
+                                Clicked="FollowButton_Clicked"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>
