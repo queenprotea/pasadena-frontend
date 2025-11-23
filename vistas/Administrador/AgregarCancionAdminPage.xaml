@@ -9,6 +9,8 @@
         <VerticalStackLayout Spacing="15" Padding="25" VerticalOptions="Start" Margin="0,20,0,0">
             <Label Text="Agregar Nueva Canción" TextColor="White" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center"/>
 
+            <ImageButton  x:Name="AlbumCoverImg" Margin="400,0,400,0" WidthRequest="300" HeightRequest="300" Clicked="AlbumCover_clicked" BackgroundColor="DimGrey" Opacity="0.6" />
+
             <Label Text="Título (Nombre de la canción)" TextColor="Gray" Margin="0,20,0,0"/>
             <Entry x:Name="NombreEntry" Placeholder="Nombre de la canción" TextColor="White" />
 
@@ -33,8 +35,24 @@
                 </VerticalStackLayout>
             </Grid>
 
-            <Label Text="URL del archivo de audio (MP3)" TextColor="Gray" Margin="0,10,0,0"/>
-            <Entry x:Name="UrlAudioEntry" Placeholder="https://.../cancion.mp3" TextColor="White" />
+            <Label Text="Archivo de audio (MP3)" TextColor="Gray" Margin="0,10,0,0"/>
+
+            <HorizontalStackLayout>
+                <Button Text="Seleccionar Archivo" 
+            BackgroundColor="#1DB954" 
+            TextColor="White" 
+            CornerRadius="25" 
+            Clicked="SeleccionarArchivo_Clicked"/>
+
+                <Label x:Name="ArchivoSeleccionadoLabel" 
+                Text="Archivo seleccionado"
+                TextColor="White" 
+                VerticalOptions="Center" 
+                Margin="10,0,0,0"/> 
+                
+            </HorizontalStackLayout>
+
+            
 
             <Label Text="URL de la carátula (Imagen)" TextColor="Gray" Margin="0,10,0,0"/>
             <Entry x:Name="UrlCaratulaEntry" Placeholder="https://.../cover.jpg" TextColor="White" />

@@ -60,8 +60,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Google.Protobuf" Version="3.33.0" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.76.0">
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		  <PrivateAssets>all</PrivateAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.8" />
+		<PackageReference Include="System.DirectoryServices" Version="10.0.0" />
+		<PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -96,5 +104,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="proto\*.proto" GrpcServices="Both" OutputDir="" />
+	</ItemGroup>
+
 
 </Project>
