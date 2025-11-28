@@ -60,6 +60,13 @@
                     BackgroundColor="#222222"
                     CornerRadius="10"
                     Margin="0,20,0,0"/>
+            <Button Text="Iniciar sesion"
+                    TextColor="Green"
+                    FontAttributes="Bold"
+                    BackgroundColor="#222222"
+                    CornerRadius="10"
+                    Margin="0, 20, 0, 10"
+                    Clicked="LoginClicked"/>
 
         </VerticalStackLayout>
     </ScrollView>
