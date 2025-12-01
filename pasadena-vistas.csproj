@@ -95,6 +95,9 @@
 	  <MauiXaml Update="vistas\Usuario\EditarPlaylistPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="vistas\Usuario\Login\InicioSesion.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="vistas\Usuario\PantallaInicio.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

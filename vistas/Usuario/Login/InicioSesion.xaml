@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="pasadena_vistas.vistas.Usuario.Login.InicioSesion"
+             Title="InicioSesion">
+    <ScrollView>
+
+        <VerticalStackLayout Padding="25" Spacing="20" VerticalOptions="Center">
+            <!-- Header -->
+            <Label Text="Iniciar sesion"
+                   TextColor="White"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0, 0, 0, 10"/>
+
+            <Label Text="Sign in to continue to Pasadena" 
+                   TextColor="Gray" 
+                   FontSize="16" 
+                   HorizontalOptions="Center" 
+                   Margin="0,0,0,30"/>
+
+            <!-- Login Form -->
+            <Frame BackgroundColor="#1E1E1E" 
+                   BorderColor="#333333" 
+                   CornerRadius="15" 
+                   Padding="25" 
+                   Margin="0,0,0,20">
+
+                <VerticalStackLayout Spacing="20">
+
+                    <!-- Identifier Input -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Email or Username" 
+                               TextColor="White" 
+                               FontSize="14" 
+                               FontAttributes="Bold"/>
+
+                        <Entry x:Name="IdentifierEntry" 
+                               Placeholder="Enter your email or username" 
+                               TextColor="White" 
+                               PlaceholderColor="#888888"
+                               BackgroundColor="#2A2A2A"
+                               ClearButtonVisibility="WhileEditing"/>
+                    </VerticalStackLayout>
+
+                    <!-- Password Input -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Password" 
+                               TextColor="White" 
+                               FontSize="14" 
+                               FontAttributes="Bold"/>
+
+                        <Entry x:Name="PasswordEntry" 
+                               Placeholder="Enter your password" 
+                               TextColor="White" 
+                               PlaceholderColor="#888888"
+                               BackgroundColor="#2A2A2A"
+                               IsPassword="True"
+                               ClearButtonVisibility="WhileEditing"/>
+                    </VerticalStackLayout>
+
+                    <!-- Error Message -->
+                    <Label x:Name="ErrorLabel" 
+                           Text="" 
+                           TextColor="#FF6B6B" 
+                           FontSize="14" 
+                           IsVisible="False"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Center"/>
+
+                    <!-- Login Button -->
+                    <Button x:Name="LoginButton" 
+                            Text="Sign In" 
+                            BackgroundColor="#1DB954" 
+                            TextColor="White" 
+                            CornerRadius="25" 
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            HeightRequest="50"
+                            Clicked="btnLoginClick"/>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Footer Links -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                <Label Text="Don't have an account?" 
+                       TextColor="Gray" 
+                       FontSize="14"/>
+
+                <Label x:Name="SignUpLabel" 
+                       Text="Sign Up" 
+                       TextColor="#1DB954" 
+                       FontSize="14"
+                       FontAttributes="Bold">
+                </Label>
+                <Button x:Name="btnRegistro"
+                        Text="Registrate"
+                        BackgroundColor="Azure"
+                        TextColor="Black"
+                        CornerRadius="25"
+                        FontSize="26"
+                        FontAttributes="Italic"
+                        HeightRequest="50"
+                        Clicked="btnRegistro_Clicked"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+        
+    </ScrollView>
+</ContentPage>
