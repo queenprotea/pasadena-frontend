@@ -14,7 +14,9 @@
                     CornerRadius="20"
                     FontAttributes="Bold"
                     Clicked="AgregarCancion_Clicked"/>
-            <SearchBar Placeholder="Buscar canción para eliminar..." Margin="0,10,0,0"/>
+            <SearchBar Placeholder="Buscar canción para eliminar..." 
+                       Margin="0,10,0,0"
+                       TextChanged="SearchSong_textChanged"/>
             <BoxView HeightRequest="1" Color="#282828"/>
         </VerticalStackLayout>
 

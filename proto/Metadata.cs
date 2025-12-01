@@ -40,25 +40,25 @@ namespace Metadata {
             "ZRgCIAEoCSI0ChNTZWFyY2hTb25nc1Jlc3BvbnNlEh0KBXNvbmdzGAEgAygL",
             "Mg4ubWV0YWRhdGEuU29uZyIpCgZBcnRpc3QSEQoJYXJ0aXN0X2lkGAEgASgF",
             "EgwKBG5hbWUYAiABKAkiOgoVU2VhcmNoQXJ0aXN0c1Jlc3BvbnNlEiEKB2Fy",
-            "dGlzdHMYASADKAsyEC5tZXRhZGF0YS5BcnRpc3QiSQoFQWxidW0SEAoIYWxi",
-            "dW1faWQYASABKAUSDAoEbmFtZRgCIAEoCRIRCglhcnRpc3RfaWQYAyABKAUS",
-            "DQoFY292ZXIYBCABKAwiNwoUU2VhcmNoQWxidW1zUmVzcG9uc2USHwoGYWxi",
-            "dW1zGAEgAygLMg8ubWV0YWRhdGEuQWxidW0iJwoFR2VucmUSEAoIZ2VucmVf",
-            "aWQYASABKAUSDAoEbmFtZRgCIAEoCSI3ChRTZWFyY2hHZW5yZXNSZXNwb25z",
-            "ZRIfCgZnZW5yZXMYASADKAsyDy5tZXRhZGF0YS5HZW5yZTK1BAoPTWV0YWRh",
-            "dGFTZXJ2aWNlEjsKB0FkZFNvbmcSGC5tZXRhZGF0YS5BZGRTb25nUmVxdWVz",
-            "dBoWLm1ldGFkYXRhLlNvbmdSZXNwb25zZRJACg9HZXRTb25nTWV0YWRhdGES",
-            "FS5tZXRhZGF0YS5Tb25nUmVxdWVzdBoWLm1ldGFkYXRhLlNvbmdSZXNwb25z",
-            "ZRJACgtHZXRTb25nUGF0aBIVLm1ldGFkYXRhLlNvbmdSZXF1ZXN0GhoubWV0",
-            "YWRhdGEuU29uZ1BhdGhSZXNwb25zZRI9CgpEZWxldGVTb25nEhUubWV0YWRh",
-            "dGEuU29uZ1JlcXVlc3QaGC5tZXRhZGF0YS5EZWxldGVSZXNwb25zZRJFCgtT",
-            "ZWFyY2hTb25ncxIXLm1ldGFkYXRhLlNlYXJjaFJlcXVlc3QaHS5tZXRhZGF0",
-            "YS5TZWFyY2hTb25nc1Jlc3BvbnNlEkkKDVNlYXJjaEFydGlzdHMSFy5tZXRh",
-            "ZGF0YS5TZWFyY2hSZXF1ZXN0Gh8ubWV0YWRhdGEuU2VhcmNoQXJ0aXN0c1Jl",
-            "c3BvbnNlEkcKDFNlYXJjaEFsYnVtcxIXLm1ldGFkYXRhLlNlYXJjaFJlcXVl",
-            "c3QaHi5tZXRhZGF0YS5TZWFyY2hBbGJ1bXNSZXNwb25zZRJHCgxTZWFyY2hH",
-            "ZW5yZXMSFy5tZXRhZGF0YS5TZWFyY2hSZXF1ZXN0Gh4ubWV0YWRhdGEuU2Vh",
-            "cmNoR2VucmVzUmVzcG9uc2ViBnByb3RvMw=="));
+            "dGlzdHMYASADKAsyEC5tZXRhZGF0YS5BcnRpc3QiQwoFQWxidW0SCgoCaWQY",
+            "ASABKAUSDAoEbmFtZRgCIAEoCRIRCglhcnRpc3RfaWQYAyABKAUSDQoFY292",
+            "ZXIYBCABKAwiNwoUU2VhcmNoQWxidW1zUmVzcG9uc2USHwoGYWxidW1zGAEg",
+            "AygLMg8ubWV0YWRhdGEuQWxidW0iJwoFR2VucmUSEAoIZ2VucmVfaWQYASAB",
+            "KAUSDAoEbmFtZRgCIAEoCSI3ChRTZWFyY2hHZW5yZXNSZXNwb25zZRIfCgZn",
+            "ZW5yZXMYASADKAsyDy5tZXRhZGF0YS5HZW5yZTK1BAoPTWV0YWRhdGFTZXJ2",
+            "aWNlEjsKB0FkZFNvbmcSGC5tZXRhZGF0YS5BZGRTb25nUmVxdWVzdBoWLm1l",
+            "dGFkYXRhLlNvbmdSZXNwb25zZRJACg9HZXRTb25nTWV0YWRhdGESFS5tZXRh",
+            "ZGF0YS5Tb25nUmVxdWVzdBoWLm1ldGFkYXRhLlNvbmdSZXNwb25zZRJACgtH",
+            "ZXRTb25nUGF0aBIVLm1ldGFkYXRhLlNvbmdSZXF1ZXN0GhoubWV0YWRhdGEu",
+            "U29uZ1BhdGhSZXNwb25zZRI9CgpEZWxldGVTb25nEhUubWV0YWRhdGEuU29u",
+            "Z1JlcXVlc3QaGC5tZXRhZGF0YS5EZWxldGVSZXNwb25zZRJFCgtTZWFyY2hT",
+            "b25ncxIXLm1ldGFkYXRhLlNlYXJjaFJlcXVlc3QaHS5tZXRhZGF0YS5TZWFy",
+            "Y2hTb25nc1Jlc3BvbnNlEkkKDVNlYXJjaEFydGlzdHMSFy5tZXRhZGF0YS5T",
+            "ZWFyY2hSZXF1ZXN0Gh8ubWV0YWRhdGEuU2VhcmNoQXJ0aXN0c1Jlc3BvbnNl",
+            "EkcKDFNlYXJjaEFsYnVtcxIXLm1ldGFkYXRhLlNlYXJjaFJlcXVlc3QaHi5t",
+            "ZXRhZGF0YS5TZWFyY2hBbGJ1bXNSZXNwb25zZRJHCgxTZWFyY2hHZW5yZXMS",
+            "Fy5tZXRhZGF0YS5TZWFyY2hSZXF1ZXN0Gh4ubWV0YWRhdGEuU2VhcmNoR2Vu",
+            "cmVzUmVzcG9uc2ViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -72,7 +72,7 @@ namespace Metadata {
             new pbr::GeneratedClrTypeInfo(typeof(global::Metadata.SearchSongsResponse), global::Metadata.SearchSongsResponse.Parser, new[]{ "Songs" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Metadata.Artist), global::Metadata.Artist.Parser, new[]{ "ArtistId", "Name" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Metadata.SearchArtistsResponse), global::Metadata.SearchArtistsResponse.Parser, new[]{ "Artists" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Metadata.Album), global::Metadata.Album.Parser, new[]{ "AlbumId", "Name", "ArtistId", "Cover" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Metadata.Album), global::Metadata.Album.Parser, new[]{ "Id", "Name", "ArtistId", "Cover" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Metadata.SearchAlbumsResponse), global::Metadata.SearchAlbumsResponse.Parser, new[]{ "Albums" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Metadata.Genre), global::Metadata.Genre.Parser, new[]{ "GenreId", "Name" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Metadata.SearchGenresResponse), global::Metadata.SearchGenresResponse.Parser, new[]{ "Genres" }, null, null, null, null)
@@ -2845,7 +2845,7 @@ namespace Metadata {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public Album(Album other) : this() {
-      albumId_ = other.albumId_;
+      id_ = other.id_;
       name_ = other.name_;
       artistId_ = other.artistId_;
       cover_ = other.cover_;
@@ -2858,15 +2858,15 @@ namespace Metadata {
       return new Album(this);
     }
 
-    /// <summary>Field number for the "album_id" field.</summary>
-    public const int AlbumIdFieldNumber = 1;
-    private int albumId_;
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private int id_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int AlbumId {
-      get { return albumId_; }
+    public int Id {
+      get { return id_; }
       set {
-        albumId_ = value;
+        id_ = value;
       }
     }
 
@@ -2921,7 +2921,7 @@ namespace Metadata {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (AlbumId != other.AlbumId) return false;
+      if (Id != other.Id) return false;
       if (Name != other.Name) return false;
       if (ArtistId != other.ArtistId) return false;
       if (Cover != other.Cover) return false;
@@ -2932,7 +2932,7 @@ namespace Metadata {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (AlbumId != 0) hash ^= AlbumId.GetHashCode();
+      if (Id != 0) hash ^= Id.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (ArtistId != 0) hash ^= ArtistId.GetHashCode();
       if (Cover.Length != 0) hash ^= Cover.GetHashCode();
@@ -2954,9 +2954,9 @@ namespace Metadata {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (AlbumId != 0) {
+      if (Id != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(AlbumId);
+        output.WriteInt32(Id);
       }
       if (Name.Length != 0) {
         output.WriteRawTag(18);
@@ -2980,9 +2980,9 @@ namespace Metadata {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (AlbumId != 0) {
+      if (Id != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(AlbumId);
+        output.WriteInt32(Id);
       }
       if (Name.Length != 0) {
         output.WriteRawTag(18);
@@ -3006,8 +3006,8 @@ namespace Metadata {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (AlbumId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(AlbumId);
+      if (Id != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
       }
       if (Name.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
@@ -3030,8 +3030,8 @@ namespace Metadata {
       if (other == null) {
         return;
       }
-      if (other.AlbumId != 0) {
-        AlbumId = other.AlbumId;
+      if (other.Id != 0) {
+        Id = other.Id;
       }
       if (other.Name.Length != 0) {
         Name = other.Name;
@@ -3062,7 +3062,7 @@ namespace Metadata {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            AlbumId = input.ReadInt32();
+            Id = input.ReadInt32();
             break;
           }
           case 18: {
@@ -3097,7 +3097,7 @@ namespace Metadata {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            AlbumId = input.ReadInt32();
+            Id = input.ReadInt32();
             break;
           }
           case 18: {

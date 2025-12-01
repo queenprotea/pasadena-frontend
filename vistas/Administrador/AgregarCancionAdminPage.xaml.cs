@@ -1,8 +1,9 @@
-﻿using System.Diagnostics;
-using TagLib;
+﻿using Metadata;
 using pasadena_vistas.Models;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using TagLib;
 using File = System.IO.File;
-using Metadata;
 
 
 
@@ -10,6 +11,7 @@ namespace pasadena_vistas.vistas.Administrador;
 
 public partial class AgregarCancionAdminPage : ContentPage
 {
+   
     private Models.Song newSong = new Models.Song();
     private readonly MetadataService.MetadataServiceClient _client;
     public AgregarCancionAdminPage()

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 
+
+
 namespace pasadena_vistas
 {
     public static class MauiProgram
