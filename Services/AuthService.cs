@@ -7,6 +7,7 @@ public class AuthService
 {
     private readonly HttpClient _clienteHttp;
     private string urlBase = Config.Config.AuthLogin;
+    private string urlProfile = Config.Config.GetProfile;
 
     public AuthService()
     {
@@ -27,5 +28,23 @@ public class AuthService
             throw new Exception("Credenciales incorrectas");
 
         return await respuesta.Content.ReadFromJsonAsync<TokenRespuesta>();
+    }
+
+    public async Task<Usuario?> ObtenerPerfilUsuarioAsync()
+    {
+        var token = await SecureStorage.GetAsync("auth_token");
+        if (string.IsNullOrEmpty(token))
+            return null;
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, urlProfile);
+        request.Headers.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+        var response = await _clienteHttp.SendAsync(request);
+
+        if (!response.IsSuccessStatusCode)
+            return null;
+
+        return await response.Content.ReadFromJsonAsync<Usuario>();
     }
 }

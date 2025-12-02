@@ -8,5 +8,7 @@
         public string username { get; set; }
         public bool is_active { get; set; }
         public int role_id { get; set; }
+
+        public string profile_picture { get; set; }
     }
 }

@@ -12,6 +12,18 @@
                    TextColor="White"
                    FontSize="20"
                    FontAttributes="Bold"/>
+            <!--Datos de perfil-->
+            <VerticalStackLayout x:Name="DatosUsuario" Spacing="15" IsVisible="False">
+                
+                <Image x:Name="FotoPerfil" HeightRequest="100" WidthRequest="100"
+                       HorizontalOptions="Center" BackgroundColor="SlateGray"
+                       Aspect="AspectFill"/>
+                <Label x:Name="NombreUsuarioLabel" TextColor="White" FontSize="20"
+                       HorizontalOptions="Center" Text="Username"/>
+                <Label x:Name="CorreoLabel" TextColor="White" FontSize="14"
+                       HorizontalOptions="Center" Text="Email"/>
+
+            </VerticalStackLayout>
 
             <Frame Padding="15" CornerRadius="10" BackgroundColor="#222222">
                 <VerticalStackLayout Spacing="20">
