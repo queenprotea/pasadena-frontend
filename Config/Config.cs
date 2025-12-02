@@ -19,4 +19,5 @@ public static class Config
     //User only
     public static string UserRegister => $"{URL_BASE}/profiles/register";
     public static string UserById(int id) => $"{URL_BASE}/profiles/{id}";
+    public static string ProfilePic(string fotoUrl) => $"{URL_BASE}/profiles/static/avatars/{fotoUrl}";
 }

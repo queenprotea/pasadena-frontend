@@ -1,5 +1,5 @@
 using pasadena_vistas.Services;
-using System.Threading.Tasks;
+using pasadena_vistas.Models.Login;
 
 namespace pasadena_vistas.vistas.Usuario.Login;
 
@@ -18,19 +18,26 @@ public partial class InicioSesion : ContentPage
         await camposIncompletos();
 
 		try
-            {
-                var token = await _authService.LoginAsync(IdentifierEntry.Text, PasswordEntry.Text);
+        {
+            var token = await _authService.LoginAsync(IdentifierEntry.Text, PasswordEntry.Text);
 
-                await SecureStorage.SetAsync("auth_token", token.access_token);
+            await SecureStorage.SetAsync("auth_token", token.access_token);
 
-                await DisplayAlert("Exito", "Iniciaste sesion", "Aceptar");
+            var usuario = await _authService.ObtenerPerfilUsuarioAsync();
 
-                await Shell.Current.GoToAsync($"///{nameof(PantallaInicio)}");
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error al iniciar sesion", ex.Message, "Aceptar");
-            }
+            if (!string.IsNullOrWhiteSpace(usuario.profile_picture))
+                await SecureStorage.SetAsync("profile_picture", usuario.profile_picture);
+            else
+                SecureStorage.Remove("profile_picture");
+
+            await DisplayAlert("Éxito", "Iniciaste sesión", "Aceptar");
+
+            await Shell.Current.GoToAsync($"///{nameof(PantallaInicio)}");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error al iniciar sesion", ex.Message, "Aceptar");
+        }
     }
 
     private async void btnRegistro_Clicked(object sender, EventArgs e)

@@ -47,4 +47,25 @@ public class AuthService
 
         return await response.Content.ReadFromJsonAsync<Usuario>();
     }
+
+    public async Task<bool> ValidarTokenAsync()
+    {
+        var token = await SecureStorage.GetAsync("auth_token");
+
+        if (string.IsNullOrEmpty(token))
+            return false;
+
+        _clienteHttp.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+        var respuesta = await _clienteHttp.GetAsync(Config.Config.GetProfile);
+
+        return respuesta.IsSuccessStatusCode;
+    }
+
+    public async Task LimpiarSesionAsync()
+    {
+        SecureStorage.Remove("auth_token");
+        SecureStorage.Remove("profile_picture");
+    }
 }

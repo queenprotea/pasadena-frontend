@@ -27,7 +27,6 @@ public partial class PerfilUsuarioPage : ContentPage
             if (usuario == null)
             {
                 DatosUsuario.IsVisible = false;
-                await DisplayAlert("Sesion expirada", "Inicia sesion nuevamente", "Aceptar");
                 return;
             }
 
@@ -64,5 +63,22 @@ public partial class PerfilUsuarioPage : ContentPage
     private async void LoginClicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(vistas.Usuario.Login.InicioSesion));
+    }
+
+    private async void BtnCerrarSesion(object sender, EventArgs e)
+    {
+        bool confirmar = await DisplayAlert(
+            "Cerrar sesión",
+            "¿Seguro que deseas cerrar sesión?\nTendrás que iniciar sesión de nuevo",
+            "Sí",
+            "No"
+        );
+
+        if (!confirmar)
+            return;
+
+        await _authService.LimpiarSesionAsync();
+
+        await Shell.Current.GoToAsync($"///{nameof(PantallaInicio)}");
     }
 }

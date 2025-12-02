@@ -71,14 +71,16 @@
                     FontAttributes="Bold"
                     BackgroundColor="#222222"
                     CornerRadius="10"
-                    Margin="0,20,0,0"/>
+                    Margin="0,20,0,0"
+                    Clicked="BtnCerrarSesion"/>
             <Button Text="Iniciar sesion"
                     TextColor="Green"
                     FontAttributes="Bold"
                     BackgroundColor="#222222"
                     CornerRadius="10"
                     Margin="0, 20, 0, 10"
-                    Clicked="LoginClicked"/>
+                    Clicked="LoginClicked"
+                    IsVisible="True"/>
 
         </VerticalStackLayout>
     </ScrollView>
