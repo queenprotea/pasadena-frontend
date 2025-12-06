@@ -1,5 +1,6 @@
 using pasadena_vistas.Services;
 using pasadena_vistas.Models.Login;
+using pasadena_vistas.vistas.Usuario.Registro;
 
 namespace pasadena_vistas.vistas.Usuario.Login;
 
@@ -42,7 +43,7 @@ public partial class InicioSesion : ContentPage
 
     private async void btnRegistro_Clicked(object sender, EventArgs e)
     {
-		await Shell.Current.GoToAsync(nameof(PantallaInicio));
+		await Shell.Current.GoToAsync(nameof(RegistrarUsuarioPage));
     }
 
 	private async Task<bool> camposIncompletos()

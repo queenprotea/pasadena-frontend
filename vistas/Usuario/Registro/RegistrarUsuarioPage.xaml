@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="pasadena_vistas.vistas.Usuario.Registro.RegistrarUsuarioPage"
+             Title="RegistrarUsuarioPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="25" Spacing="20">
+            <!-- Header -->
+            <Label Text="Crea tu cuenta para acceder a todas las funciones de Pasadena"
+                   TextColor="White"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   Margin="10, 0, 5, 0"/>
+            <!-- FOTO DE PERFIL -->
+            <Frame WidthRequest="120" HeightRequest="120"
+                   CornerRadius="60"
+                   HorizontalOptions="Center"
+                   BackgroundColor="#2A2A2A"
+                   HasShadow="False"
+                   Padding="0">
+                <Image x:Name="FotoPerfil"
+                       Source="user_profile_icon.png"
+                       Aspect="AspectFill" />
+            </Frame>
+            <Label Text="Podrás modificar tu foto despúes"
+                   TextColor="Gray"
+                   FontSize="8"
+                   HorizontalOptions="Center"/>
+
+            <!--Formulario-->
+            <Entry x:Name="CorreoEntry"
+                   Placeholder="Correo electrónico"
+                   Keyboard="Email"
+                   TextColor="White"
+                   PlaceholderColor="#999"/>
+
+            <Entry x:Name="NombreCompletoEntry"
+                   Placeholder="Nombre completo"
+                   TextColor="White"
+                   PlaceholderColor="#999"/>
+
+            <Entry x:Name="UsuarioEntry"
+                   Placeholder="Nombre de usuario"
+                   TextColor="White"
+                   PlaceholderColor="#999"
+                   TextChanged="UsuarioEntry_TextChanged"/>
+
+            <Entry x:Name="ContrasenaEntry"
+                   Placeholder="Contraseña"
+                   IsPassword="True"
+                   TextColor="White"
+                   PlaceholderColor="#999"/>
+
+            <Entry x:Name="ConfirmarContrasenaEntry"
+                   Placeholder="Confirma tu contraseña"
+                   IsPassword="True"
+                   TextColor="White"
+                   PlaceholderColor="#999"/>
+            
+            <!--Botones-->
+            <Border BackgroundColor="Transparent" Margin="5, 0, 5, 5"
+                    Padding="5" Stroke="Transparent">
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Button Text="Registrarse"
+                            x:Name="btnRegistrarse"
+                            Clicked="btnRegistrarse_Clicked"
+                            BackgroundColor="#4CAF50"
+                            TextColor="White"
+                            CornerRadius="12"
+                            Margin="0, 10, 20, 10"/>
+
+                    <Button Text="Iniciar sesión"
+                            Clicked="btnIniciarSesion_clicked"
+                            BackgroundColor="Transparent"
+                            TextColor="#90CAF9"
+                            Margin="0, 10, 20, 10"/>
+                </HorizontalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

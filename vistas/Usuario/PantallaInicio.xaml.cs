@@ -53,7 +53,7 @@ namespace pasadena_vistas.vistas.Usuario;
 
         if (!tokenValido)
         {
-            await _authService.LimpiarSesionAsync();
+            _authService.LimpiarSesionAsync();
             ProfileButton.Source = "user_profile_icon.png";
             return;
         }

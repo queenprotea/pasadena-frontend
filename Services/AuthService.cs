@@ -1,6 +1,9 @@
 ﻿using pasadena_vistas.Config;
 using pasadena_vistas.Models.Login;
+using pasadena_vistas.Models.Registro;
+using System.Net;
 using System.Net.Http.Json;
+
 namespace pasadena_vistas.Services;
 
 public class AuthService
@@ -12,6 +15,36 @@ public class AuthService
     public AuthService()
     {
         _clienteHttp = new HttpClient();
+    }
+
+    public async Task<RegistroRespuesta> RegistrarUsuarioAsync(SolicitudRegistro solicitud)
+    {
+        try
+        {
+            var respuesta = await _clienteHttp.PostAsJsonAsync(Config.Config.AuthRegister, solicitud);
+
+            if (respuesta.IsSuccessStatusCode)
+                return new RegistroRespuesta { Exito = true };
+
+            string error = await respuesta.Content.ReadAsStringAsync();
+
+            if (respuesta.StatusCode == HttpStatusCode.UnprocessableEntity)
+            {
+                if (error.Contains("Email already exists"))
+                    return new RegistroRespuesta { Exito = false, MensajeError =
+                        "El correo electrónico ya está registrado."};
+
+                if (error.Contains("Username already taken"))
+                    return new RegistroRespuesta { Exito = false, MensajeError =
+                        "Nombre de usuario ya está en uso."};
+            }
+
+            return new RegistroRespuesta { Exito = false, MensajeError = "Error al registrar usuario." };
+        }
+        catch (Exception ex)
+        {
+            return new RegistroRespuesta { Exito = false, MensajeError = $"Excepción: {ex.Message}" }; //delete, server error
+        }
     }
 
     public async Task<TokenRespuesta> LoginAsync(string identifier, string password)
@@ -63,9 +96,12 @@ public class AuthService
         return respuesta.IsSuccessStatusCode;
     }
 
-    public async Task LimpiarSesionAsync()
+    public void LimpiarSesionAsync()
     {
         SecureStorage.Remove("auth_token");
         SecureStorage.Remove("profile_picture");
+
+        _clienteHttp.DefaultRequestHeaders.Authorization = null;
+        Preferences.Clear();
     }
 }

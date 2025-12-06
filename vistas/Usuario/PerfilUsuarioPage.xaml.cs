@@ -77,7 +77,7 @@ public partial class PerfilUsuarioPage : ContentPage
         if (!confirmar)
             return;
 
-        await _authService.LimpiarSesionAsync();
+        _authService.LimpiarSesionAsync();
 
         await Shell.Current.GoToAsync($"///{nameof(PantallaInicio)}");
     }
