@@ -49,26 +49,33 @@ namespace pasadena_vistas.vistas.Usuario;
 
     private async Task CargarFotoUsuario()
     {
-        bool tokenValido = await _authService.ValidarTokenAsync();
-
-        if (!tokenValido)
+        try
         {
-            _authService.LimpiarSesionAsync();
-            ProfileButton.Source = "user_profile_icon.png";
-            return;
+            bool tokenValido = await _authService.ValidarTokenAsync();
+
+            if (!tokenValido)
+            {
+                _authService.LimpiarSesion();
+                ProfileButton.Source = "user_profile_icon.png";
+                return;
+            }
+
+            var fotoPerfil = await SecureStorage.GetAsync("profile_picture");
+
+            if (string.IsNullOrWhiteSpace(fotoPerfil))
+            {
+                ProfileButton.Source = "user_profile_icon.png";
+                return;
+            }
+
+            string fotoUrl = Config.Config.ProfilePic(fotoPerfil);
+
+            ProfileButton.Source = ImageSource.FromUri(new Uri(fotoUrl));
         }
-
-        var fotoPerfil = await SecureStorage.GetAsync("profile_picture");
-
-        if (string.IsNullOrWhiteSpace(fotoPerfil))
+        catch
         {
             ProfileButton.Source = "user_profile_icon.png";
-            return;
         }
-
-        string fotoUrl = Config.Config.ProfilePic(fotoPerfil);
-
-        ProfileButton.Source = ImageSource.FromUri(new Uri(fotoUrl));
     }
 
 

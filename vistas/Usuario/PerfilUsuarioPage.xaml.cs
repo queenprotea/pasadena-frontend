@@ -20,35 +20,52 @@ public partial class PerfilUsuarioPage : ContentPage
 
     private async Task CargarPerfil()
     {
-        bool tokenValido = await _authService.ValidarTokenAsync();
+        try
+        {
+            bool tokenValido = await _authService.ValidarTokenAsync();
 
-        if (!tokenValido)
+            if (!tokenValido)
+            {
+                MostrarVistaNoAutenticado();
+                return;
+            }
+
+            var usuario = await _authService.ObtenerPerfilUsuarioAsync();
+
+            if (usuario == null)
+            {
+                MostrarVistaNoAutenticado();
+                return;
+            }
+
+            NoAuthLayout.IsVisible = false;
+            AuthLayout.IsVisible = true;
+
+            NombreUsuarioLabel.Text = usuario.username;
+            CorreoLabel.Text = usuario.email;
+
+            var foto = await SecureStorage.GetAsync("profile_picture");
+            if (!string.IsNullOrEmpty(foto))
+            {
+                var fullUrl = $"{Config.Config.URL_BASE}/profiles/static/avatars/{foto}";
+
+                if (Uri.TryCreate(fullUrl, UriKind.Absolute, out var uri))
+                    FotoPerfil.Source = ImageSource.FromUri(uri);
+            }
+        }
+        catch (HttpRequestException)
         {
             MostrarVistaNoAutenticado();
-            return;
+            await DisplayAlert("Sin conexion", "No hay conexion a internet", "OK");
         }
-
-        var usuario = await _authService.ObtenerPerfilUsuarioAsync();
-
-        if (usuario == null)
+        catch (TaskCanceledException)
         {
             MostrarVistaNoAutenticado();
-            return;
         }
-
-        NoAuthLayout.IsVisible = false;
-        AuthLayout.IsVisible = true;
-
-        NombreUsuarioLabel.Text = usuario.username;
-        CorreoLabel.Text = usuario.email;
-
-        var foto = await SecureStorage.GetAsync("profile_picture");
-        if (!string.IsNullOrEmpty(foto))
+        catch (Exception ex)
         {
-            var fullUrl = $"{Config.Config.URL_BASE}/profiles/static/avatars/{foto}";
-
-            if (Uri.TryCreate(fullUrl, UriKind.Absolute, out var uri))
-                FotoPerfil.Source = ImageSource.FromUri(uri);
+            MostrarVistaNoAutenticado();
+            System.Diagnostics.Debug.WriteLine(ex);
         }
     }
 
@@ -88,7 +105,7 @@ public partial class PerfilUsuarioPage : ContentPage
         if (!confirmar)
             return;
 
-        _authService.LimpiarSesionAsync();
+        _authService.LimpiarSesion();
 
         await Shell.Current.GoToAsync($"///{nameof(PantallaInicio)}");
         MostrarVistaNoAutenticado();

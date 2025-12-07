@@ -35,6 +35,10 @@ public partial class RegistrarUsuarioPage : ContentPage
             await DisplayAlert("Registro exitoso", "Ahora puedes iniciar sesion", "Aceptar");
             await Shell.Current.GoToAsync("..");
         }
+        catch (HttpRequestException)
+        {
+            await DisplayAlert("Error", "No hay conexion a internet", "OK");
+        }
         catch (Exception ex)
         {
             await DisplayAlert("Error", ex.Message, "Aceptar");

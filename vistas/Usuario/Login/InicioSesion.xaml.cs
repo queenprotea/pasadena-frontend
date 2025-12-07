@@ -35,6 +35,10 @@ public partial class InicioSesion : ContentPage
 
             await Shell.Current.GoToAsync($"///{nameof(PantallaInicio)}");
         }
+        catch (HttpRequestException)
+        {
+            await DisplayAlert("Error", "No hay conexion a internet", "OK");
+        }
         catch (Exception ex)
         {
             await DisplayAlert("Error al iniciar sesion", ex.Message, "Aceptar");

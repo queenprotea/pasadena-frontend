@@ -2,6 +2,7 @@
 using pasadena_vistas.Models.Login;
 using pasadena_vistas.Models.Registro;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace pasadena_vistas.Services;
@@ -17,33 +18,24 @@ public class AuthService
         _clienteHttp = new HttpClient();
     }
 
-    public async Task<RegistroRespuesta> RegistrarUsuarioAsync(SolicitudRegistro solicitud)
+    public async Task RegistrarUsuarioAsync(SolicitudRegistro solicitud)
     {
-        try
+        var respuesta = await _clienteHttp.PostAsJsonAsync(Config.Config.AuthRegister, solicitud);
+
+        if (!respuesta.IsSuccessStatusCode)
         {
-            var respuesta = await _clienteHttp.PostAsJsonAsync(Config.Config.AuthRegister, solicitud);
-
-            if (respuesta.IsSuccessStatusCode)
-                return new RegistroRespuesta { Exito = true };
-
-            string error = await respuesta.Content.ReadAsStringAsync();
+            var error = await respuesta.Content.ReadAsStringAsync();
 
             if (respuesta.StatusCode == HttpStatusCode.UnprocessableEntity)
             {
-                if (error.Contains("Email already exists"))
-                    return new RegistroRespuesta { Exito = false, MensajeError =
-                        "El correo electrónico ya está registrado."};
+                if (error.Contains("Email already"))
+                    throw new Exception("El correo electrónico ya está registrado.");
 
-                if (error.Contains("Username already taken"))
-                    return new RegistroRespuesta { Exito = false, MensajeError =
-                        "Nombre de usuario ya está en uso."};
+                if (error.Contains("Username"))
+                    throw new Exception("El nombre de usuario ya está en uso.");
             }
 
-            return new RegistroRespuesta { Exito = false, MensajeError = "Error al registrar usuario." };
-        }
-        catch (Exception ex)
-        {
-            return new RegistroRespuesta { Exito = false, MensajeError = $"Excepción: {ex.Message}" }; //delete, server error
+            throw new Exception("Error al registrar el usuario.");
         }
     }
 
@@ -65,38 +57,51 @@ public class AuthService
 
     public async Task<Usuario?> ObtenerPerfilUsuarioAsync()
     {
-        var token = await SecureStorage.GetAsync("auth_token");
-        if (string.IsNullOrEmpty(token))
+        try
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                return null;
+
+            using var request = new HttpRequestMessage(HttpMethod.Get, urlProfile);
+            request.Headers.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await _clienteHttp.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            return await response.Content.ReadFromJsonAsync<Usuario>();
+        }
+        catch (HttpRequestException)
+        {
             return null;
-
-        using var request = new HttpRequestMessage(HttpMethod.Get, urlProfile);
-        request.Headers.Authorization =
-            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-
-        var response = await _clienteHttp.SendAsync(request);
-
-        if (!response.IsSuccessStatusCode)
-            return null;
-
-        return await response.Content.ReadFromJsonAsync<Usuario>();
+        }
     }
 
     public async Task<bool> ValidarTokenAsync()
     {
-        var token = await SecureStorage.GetAsync("auth_token");
+        try
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
 
-        if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(token))
+                return false;
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var respuesta = await _clienteHttp.GetAsync(Config.Config.GetProfile);
+
+            return respuesta.IsSuccessStatusCode;
+        }
+        catch (HttpRequestException)
+        {
             return false;
-
-        _clienteHttp.DefaultRequestHeaders.Authorization =
-            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-
-        var respuesta = await _clienteHttp.GetAsync(Config.Config.GetProfile);
-
-        return respuesta.IsSuccessStatusCode;
+        }
     }
 
-    public void LimpiarSesionAsync()
+    public void LimpiarSesion()
     {
         SecureStorage.Remove("auth_token");
         SecureStorage.Remove("profile_picture");
