@@ -1,5 +1,5 @@
 using Grpc.Net.Client;
-using Metadata;
+using MisDatosGrpc;
 using pasadena_vistas.Models;
 using pasadena_vistas.vistas.Administrador;
 using System.Collections.ObjectModel;

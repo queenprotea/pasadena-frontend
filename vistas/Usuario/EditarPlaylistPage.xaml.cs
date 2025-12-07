@@ -5,8 +5,6 @@ public partial class EditarPlaylistPage : ContentPage
     public EditarPlaylistPage()
     {
         InitializeComponent();
-
- 
     }
 
     private async void AgregarCanciones_Clicked(object sender, EventArgs e)

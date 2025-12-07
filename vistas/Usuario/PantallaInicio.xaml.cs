@@ -1,300 +1,235 @@
-﻿using Grpc.Net.Client;
-using Metadata;
-
-using pasadena_vistas.Models;
-using Streaming;
+﻿using System;
 using System.Collections.ObjectModel;
-using System.DirectoryServices;
-
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Maui.Controls;
+using pasadena_vistas.Models;
+using pasadena_vistas.vistas.Administrador;
 using Plugin.Maui.Audio;
-using Grpc.Core;
 
 namespace pasadena_vistas.vistas.Usuario;
 
 public partial class PantallaInicio : ContentPage
 {
+    // Audio (por ahora solo preparado, sin lógica real de streaming)
+    private readonly IAudioManager _audioManager;
     private IAudioPlayer? _currentPlayer;
 
-    private CancellationTokenSource _cts = new();
-    public ObservableCollection<SearchResultClass> SearchResults { get; set; } = new();
-
+    // Colecciones para binding
+    public ObservableCollection<SearchResultClass> SearchResults { get; } = new();
+    public ObservableCollection<Album> AlbumsRecomendados { get; } = new();
+    public ObservableCollection<PlaylistItem> Playlists { get; } = new();
 
     public PantallaInicio()
     {
         InitializeComponent();
+
+        _audioManager = AudioManager.Current;
         BindingContext = this;
 
+        CargarPlaylistsDePrueba();
+        CargarAlbumsDePrueba();
 
-
-        SizeChanged += OnSizeChanged;
+        // Ocultamos resultados de búsqueda al inicio
+        SearchResultsView.IsVisible = false;
     }
 
-    public static class GrpcClientProvider
+    // ===================== DATOS DE PRUEBA =====================
+
+    private void CargarPlaylistsDePrueba()
     {
-        private static MetadataService.MetadataServiceClient? _client;
-        private static StreamingService.StreamingServiceClient? _streamingService;
-
-        public static MetadataService.MetadataServiceClient Client
-        {
-            get
-            {
-                if (_client == null)
-                {
-                    var channel = GrpcChannel.ForAddress("http://localhost:50051");
-                    _client = new MetadataService.MetadataServiceClient(channel);
-                }
-
-                return _client;
-            }
-        }
-
-        public static StreamingService.StreamingServiceClient ClientStream
-        {
-            get
-            {
-                if (_streamingService == null)
-                {
-                    var channel = GrpcChannel.ForAddress("http://localhost:50052");
-                    _streamingService = new StreamingService.StreamingServiceClient(channel);
-                }
-
-                return _streamingService;
-            }
-        }
+        Playlists.Clear();
+        Playlists.Add(new PlaylistItem { Id = "1", Name = "Tus me gusta", Emoji = "🎵" });
+        Playlists.Add(new PlaylistItem { Id = "2", Name = "Canciones tristes", Emoji = "🎧" });
+        Playlists.Add(new PlaylistItem { Id = "3", Name = "Rock clásico", Emoji = "🎸" });
     }
 
+    private void CargarAlbumsDePrueba()
+    {
+        AlbumsRecomendados.Clear();
 
+        var album1 = new Album
+        {
+            Name = "Lo-fi para estudiar",
+            Artist = "Varios artistas",
+            CoverUrl = "default_cover.jpg"
+        };
+        album1.Songs.Add(new Song { title = "Beat 1", artist = "Lo-fi Artist", songNumber = 1 });
+        album1.Songs.Add(new Song { title = "Beat 2", artist = "Lo-fi Artist", songNumber = 2 });
 
+        var album2 = new Album
+        {
+            Name = "Rock clásico",
+            Artist = "Varios artistas",
+            CoverUrl = "default_cover.jpg"
+        };
+        album2.Songs.Add(new Song { title = "Highway Song", artist = "The Classics", songNumber = 1 });
+
+        var album3 = new Album
+        {
+            Name = "Pop latino",
+            Artist = "Varios artistas",
+            CoverUrl = "default_cover.jpg"
+        };
+
+        AlbumsRecomendados.Add(album1);
+        AlbumsRecomendados.Add(album2);
+        AlbumsRecomendados.Add(album3);
+    }
+
+    // ===================== MENÚ / PERFIL =====================
+
+    private void ToggleMenu_Clicked(object sender, EventArgs e)
+    {
+        LeftMenu.IsVisible = !LeftMenu.IsVisible;
+    }
 
     private async void ProfileButton_Clicked(object sender, EventArgs e)
     {
+        // Ir a la página de perfil de usuario
         await Shell.Current.GoToAsync(nameof(PerfilUsuarioPage));
     }
+
+    // ===================== BÚSQUEDA =====================
+
+    private void SearchSong_Clicked(object sender, EventArgs e)
+    {
+        var query = SearchBar.Text?.Trim();
+
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            SearchResults.Clear();
+            SearchResultsView.IsVisible = false;
+            return;
+        }
+
+        // Por ahora, resultados de prueba
+        SearchResults.Clear();
+        SearchResults.Add(new SearchResultClass
+        {
+            Nombre = query,
+            Tipo = "Resultado de ejemplo"
+        });
+
+        SearchResultsView.IsVisible = true;
+    }
+
+    private void SearchSong_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(e.NewTextValue))
+        {
+            SearchResults.Clear();
+            SearchResultsView.IsVisible = false;
+        }
+    }
+
+    private async void OnSearchResultSelected(object sender, SelectionChangedEventArgs e)
+    {
+        var selected = e.CurrentSelection.FirstOrDefault() as SearchResultClass;
+        if (selected == null) return;
+
+        if (sender is CollectionView cv)
+            cv.SelectedItem = null;
+
+        // Aquí después puedes llamar a la lógica de reproducción de tu compa
+        await DisplayAlert("Canción seleccionada", selected.Nombre, "OK");
+    }
+
+    // ===================== PLAYLISTS =====================
+
+    // Botón "+ Crear Playlist" → ir a CrearPlaylistPage
     private async void CrearPlaylist_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(CrearPlaylistPage));
     }
-    private async void Playlist_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+
+    // Al seleccionar una playlist del menú lateral → ir a EditarPlaylistPage (Ver Playlist)
+    private async void PlaylistsCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        // CurrentSelection puede ser vacío → validamos
-        var selectedPlaylist = e.CurrentSelection?.FirstOrDefault() as string;
+        var selected = e.CurrentSelection.FirstOrDefault() as PlaylistItem;
+        if (selected == null) return;
 
-        if (selectedPlaylist is not null && sender is CollectionView cv)
-        {
-            await Shell.Current.GoToAsync(nameof(EditarPlaylistPage));
-
-            // limpiar selección
+        if (sender is CollectionView cv)
             cv.SelectedItem = null;
-        }
+
+        await Shell.Current.GoToAsync(nameof(EditarPlaylistPage), new Dictionary<string, object>
+        {
+            { "PlaylistId", selected.Id },
+            { "PlaylistName", selected.Name }
+        });
     }
 
-    private async void AdminUsuarios_Clicked(object sender, EventArgs e)
+    // ===================== ÁLBUMES =====================
+
+    private async void OnAlbumSelected(object sender, SelectionChangedEventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(vistas.Administrador.GestionarUsuariosPage));
+        var selected = e.CurrentSelection.FirstOrDefault() as Album;
+        if (selected == null) return;
+
+        if (sender is CollectionView cv)
+            cv.SelectedItem = null;
+
+        // Navegar a la página de detalle de álbum tipo Spotify
+        await Shell.Current.GoToAsync(nameof(AlbumPage), new Dictionary<string, object>
+        {
+            { "Album", selected }
+        });
     }
+
+    // ===================== ADMIN =====================
+
+    private async void AdminStats_Clicked(object sender, EventArgs e)
+    {
+        // Navegar a la página de estadísticas
+        await Shell.Current.GoToAsync(nameof(AdminDashboardPage));
+    }
+
     private async void AdminCanciones_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(vistas.Administrador.GestionarCancionesPage));
+        // Navegar a la página de gestionar canciones
+        await Shell.Current.GoToAsync(nameof(GestionarCancionesPage));
     }
 
-    private async void SearchSong_clicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync(nameof(vistas.Administrador.GestionarCancionesPage));
-    }
-    private async void SearchSong_textChanged(object sender, TextChangedEventArgs e)
-    {
-        string text = e.NewTextValue;
+    // ===================== REPRODUCTOR =====================
 
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            SearchResultsView.IsVisible = false;
-            SearchResults.Clear();
-            return;
-        }
-
-        _cts.Cancel();
-        _cts = new CancellationTokenSource();
-        var token = _cts.Token;
-
-        try
-        {
-            await Task.Delay(350, token);
-
-            var results = await BuscarTodoAsync(text);
-
-            if (token.IsCancellationRequested)
-                return;
-
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                SearchResults.Clear();
-                foreach (var r in results)
-                    SearchResults.Add(r);
-
-                SearchResultsView.IsVisible = SearchResults.Count > 0;
-            });
-        }
-        catch (TaskCanceledException)
-        {
-            // ignorar
-        }
-    }
-
-
-
-
-    private async void OnSearchResultSelected(object sender, SelectionChangedEventArgs e)
-    {
-        if (e.CurrentSelection.Count == 0)
-            return;
-
-        var item = e.CurrentSelection[0] as SearchResultClass;
-
-        if (item == null)
-            return;
-
-        // Solo reproducir si es canción
-        if (item.Tipo == "Canción")
-        {
-            await ReproducirCancion(item.Id, item.Nombre);
-        }
-
-     // Quitar selección
-     ((CollectionView)sender).SelectedItem = null;
-    }
-
-
-    private async Task ReproducirCancion(string songId, string title)
-    {
-        SongName.Text = title;
-        // SongArtist.Text = artist;
-
-
-        await StartStreaming(songId);
-    }
-    private async Task StartStreaming(string songId)
-    {
-        var client = GrpcClientProvider.ClientStream;
-
-        using var call = client.StreamSong(new StreamRequest { SongId = songId });
-
-        var ms = new MemoryStream();
-
-        while (await call.ResponseStream.MoveNext())
-        {
-            var bytes = call.ResponseStream.Current.Chunk.ToByteArray();
-            ms.Write(bytes, 0, bytes.Length);
-        }
-
-        ms.Position = 0;
-
-        _currentPlayer?.Stop();
-        _currentPlayer?.Dispose();
-
-        _currentPlayer = AudioManager.Current.CreatePlayer(ms);
-        _currentPlayer.Play();
-
-
-    }
-
-
-
-    private async Task<List<SearchResultClass>> BuscarTodoAsync(string query)
-    {
-        var results = new List<SearchResultClass>();
-
-        // Crear cliente gRPC una sola vez
-        var client = GrpcClientProvider.Client;
-
-        // ===============================
-        // 🔎 BUSCAR CANCIONES
-        // ===============================
-        var songResponse = await client.SearchSongsAsync(new SearchRequest { Query = query });
-
-        foreach (var c in songResponse.Songs)
-        {
-            results.Add(new SearchResultClass
-            {
-                Id = c.SongId,
-                Tipo = "Canción",
-                Nombre = c.Title,
-                Imagen = ImageSource.FromStream(() => new MemoryStream(c.AlbumCover.ToByteArray()))
-            });
-        }
-
-        // ===============================
-        // 🔎 BUSCAR ARTISTAS
-        // ===============================
-        var artistResponse = await client.SearchArtistsAsync(new SearchRequest { Query = query });
-
-        foreach (var a in artistResponse.Artists)
-        {
-            results.Add(new SearchResultClass
-            {
-                Id = a.ArtistId.ToString(),
-                Nombre = a.Name,
-                Tipo = "Artista",
-                Imagen = ImageSource.FromFile("default_artist.png")
-            });
-        }
-
-        // ===============================
-        // 🔎 BUSCAR ALBUMS
-        // ===============================
-        var albumResponse = await client.SearchAlbumsAsync(new SearchRequest { Query = query });
-
-        foreach (var a in albumResponse.Albums)
-        {
-            results.Add(new SearchResultClass
-            {
-                Id = a.Id.ToString(),
-                Nombre = a.Name,
-                Tipo = "Álbum",
-                Imagen = ImageSource.FromStream(() => new MemoryStream(a.Cover.ToByteArray()))
-            });
-        }
-
-        return results;
-    }
-
-    void OnSizeChanged(object? sender, EventArgs e)
-    {
-        LeftMenu.IsVisible = this.Width > 600; // Desktop only
-    }
-
-    void ToggleMenu(object sender, EventArgs e)
-    {
-        LeftMenu.IsVisible = !LeftMenu.IsVisible;
-    }
     private void PlayPause_Clicked(object sender, EventArgs e)
     {
-        if (_currentPlayer == null) return;
+        if (_currentPlayer == null)
+        {
+            DisplayAlert("Reproductor", "No hay canción cargada aún.", "OK");
+            return;
+        }
 
         if (_currentPlayer.IsPlaying)
+        {
             _currentPlayer.Pause();
+            PlayPauseButton.Source = "icon_play.png";
+        }
         else
+        {
             _currentPlayer.Play();
+            PlayPauseButton.Source = "icon_pause.png";
+        }
     }
 
     private void PreviousButton_Clicked(object sender, EventArgs e)
     {
-        if (_currentPlayer == null) return;
-
-        if (_currentPlayer.IsPlaying)
-            _currentPlayer.Pause();
-        else
-            _currentPlayer.Play();
+        DisplayAlert("Reproductor", "Anterior (lógica pendiente).", "OK");
     }
 
     private void NextButton_Clicked(object sender, EventArgs e)
     {
-        if (_currentPlayer == null) return;
-
-        if (_currentPlayer.IsPlaying)
-            _currentPlayer.Pause();
-        else
-            _currentPlayer.Play();
+        DisplayAlert("Reproductor", "Siguiente (lógica pendiente).", "OK");
     }
 
+    // ===================== CLASE AUXILIAR PARA PLAYLISTS =====================
 
+    public class PlaylistItem
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Emoji { get; set; } = "🎵";
+
+        public string DisplayName => $"{Emoji} {Name}";
+    }
 }

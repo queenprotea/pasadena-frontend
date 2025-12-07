@@ -2,7 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
+			$(TargetFrameworks);net9.0-windows10.0.19041.0
+		</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
 
@@ -62,10 +64,7 @@
 	<ItemGroup>
 		<PackageReference Include="Google.Protobuf" Version="3.33.1" />
 		<PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
-		<PackageReference Include="Grpc.Tools" Version="2.76.0">
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		  <PrivateAssets>all</PrivateAssets>
-		</PackageReference>
+		<PackageReference Include="Grpc.Tools" Version="2.76.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.11" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="4.0.0" />
@@ -74,6 +73,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="vistas\Administrador\AdminDashboardPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="vistas\Administrador\AgregarCancionAdminPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -84,6 +86,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="vistas\Usuario\AgregarCancionPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="vistas\Usuario\AlbumPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="vistas\Usuario\CrearPlaylistPage.xaml">
@@ -105,10 +110,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
+	<!-- <ItemGroup>
+		<Protobuf Include="proto\Metadata.proto" GrpcServices="Client" Access="Public" />
+		<Protobuf Include="proto\Streaming.proto" GrpcServices="Client" Access="Public" />
+	</ItemGroup> -->
 	<ItemGroup>
-		<Protobuf Include="proto\*.proto" GrpcServices="Both" OutputDir="" />
-	</ItemGroup>
-	<ItemGroup>
+	  <Folder Include="GrpcGenerated\" />
 	  <Folder Include="Utils\" />
 	</ItemGroup>
 
