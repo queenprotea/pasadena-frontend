@@ -20,31 +20,42 @@ public partial class PerfilUsuarioPage : ContentPage
 
     private async Task CargarPerfil()
     {
-        try
+        bool tokenValido = await _authService.ValidarTokenAsync();
+
+        if (!tokenValido)
         {
-            var usuario = await _authService.ObtenerPerfilUsuarioAsync();
-
-            if (usuario == null)
-            {
-                DatosUsuario.IsVisible = false;
-                return;
-            }
-
-            DatosUsuario.IsVisible = true;
-
-            NombreUsuarioLabel.Text = usuario.username;
-            CorreoLabel.Text = usuario.email;
-
-            if (!string.IsNullOrEmpty(usuario.profile_picture))
-            {
-                FotoPerfil.Source =
-                    $"{Config.Config.URL_BASE}/profiles/static/avatars/{usuario.profile_picture}";
-            }
+            MostrarVistaNoAutenticado();
+            return;
         }
-        catch (Exception ex)
+
+        var usuario = await _authService.ObtenerPerfilUsuarioAsync();
+
+        if (usuario == null)
         {
-            await DisplayAlert("Error", ex.Message, "Aceptar");
+            MostrarVistaNoAutenticado();
+            return;
         }
+
+        NoAuthLayout.IsVisible = false;
+        AuthLayout.IsVisible = true;
+
+        NombreUsuarioLabel.Text = usuario.username;
+        CorreoLabel.Text = usuario.email;
+
+        var foto = await SecureStorage.GetAsync("profile_picture");
+        if (!string.IsNullOrEmpty(foto))
+        {
+            var fullUrl = $"{Config.Config.URL_BASE}/profiles/static/avatars/{foto}";
+
+            if (Uri.TryCreate(fullUrl, UriKind.Absolute, out var uri))
+                FotoPerfil.Source = ImageSource.FromUri(uri);
+        }
+    }
+
+    private void MostrarVistaNoAutenticado()
+    {
+        AuthLayout.IsVisible = false;
+        NoAuthLayout.IsVisible = true;
     }
 
     private async void EditarPerfil_Tapped(object sender, TappedEventArgs e)
@@ -80,5 +91,6 @@ public partial class PerfilUsuarioPage : ContentPage
         _authService.LimpiarSesionAsync();
 
         await Shell.Current.GoToAsync($"///{nameof(PantallaInicio)}");
+        MostrarVistaNoAutenticado();
     }
 }

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="pasadena_vistas.vistas.Usuario.PerfilUsuarioPage"
@@ -8,79 +7,87 @@
     <ScrollView>
         <VerticalStackLayout Spacing="15" Padding="20">
 
-            <Label Text="Cuenta"
-                   TextColor="White"
-                   FontSize="20"
-                   FontAttributes="Bold"/>
-            <!--Datos de perfil-->
-            <VerticalStackLayout x:Name="DatosUsuario" Spacing="15" IsVisible="False">
-                
-                <Image x:Name="FotoPerfil" HeightRequest="100" WidthRequest="100"
-                       HorizontalOptions="Center" BackgroundColor="SlateGray"
-                       Aspect="AspectFill"/>
-                <Label x:Name="NombreUsuarioLabel" TextColor="White" FontSize="20"
-                       HorizontalOptions="Center" Text="Username"/>
-                <Label x:Name="CorreoLabel" TextColor="White" FontSize="14"
-                       HorizontalOptions="Center" Text="Email"/>
+            <!-- Sin sesion -->
+            <VerticalStackLayout x:Name="NoAuthLayout" IsVisible="False" Spacing="20">
+
+                <Label Text="Inicia sesión o crea una cuenta"
+                       TextColor="White"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+
+                <Button Text="Iniciar sesión"
+                        TextColor="Green"
+                        FontAttributes="Bold"
+                        BackgroundColor="#222222"
+                        CornerRadius="10"
+                        Clicked="LoginClicked"/>
 
             </VerticalStackLayout>
 
-            <Frame Padding="15" CornerRadius="10" BackgroundColor="#222222">
-                <VerticalStackLayout Spacing="20">
-                    <Grid ColumnDefinitions="Auto, *, Auto">
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="EditarPerfil_Tapped"/>
-                        </Grid.GestureRecognizers>
-                        <Image Source="edit_icon.png" HeightRequest="20" WidthRequest="20" VerticalOptions="Center"/>
-                        <Label Grid.Column="1" Text="Editar Información Personal" TextColor="White" VerticalOptions="Center" Margin="15,0"/>
-                        <Label Grid.Column="2" Text=">" TextColor="Gray" FontSize="18" VerticalOptions="Center"/>
-                    </Grid>
+            <!-- Con sesion -->
+            <VerticalStackLayout x:Name="AuthLayout" IsVisible="False" Spacing="15">
 
-                    <Grid ColumnDefinitions="Auto, *, Auto">
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Social_Tapped"/>
-                        </Grid.GestureRecognizers>
-                        <Image Source="social_icon.png" HeightRequest="20" WidthRequest="20" VerticalOptions="Center"/>
-                        <Label Grid.Column="1" Text="Social" TextColor="White" VerticalOptions="Center" Margin="15,0"/>
-                        <Label Grid.Column="2" Text=">" TextColor="Gray" FontSize="18" VerticalOptions="Center"/>
-                    </Grid>
+                <Label Text="Cuenta"
+                       TextColor="White"
+                       FontSize="20"
+                       FontAttributes="Bold"/>
+
+                <!-- Perfil -->
+                <VerticalStackLayout Spacing="15">
+                    <Image x:Name="FotoPerfil"
+                           HeightRequest="100"
+                           WidthRequest="100"
+                           HorizontalOptions="Center"
+                           Aspect="AspectFill"/>
+
+                    <Label x:Name="NombreUsuarioLabel"
+                           TextColor="White"
+                           FontSize="20"
+                           HorizontalOptions="Center"/>
+
+                    <Label x:Name="CorreoLabel"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
-            </Frame>
 
+                <!-- Ajustes -->
+                <Frame Padding="15" CornerRadius="10" BackgroundColor="#222222">
+                    <VerticalStackLayout Spacing="20">
 
-            <Label Text="Seguridad"
-                   TextColor="White"
-                   FontSize="20"
-                   FontAttributes="Bold"
-                   Margin="0,20,0,0"/>
+                        <Grid ColumnDefinitions="Auto, *, Auto">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="EditarPerfil_Tapped"/>
+                            </Grid.GestureRecognizers>
+                            <Image Source="edit_icon.png" HeightRequest="20"/>
+                            <Label Grid.Column="1" Text="Editar Información Personal"
+                                   TextColor="White" Margin="15,0"/>
+                            <Label Grid.Column="2" Text=">" TextColor="Gray"/>
+                        </Grid>
 
-            <Frame Padding="15" CornerRadius="10" BackgroundColor="#222222">
-                <Grid ColumnDefinitions="Auto, *, Auto">
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="AdminPanel_Tapped"/>
-                    </Grid.GestureRecognizers>
-                    <Image Source="admin_icon.png" HeightRequest="20" WidthRequest="20" VerticalOptions="Center"/>
-                    <Label Grid.Column="1" Text="Gestionar Usuarios" TextColor="White" VerticalOptions="Center" Margin="15,0"/>
-                    <Label Grid.Column="2" Text=">" TextColor="Gray" FontSize="18" VerticalOptions="Center"/>
-                </Grid>
-            </Frame>
+                        <Grid ColumnDefinitions="Auto, *, Auto">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Social_Tapped"/>
+                            </Grid.GestureRecognizers>
+                            <Image Source="social_icon.png" HeightRequest="20"/>
+                            <Label Grid.Column="1" Text="Social"
+                                   TextColor="White" Margin="15,0"/>
+                            <Label Grid.Column="2" Text=">" TextColor="Gray"/>
+                        </Grid>
 
+                    </VerticalStackLayout>
+                </Frame>
 
-            <Button Text="Cerrar Sesión"
-                    TextColor="Red"
-                    FontAttributes="Bold"
-                    BackgroundColor="#222222"
-                    CornerRadius="10"
-                    Margin="0,20,0,0"
-                    Clicked="BtnCerrarSesion"/>
-            <Button Text="Iniciar sesion"
-                    TextColor="Green"
-                    FontAttributes="Bold"
-                    BackgroundColor="#222222"
-                    CornerRadius="10"
-                    Margin="0, 20, 0, 10"
-                    Clicked="LoginClicked"
-                    IsVisible="True"/>
+                <!-- Cerrar sesion -->
+                <Button Text="Cerrar Sesión"
+                        TextColor="Red"
+                        FontAttributes="Bold"
+                        BackgroundColor="#222222"
+                        CornerRadius="10"
+                        Clicked="BtnCerrarSesion"/>
+
+            </VerticalStackLayout>
 
         </VerticalStackLayout>
     </ScrollView>
