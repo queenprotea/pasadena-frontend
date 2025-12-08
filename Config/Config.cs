@@ -16,6 +16,10 @@ public static class Config
 
     public static string GetProfile => $"{URL_BASE}/auth/me";
 
+    public static string PasswordRecovery => $"{URL_BASE}/auth/password-recovery/initiate";
+    public static string PasswordVerify => $"{URL_BASE}/auth/password-recovery/verify";
+    public static string PasswordReset => $"{URL_BASE}/auth/password-recovery/reset";
+
     //User only
     public static string UserRegister => $"{URL_BASE}/profiles/register";
     public static string UserById(int id) => $"{URL_BASE}/profiles/{id}";
