@@ -1,6 +1,7 @@
 using pasadena_vistas.Services;
 using pasadena_vistas.Models.Login;
 using pasadena_vistas.vistas.Usuario.Registro;
+using System.Threading.Tasks;
 
 namespace pasadena_vistas.vistas.Usuario.Login;
 
@@ -61,5 +62,10 @@ public partial class InicioSesion : ContentPage
         }
 
 		return resultado;
+    }
+
+    private async void btnModificarContrasena(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(RecuperarContrasena));
     }
 }

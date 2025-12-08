@@ -13,6 +13,7 @@
             Routing.RegisterRoute(nameof(vistas.Usuario.AgregarCancionPage), typeof(vistas.Usuario.AgregarCancionPage));
             Routing.RegisterRoute(nameof(vistas.Usuario.Login.InicioSesion), typeof(vistas.Usuario.Login.InicioSesion));
             Routing.RegisterRoute(nameof(vistas.Usuario.Registro.RegistrarUsuarioPage), typeof(vistas.Usuario.Registro.RegistrarUsuarioPage));
+            Routing.RegisterRoute(nameof(vistas.Usuario.RecuperarContrasena.RecuperarContrasena), typeof(vistas.Usuario.RecuperarContrasena.RecuperarContrasena));
 
             Routing.RegisterRoute(nameof(vistas.Administrador.GestionarUsuariosPage), typeof(vistas.Administrador.GestionarUsuariosPage));
             Routing.RegisterRoute(nameof(vistas.Administrador.GestionarCancionesPage), typeof(vistas.Administrador.GestionarCancionesPage));

@@ -5,7 +5,7 @@
              Title="RegistrarUsuarioPage">
     <ScrollView>
         <VerticalStackLayout Padding="25" Spacing="20">
-            <!-- Header -->
+            <!-- Titulo -->
             <Label Text="Crea tu cuenta para acceder a todas las funciones de Pasadena"
                    TextColor="White"
                    FontSize="14"

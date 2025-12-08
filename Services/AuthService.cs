@@ -1,5 +1,6 @@
 ﻿using pasadena_vistas.Config;
 using pasadena_vistas.Models.Login;
+using pasadena_vistas.Models.Recuperacion;
 using pasadena_vistas.Models.Registro;
 using System.Net;
 using System.Net.Http.Headers;
@@ -109,4 +110,41 @@ public class AuthService
         _clienteHttp.DefaultRequestHeaders.Authorization = null;
         Preferences.Clear();
     }
+
+    public async Task IniciarRecuperacionAsync(SolicitudCambioContrasena solicitud)
+    {
+        var respuesta = await _clienteHttp.PostAsJsonAsync(
+            $"{Config.Config.PasswordRecovery}", solicitud);
+
+        if (!respuesta.IsSuccessStatusCode)
+        {
+            var error = await respuesta.Content.ReadAsStringAsync();
+            throw new Exception(error);
+        }
+    }
+
+    public async Task VerificarCodigoAsync(VerificarCambioContrasena solicitud)
+    {
+        var respuesta = await _clienteHttp.PostAsJsonAsync(
+            $"{Config.Config.PasswordVerify}", solicitud);
+
+        if (!respuesta.IsSuccessStatusCode)
+        {
+            var error = await respuesta.Content.ReadAsStringAsync();
+            throw new Exception(error);
+        }
+    }
+
+    public async Task CambiarContrasenaAsync(CambioContrasena solicitud)
+    {
+        var respuesta = await _clienteHttp.PostAsJsonAsync(
+            $"{Config.Config.PasswordReset}", solicitud);
+
+        if (!respuesta.IsSuccessStatusCode)
+        {
+            var error = await respuesta.Content.ReadAsStringAsync();
+            throw new Exception(error);
+        }
+    }
+
 }
