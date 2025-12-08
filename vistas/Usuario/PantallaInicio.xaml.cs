@@ -22,17 +22,26 @@ public partial class PantallaInicio : ContentPage
     public ObservableCollection<SearchResultClass> SearchResults { get; set; } = new();
     public ObservableCollection<pasadena_vistas.Models.Album> AlbumsRecomendados { get; set; } = new();
     public ObservableCollection<PlaylistItem> Playlists { get; } = new();
-    
-    
+    private PlayerService _player;
 
-    public PantallaInicio()
+
+
+    public PantallaInicio(PlayerService player)
     {
         InitializeComponent();
         BindingContext = this;
 
-
+        _player = player;
 
         SizeChanged += OnSizeChanged;
+        _player.OnSongChanged += song =>
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                SongName.Text = song.title;
+                SongArtist.Text = song.artist;
+            });
+        };
     }
 
    
@@ -351,7 +360,7 @@ public partial class PantallaInicio : ContentPage
 
             // Abrir la página
             await Application.Current.MainPage.Navigation
-                .PushAsync(new AlbumPage(albumModel));
+                .PushAsync(new AlbumPage(albumModel, _player));
         }
         catch (Exception ex)
         {
