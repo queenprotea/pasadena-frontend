@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Pasadena.Vistas.Usuario.UserView"
+             Title="Perfil de Usuario"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Frame CornerRadius="15" HasShadow="True" Padding="20">
+                <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
+
+                    <Frame CornerRadius="60" HeightRequest="120" WidthRequest="120" 
+                           Padding="0" HorizontalOptions="Center" IsClippedToBounds="True">
+                        <Image x:Name="ImgPerfil" Source="user_placeholder.png" Aspect="AspectFill"/>
+                    </Frame>
+
+                    <Label x:Name="LblNombre" Text="Cargando..." FontSize="24" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label x:Name="LblUsername" Text="..." FontSize="16" TextColor="Gray" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+
+                <VerticalStackLayout Grid.Column="0">
+                    <Label Text="Siguiendo" FontAttributes="Bold" Margin="0,0,0,10"/>
+                    <CollectionView x:Name="ListSiguiendo" HeightRequest="300">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Margin="0,2" Padding="10">
+                                    <Label Text="{Binding .}" FontSize="12"/>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="1">
+                    <Label Text="Seguidores" FontAttributes="Bold" Margin="0,0,0,10"/>
+                    <CollectionView x:Name="ListSeguidores" HeightRequest="300">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Margin="0,2" Padding="10" BackgroundColor="#E3F2FD">
+                                    <Label Text="{Binding .}" FontSize="12"/>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
