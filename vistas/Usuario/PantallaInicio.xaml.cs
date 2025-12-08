@@ -40,16 +40,6 @@ public partial class PantallaInicio : ContentPage
         await CargarFotoUsuario();
     }
 
-    public static class GrpcClientProvider
-    {
-        InitializeComponent();
-        BindingContext = this;
-
-
-
-        SizeChanged += OnSizeChanged;
-    }
-
     private async Task CargarFotoUsuario()
     {
         try
