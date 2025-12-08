@@ -20,4 +20,12 @@ public static class Config
     public static string UserRegister => $"{URL_BASE}/profiles/register";
     public static string UserById(int id) => $"{URL_BASE}/profiles/{id}";
     public static string ProfilePic(string fotoUrl) => $"{URL_BASE}/profiles/static/avatars/{fotoUrl}";
+
+    //playlist only
+    public static string PlaylistsCreate => $"{URL_BASE}/playlist";
+    public static string PlaylistUpdate(int playlistId) => $"{URL_BASE}/playlist/{playlistId}";
+    public static string PlaylistDelete(int playlistId) => $"{URL_BASE}/playlist/{playlistId}";
+    public static string GetCover(string coverName) => $"{URL_BASE}/static/{coverName}";
+
+
 }
