@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using pasadena_vistas.Services;
 
 
 
@@ -20,6 +21,7 @@ namespace pasadena_vistas
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+            builder.Services.AddSingleton<PlayerService>();
 
             return builder.Build();
         }
