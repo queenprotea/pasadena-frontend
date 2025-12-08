@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace pasadena_vistas.Config;
 
 public static class Config
@@ -17,4 +18,7 @@ public static class Config
     //User only
     public static string UserRegister => $"{URL_BASE}/profiles/register";
     public static string UserById(int id) => $"{URL_BASE}/profiles/{id}";
+   public static string UserByUsername(string username) => $"{URL_BASE}/auth/users/username/{username}";
+    public static string MetadataURL => $"{URL_BASE}/metadata.MetadataService";
+    public static string StreamingURL => $"{URL_BASE}/streaming.StreamingService";
 }

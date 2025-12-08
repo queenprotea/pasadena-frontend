@@ -106,6 +106,10 @@
                             BackgroundColor="#181818"
                             TextColor="White"
                             Clicked="AdminCanciones_Clicked"/>
+                    <Button Text="Estadisticas"
+                            BackgroundColor="#181818"
+                            TextColor="White"
+                            Clicked="Dashboard_Clicked"/>
 
                 </VerticalStackLayout>
 
@@ -157,19 +161,16 @@
                                    FontSize="22"
                                    FontAttributes="Bold"/>
 
-                            <CollectionView HeightRequest="220">
+                            <CollectionView x:Name="AlbumsCollection"
+                                HeightRequest="220"
+                                ItemsSource="{Binding AlbumsRecomendados}"
+                                SelectionMode="Single"
+                                SelectionChanged="OnAlbumSelected">
+                                
                                 <CollectionView.ItemsLayout>
                                     <LinearItemsLayout Orientation="Horizontal"
-                                                       ItemSpacing="20" />
+                                         ItemSpacing="20"/>
                                 </CollectionView.ItemsLayout>
-
-                                <CollectionView.ItemsSource>
-                                    <x:Array Type="{x:Type x:String}">
-                                        <x:String>Álbum 1</x:String>
-                                        <x:String>Álbum 2</x:String>
-                                        <x:String>Álbum 3</x:String>
-                                    </x:Array>
-                                </CollectionView.ItemsSource>
 
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
@@ -178,15 +179,19 @@
                                                    HeightRequest="170"
                                                    Aspect="AspectFill" />
                                             <Label Text="{Binding .}"
-                                                   TextColor="White"
-                                                   FontAttributes="Bold"
-                                                   Margin="0,10,0,0"/>
-                                            <Label Text="Artista"
-                                                   TextColor="Gray"/>
+                                               TextColor="White"
+                                               FontAttributes="Bold"
+                                               FontSize="14"
+                                               LineBreakMode="TailTruncation"
+                                               Margin="0,8,0,0"/>
+
+                                            <Label Text="{Binding Artist}"
+                                               TextColor="#B0B0B0"
+                                               FontSize="12"
+                                               LineBreakMode="TailTruncation"/>
                                         </VerticalStackLayout>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
-
                             </CollectionView>
 
                         </VerticalStackLayout>

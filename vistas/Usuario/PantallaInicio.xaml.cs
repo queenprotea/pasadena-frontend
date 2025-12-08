@@ -1,6 +1,6 @@
 ﻿using Grpc.Net.Client;
 using Metadata;
-
+using pasadena_vistas.Config;
 using pasadena_vistas.Models;
 using Streaming;
 using System.Collections.ObjectModel;
@@ -8,6 +8,9 @@ using System.DirectoryServices;
 
 using Plugin.Maui.Audio;
 using Grpc.Core;
+using pasadena_vistas.vistas.Administrador;
+using pasadena_vistas.vistas.Usuario;
+using pasadena_vistas.Services;
 
 namespace pasadena_vistas.vistas.Usuario;
 
@@ -17,7 +20,10 @@ public partial class PantallaInicio : ContentPage
 
     private CancellationTokenSource _cts = new();
     public ObservableCollection<SearchResultClass> SearchResults { get; set; } = new();
-
+    public ObservableCollection<pasadena_vistas.Models.Album> AlbumsRecomendados { get; set; } = new();
+    public ObservableCollection<PlaylistItem> Playlists { get; } = new();
+    
+    
 
     public PantallaInicio()
     {
@@ -29,40 +35,7 @@ public partial class PantallaInicio : ContentPage
         SizeChanged += OnSizeChanged;
     }
 
-    public static class GrpcClientProvider
-    {
-        private static MetadataService.MetadataServiceClient? _client;
-        private static StreamingService.StreamingServiceClient? _streamingService;
-
-        public static MetadataService.MetadataServiceClient Client
-        {
-            get
-            {
-                if (_client == null)
-                {
-                    var channel = GrpcChannel.ForAddress("http://localhost:50051");
-                    _client = new MetadataService.MetadataServiceClient(channel);
-                }
-
-                return _client;
-            }
-        }
-
-        public static StreamingService.StreamingServiceClient ClientStream
-        {
-            get
-            {
-                if (_streamingService == null)
-                {
-                    var channel = GrpcChannel.ForAddress("http://localhost:50052");
-                    _streamingService = new StreamingService.StreamingServiceClient(channel);
-                }
-
-                return _streamingService;
-            }
-        }
-    }
-
+   
 
 
 
@@ -154,9 +127,24 @@ public partial class PantallaInicio : ContentPage
             return;
 
         // Solo reproducir si es canción
-        if (item.Tipo == "Canción")
+        switch (item.Tipo)
         {
-            await ReproducirCancion(item.Id, item.Nombre);
+            case "Canción":
+                await ReproducirCancion(item.Id, item.Nombre);
+                break;
+
+            case "Album":
+
+                await AlbumPage();
+                break;
+
+            case "Usuario":
+                await AbrirPerfilUsuario(item.Id);
+                break;
+
+            default:
+                Console.WriteLine($"Tipo no reconocido: {item.Tipo}");
+                break;
         }
 
      // Quitar selección
@@ -174,7 +162,7 @@ public partial class PantallaInicio : ContentPage
     }
     private async Task StartStreaming(string songId)
     {
-        var client = GrpcClientProvider.ClientStream;
+        var client = Services.StreamingService.Client;
 
         using var call = client.StreamSong(new StreamRequest { SongId = songId });
 
@@ -202,9 +190,9 @@ public partial class PantallaInicio : ContentPage
     private async Task<List<SearchResultClass>> BuscarTodoAsync(string query)
     {
         var results = new List<SearchResultClass>();
-
+        ;
         // Crear cliente gRPC una sola vez
-        var client = GrpcClientProvider.Client;
+        var client =  Services.MetadataService.Client;
 
         // ===============================
         // 🔎 BUSCAR CANCIONES
@@ -254,6 +242,29 @@ public partial class PantallaInicio : ContentPage
             });
         }
 
+
+        // ===============================
+        // 🔎 BUSCAR USUARIOS
+        // ===============================
+
+        var auth = new AuthService();
+        var userResponse = await auth.GetUserByUsernameAsync(query.ToString());
+
+        if (userResponse != null)
+        {
+            results.Add(new SearchResultClass
+            {
+                Id = userResponse.id.ToString(),
+                Nombre = userResponse.full_name,
+                Tipo = "Usuario",
+                Imagen = ImageSource.FromFile("default_artist.png")
+            });
+        }
+        else
+        {
+            Console.WriteLine("Usuario no encontrado o API devolvió error.");
+        }
+
         return results;
     }
 
@@ -296,5 +307,25 @@ public partial class PantallaInicio : ContentPage
             _currentPlayer.Play();
     }
 
+    private async void Dashboard_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(AdminDashboardPage));
+    }
+
+    
+
+    private async void OnAlbumSelected(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(AlbumPage));
+    }
+
+    public class PlaylistItem
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Emoji { get; set; } = "🎵";
+
+        public string DisplayName => $"{Emoji} {Name}";
+    }
 
 }

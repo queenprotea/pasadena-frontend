@@ -1,6 +1,7 @@
 ﻿using pasadena_vistas.Config;
 using pasadena_vistas.Models.Login;
 using System.Net.Http.Json;
+using System.Text.Json;
 namespace pasadena_vistas.Services;
 
 public class AuthService
@@ -28,4 +29,25 @@ public class AuthService
 
         return await respuesta.Content.ReadFromJsonAsync<TokenRespuesta>();
     }
+    public async Task<Usuario> GetUserByUsernameAsync(string username)
+    {
+        var url = Config.Config.UserByUsername(username);
+
+        using var client = new HttpClient();
+
+        var response = await client.GetAsync(url);
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        // Si NO es exitoso → el JSON contiene el error
+        if (!response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("API ERROR => " + json);
+            return null;
+        }
+
+        return JsonSerializer.Deserialize<Usuario>(json);
+    }
+
+
 }
