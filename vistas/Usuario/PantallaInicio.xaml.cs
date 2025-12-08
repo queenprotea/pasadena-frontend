@@ -165,11 +165,9 @@ public partial class PantallaInicio : ContentPage
             return;
 
         var item = e.CurrentSelection[0] as SearchResultClass;
-
         if (item == null)
             return;
 
-        // Solo reproducir si es canción
         switch (item.Tipo)
         {
             case "Canción":
@@ -177,22 +175,31 @@ public partial class PantallaInicio : ContentPage
                 break;
 
             case "Album":
-
-                await AlbumPage();
+                if (int.TryParse(item.Id, out int albumId))
+                {
+                    await AbrirAlbum(albumId);
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Error",
+                        "El ID del álbum no es un número válido.",
+                        "OK"
+                    );
+                }
                 break;
 
-            case "Usuario":
-                await AbrirPerfilUsuario(item.Id);
+            case "Playlist":
+                
                 break;
 
             default:
-                Console.WriteLine($"Tipo no reconocido: {item.Tipo}");
                 break;
         }
 
-     // Quitar selección
-     ((CollectionView)sender).SelectedItem = null;
+    ((CollectionView)sender).SelectedItem = null;
     }
+
 
 
     private async Task ReproducirCancion(string songId, string title)
@@ -280,7 +287,7 @@ public partial class PantallaInicio : ContentPage
             {
                 Id = a.Id.ToString(),
                 Nombre = a.Name,
-                Tipo = "Álbum",
+                Tipo = "Album",
                 Imagen = ImageSource.FromStream(() => new MemoryStream(a.Cover.ToByteArray()))
             });
         }
@@ -361,6 +368,101 @@ public partial class PantallaInicio : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(AlbumPage));
     }
+
+    private async Task AbrirAlbum(int albumId)
+    {
+        try
+        {
+            var client = Services.MetadataService.Client;
+
+            var grpcResponse = await client.GetAlbumByIdAsync(
+                new GetAlbumByIdRequest { Id = albumId }
+            );
+
+            if (grpcResponse.Album == null)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "No se pudo obtener el álbum.",
+                    "OK"
+                );
+                return;
+            }
+
+            // Convertir respuesta gRPC → Modelo local
+            var albumModel = ConvertirAlbum(grpcResponse.Album);
+
+            // Abrir la página
+            await Application.Current.MainPage.Navigation
+                .PushAsync(new AlbumPage(albumModel));
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
+
+    private pasadena_vistas.Models.Album ConvertirAlbum(AlbumFull dto)
+    {
+        var album = new pasadena_vistas.Models.Album
+        {
+            Name = dto.Name,
+            Artist = dto.ArtistName,        // viene directo del proto
+            Year = dto.ReleaseDate ?? "",
+            CoverUrl = 0,                    // tú luego lo cambias
+            Songs = new ObservableCollection<pasadena_vistas.Models.Song>()
+        };
+
+        int index = 1;
+        foreach (var s in dto.Songs)
+        {
+            album.Songs.Add(new pasadena_vistas.Models.Song
+            {
+                Id = s.SongId,                      // tu modelo usa INT, pero proto usa UUID → no compatible
+                title = s.Title,
+                artist = s.Artist,
+                genre = s.Genre,
+                duration = s.Duration,
+                album = dto.Name,
+                year = dto.ReleaseDate ?? "",
+                album_cover = null,
+                songNumber = index++
+            });
+        }
+
+        return album;
+    }
+
+
+
+    public class AlbumResponse
+    {
+        public AlbumDTO album { get; set; }
+    }
+
+    public class AlbumDTO
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public int artist_id { get; set; }
+        public string artist_name { get; set; }
+        public string cover { get; set; }
+        public string release_date { get; set; }
+        public List<SongDTO> songs { get; set; }
+    }
+
+    public class SongDTO
+    {
+        public string song_id { get; set; }
+        public string title { get; set; }
+        public string artist { get; set; }
+        public string genre { get; set; }
+        public double duration { get; set; }
+        public int artist_id { get; set; }
+        public int genre_id { get; set; }
+    }
+
 
     public class PlaylistItem
     {

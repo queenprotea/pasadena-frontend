@@ -65,6 +65,10 @@ namespace Metadata {
     static readonly grpc::Marshaller<global::Metadata.SearchAlbumsResponse> __Marshaller_metadata_SearchAlbumsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.SearchAlbumsResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Metadata.SearchGenresResponse> __Marshaller_metadata_SearchGenresResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.SearchGenresResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Metadata.GetAlbumByIdRequest> __Marshaller_metadata_GetAlbumByIdRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.GetAlbumByIdRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Metadata.GetAlbumByIdResponse> __Marshaller_metadata_GetAlbumByIdResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.GetAlbumByIdResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Metadata.AddSongRequest, global::Metadata.SongResponse> __Method_AddSong = new grpc::Method<global::Metadata.AddSongRequest, global::Metadata.SongResponse>(
@@ -130,6 +134,14 @@ namespace Metadata {
         __Marshaller_metadata_SearchRequest,
         __Marshaller_metadata_SearchGenresResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Metadata.GetAlbumByIdRequest, global::Metadata.GetAlbumByIdResponse> __Method_GetAlbumById = new grpc::Method<global::Metadata.GetAlbumByIdRequest, global::Metadata.GetAlbumByIdResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetAlbumById",
+        __Marshaller_metadata_GetAlbumByIdRequest,
+        __Marshaller_metadata_GetAlbumByIdResponse);
+
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
@@ -184,6 +196,12 @@ namespace Metadata {
 
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Metadata.SearchGenresResponse> SearchGenres(global::Metadata.SearchRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Metadata.GetAlbumByIdResponse> GetAlbumById(global::Metadata.GetAlbumByIdRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -377,6 +395,26 @@ namespace Metadata {
       {
         return CallInvoker.AsyncUnaryCall(__Method_SearchGenres, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Metadata.GetAlbumByIdResponse GetAlbumById(global::Metadata.GetAlbumByIdRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetAlbumById(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Metadata.GetAlbumByIdResponse GetAlbumById(global::Metadata.GetAlbumByIdRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetAlbumById, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Metadata.GetAlbumByIdResponse> GetAlbumByIdAsync(global::Metadata.GetAlbumByIdRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetAlbumByIdAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Metadata.GetAlbumByIdResponse> GetAlbumByIdAsync(global::Metadata.GetAlbumByIdRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetAlbumById, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected override MetadataServiceClient NewInstance(ClientBaseConfiguration configuration)
@@ -398,7 +436,8 @@ namespace Metadata {
           .AddMethod(__Method_SearchSongs, serviceImpl.SearchSongs)
           .AddMethod(__Method_SearchArtists, serviceImpl.SearchArtists)
           .AddMethod(__Method_SearchAlbums, serviceImpl.SearchAlbums)
-          .AddMethod(__Method_SearchGenres, serviceImpl.SearchGenres).Build();
+          .AddMethod(__Method_SearchGenres, serviceImpl.SearchGenres)
+          .AddMethod(__Method_GetAlbumById, serviceImpl.GetAlbumById).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the service binding logic.
@@ -416,6 +455,7 @@ namespace Metadata {
       serviceBinder.AddMethod(__Method_SearchArtists, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.SearchRequest, global::Metadata.SearchArtistsResponse>(serviceImpl.SearchArtists));
       serviceBinder.AddMethod(__Method_SearchAlbums, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.SearchRequest, global::Metadata.SearchAlbumsResponse>(serviceImpl.SearchAlbums));
       serviceBinder.AddMethod(__Method_SearchGenres, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.SearchRequest, global::Metadata.SearchGenresResponse>(serviceImpl.SearchGenres));
+      serviceBinder.AddMethod(__Method_GetAlbumById, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.GetAlbumByIdRequest, global::Metadata.GetAlbumByIdResponse>(serviceImpl.GetAlbumById));
     }
 
   }
