@@ -114,6 +114,12 @@
 	  <MauiXaml Update="vistas\Usuario\PerfilUsuarioPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="vistas\Usuario\RecuperarContrasena\RecuperarContrasena.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="vistas\Usuario\Registro\RegistrarUsuarioPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="vistas\Usuario\SocialPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="pasadena_vistas.vistas.Usuario.RecuperarContrasena.RecuperarContrasena"
+             Title="RecuperarContrasena">
+    <ScrollView>
+        <VerticalStackLayout Padding="25" Spacing="20">
+            <!-- Titulo -->
+            <Label Text="Sigue las instrucciones para modificar tu contraseña"
+                   TextColor="White"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   Margin="10, 0, 5, 0"/>
+            
+            <!-- Formulario 1 -->
+            <Entry x:Name="CorreoEntry"
+                   Placeholder="Correo electronico"
+                   Keyboard="Email"/>
+
+            <Entry x:Name="UsuarioEntry"
+                   Placeholder="Nombre de usuario"/>
+            
+            <Button Text="Enviar código"
+                    Clicked="btnSolicitarCodigo"
+                    BackgroundColor="Transparent"
+                    TextColor="#1DB954"/>
+            
+            <!-- Formulario 2-->
+            <VerticalStackLayout x:Name="CodigoLayout" IsVisible="False">
+                <Entry x:Name="CodigoEntry"
+                       Placeholder="Código de 4 digitos"
+                       Keyboard="Numeric"
+                       MaxLength="4"
+                       Margin="0, 5, 0, 5"/>
+
+                <Button Text="Verificar código"
+                        Clicked="btnVerificarCodigo"/>
+            </VerticalStackLayout>
+            
+            <!-- Formulario 3 -->
+            <VerticalStackLayout x:Name="ContrasenaLayout" IsVisible="False">
+                <Entry x:Name="ContrasenaNuevaEntry"
+                       Placeholder="Nueva contrasena"
+                       IsPassword="True"
+                       Margin="0, 5, 0, 5"/>
+
+                <Entry x:Name="ConfirmarContrasenaEntry"
+                       Placeholder="Confirmar contrasena"
+                       IsPassword="True"
+                       Margin="0, 5, 0, 5"/>
+
+                <Button Text="Actualizar contraseña"
+                        Clicked="btnModificarContrasena"
+                        Margin="0, 5, 0, 5"/>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -5,6 +5,8 @@ using pasadena_vistas.Models;
 using Streaming;
 using System.Collections.ObjectModel;
 using System.DirectoryServices;
+using pasadena_vistas.Models;
+using pasadena_vistas.Services;
 
 using Plugin.Maui.Audio;
 using Grpc.Core;
@@ -18,6 +20,7 @@ public partial class PantallaInicio : ContentPage
 {
     private IAudioPlayer? _currentPlayer;
 
+    private readonly AuthService _authService;    
     private CancellationTokenSource _cts = new();
     public ObservableCollection<SearchResultClass> SearchResults { get; set; } = new();
     public ObservableCollection<pasadena_vistas.Models.Album> AlbumsRecomendados { get; set; } = new();
@@ -26,6 +29,18 @@ public partial class PantallaInicio : ContentPage
     
 
     public PantallaInicio()
+	    {
+		    InitializeComponent();
+            _authService = new AuthService();
+            Loaded += PantallaInicio_Loaded;
+	    }
+
+    private async void PantallaInicio_Loaded(object sender, EventArgs e)
+    {
+        await CargarFotoUsuario();
+    }
+
+    public static class GrpcClientProvider
     {
         InitializeComponent();
         BindingContext = this;
@@ -35,8 +50,36 @@ public partial class PantallaInicio : ContentPage
         SizeChanged += OnSizeChanged;
     }
 
-   
+    private async Task CargarFotoUsuario()
+    {
+        try
+        {
+            bool tokenValido = await _authService.ValidarTokenAsync();
 
+            if (!tokenValido)
+            {
+                _authService.LimpiarSesion();
+                ProfileButton.Source = "user_profile_icon.png";
+                return;
+            }
+
+            var fotoPerfil = await SecureStorage.GetAsync("profile_picture");
+
+            if (string.IsNullOrWhiteSpace(fotoPerfil))
+            {
+                ProfileButton.Source = "user_profile_icon.png";
+                return;
+            }
+
+            string fotoUrl = Config.Config.ProfilePic(fotoPerfil);
+
+            ProfileButton.Source = ImageSource.FromUri(new Uri(fotoUrl));
+        }
+        catch
+        {
+            ProfileButton.Source = "user_profile_icon.png";
+        }
+    }
 
 
     private async void ProfileButton_Clicked(object sender, EventArgs e)
