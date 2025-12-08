@@ -112,6 +112,9 @@
 	  <MauiXaml Update="vistas\Usuario\SocialPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="vistas\Usuario\UserView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 	<!-- <ItemGroup>
 		<Protobuf Include="proto\Metadata.proto" GrpcServices="Client" Access="Public" />
