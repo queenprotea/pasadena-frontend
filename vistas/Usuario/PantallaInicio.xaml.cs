@@ -27,22 +27,13 @@ public partial class PantallaInicio : ContentPage
     public ObservableCollection<PlaylistItem> Playlists { get; } = new();
     private PlayerService _player;
 
-    public PantallaInicio()
-	    {
-		    InitializeComponent();
-            _authService = new AuthService();
-            Loaded += PantallaInicio_Loaded;
-	    }
-
-    private async void PantallaInicio_Loaded(object sender, EventArgs e)
-    {
-        await CargarFotoUsuario();
-
-
     public PantallaInicio(PlayerService player)
     {
         InitializeComponent();
         BindingContext = this;
+
+        _authService = new AuthService();
+        Loaded += PantallaInicio_Loaded;
 
         _player = player;
 
@@ -55,6 +46,11 @@ public partial class PantallaInicio : ContentPage
                 SongArtist.Text = song.artist;
             });
         };
+    }
+
+    private async void PantallaInicio_Loaded(object sender, EventArgs e)
+    {
+        await CargarFotoUsuario();
     }
 
     private async Task CargarFotoUsuario()
