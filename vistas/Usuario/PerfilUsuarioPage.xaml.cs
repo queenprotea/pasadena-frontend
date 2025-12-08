@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace pasadena_vistas.vistas.Usuario;
 
 public partial class PerfilUsuarioPage : ContentPage
@@ -18,5 +20,10 @@ public partial class PerfilUsuarioPage : ContentPage
     private async void AdminPanel_Tapped(object sender, TappedEventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(vistas.Administrador.GestionarUsuariosPage));
+    }
+
+    private async void LoginClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(vistas.Usuario.Login.InicioSesion));
     }
 }
