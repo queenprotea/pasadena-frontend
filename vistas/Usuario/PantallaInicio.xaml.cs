@@ -83,7 +83,7 @@ public partial class PantallaInicio : ContentPage
             if (!tokenValido)
             {
                 _authService.LimpiarSesion();
-                ProfileButton.Source = "user_profile_icon.png";
+                ProfileButton.Source = "default_user.png";
                 return;
             }
 
