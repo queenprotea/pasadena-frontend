@@ -1,16 +1,22 @@
 ﻿using Grpc.Core;
-using Plugin.Maui.Audio;
-using System.Diagnostics;
-using pasadena_vistas.Models;
-using Streaming;
 using Metadata;
+using pasadena_vistas.Models;
+using Plugin.Maui.Audio;
+using Streaming;
+using System.Diagnostics;
+using System.Linq;
 
 namespace pasadena_vistas.Services
 {
     public class PlayerService
     {
         private IAudioPlayer? _player;
+
+        // Cola de canciones por reproducir
         private Queue<pasadena_vistas.Models.Song> _queue = new();
+
+        // Historial para botón "Anterior"
+        private Stack<pasadena_vistas.Models.Song> _history = new();
 
         public event Action<pasadena_vistas.Models.Song>? OnSongChanged;
 
@@ -19,15 +25,18 @@ namespace pasadena_vistas.Services
         private DateTime _playStartTime;
         private pasadena_vistas.Models.Song? _currentSong;
 
-        // ======================
-        // MÉTODOS PÚBLICOS
-        // ======================
+        // =======================================================
+        // MÉTODOS PARA REPRODUCIR
+        // =======================================================
+
         public async Task PlayAlbumAsync(IEnumerable<pasadena_vistas.Models.Song> songs)
         {
             if (songs == null || !songs.Any())
                 return;
 
             _queue = new Queue<pasadena_vistas.Models.Song>(songs);
+            _history.Clear();
+
             await StartQueueAsync();
         }
 
@@ -37,17 +46,16 @@ namespace pasadena_vistas.Services
                 return;
 
             _queue.Clear();
+            _history.Clear();
+
             _queue.Enqueue(song);
+
             await StartQueueAsync();
         }
 
-        // ======================
-        // MÉTODOS PRIVADOS
-        // ======================
         private async Task StartQueueAsync()
         {
             StopCurrentPlayer();
-
             await PlayNextAsync();
         }
 
@@ -62,11 +70,24 @@ namespace pasadena_vistas.Services
                     _player.Dispose();
                 }
                 catch { }
+
                 _player = null;
             }
         }
 
-        private async Task PlayNextAsync()
+        // =======================================================
+        // PLAY - NEXT - PREVIOUS
+        // =======================================================
+
+        public async Task PlayNextAsync()
+        {
+            if (_currentSong != null)
+                _history.Push(_currentSong);
+
+            await InternalPlayNextAsync();
+        }
+
+        private async Task InternalPlayNextAsync()
         {
             if (_queue.Count == 0)
             {
@@ -76,18 +97,19 @@ namespace pasadena_vistas.Services
 
             var song = _queue.Dequeue();
             _currentSong = song;
+
             OnSongChanged?.Invoke(song);
 
             try
             {
                 var stream = await StreamSongAsync(song.Id);
+
                 _player = AudioManager.Current.CreatePlayer(stream);
                 _player.PlaybackEnded -= PlayerEnded;
                 _player.PlaybackEnded += PlayerEnded;
 
                 _playStartTime = DateTime.UtcNow;
 
-                // Registramos inicio con 0 segundos
                 await RegisterPlayAsync(song.Id, 0);
 
                 _player.Play();
@@ -95,10 +117,38 @@ namespace pasadena_vistas.Services
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error al reproducir canción {song.Id}: {ex}");
-                await PlayNextAsync(); // Continuar con la siguiente
+                await InternalPlayNextAsync();
             }
         }
 
+        public async Task PlayPreviousAsync()
+        {
+            if (_history.Count == 0)
+                return;
+
+            if (_currentSong != null)
+                _queue = new Queue<pasadena_vistas.Models.Song>(new[] { _currentSong }.Concat(_queue));
+
+            var prev = _history.Pop();
+
+            _queue = new Queue<pasadena_vistas.Models.Song>(new[] { prev }.Concat(_queue));
+
+            await StartQueueAsync();
+        }
+
+        public void TogglePlayPause()
+        {
+            if (_player == null) return;
+
+            if (_player.IsPlaying)
+                _player.Pause();
+            else
+                _player.Play();
+        }
+
+        // =======================================================
+        // EVENTO CUANDO TERMINA LA CANCIÓN
+        // =======================================================
         private async void PlayerEnded(object? sender, EventArgs e)
         {
             if (_currentSong != null)
@@ -107,19 +157,19 @@ namespace pasadena_vistas.Services
                 await RegisterPlayAsync(_currentSong.Id, seconds);
             }
 
-            await PlayNextAsync();
+            await InternalPlayNextAsync();
         }
 
+        // =======================================================
+        // STREAM DESDE BACKEND
+        // =======================================================
         private async Task<Stream> StreamSongAsync(string songId)
         {
-            if (string.IsNullOrWhiteSpace(songId))
-                throw new ArgumentException("songId no puede ser nulo");
-
-            var client = Services.StreamingService.Client ?? throw new InvalidOperationException("StreamingService.Client no inicializado");
+            var client = StreamingService.Client;
 
             using var call = client.StreamSong(new StreamRequest { SongId = songId });
 
-            var ms = new MemoryStream();
+            MemoryStream ms = new();
             await foreach (var chunk in call.ResponseStream.ReadAllAsync())
             {
                 if (chunk?.Chunk != null)
@@ -130,39 +180,21 @@ namespace pasadena_vistas.Services
             return ms;
         }
 
-        // ======================
+        // =======================================================
         // REGISTRO DE ESTADÍSTICAS
-        // ======================
+        // =======================================================
         private async Task RegisterPlayAsync(string songId, double seconds)
         {
-            if (string.IsNullOrWhiteSpace(songId))
-            {
-                Debug.WriteLine("Abortando play: songId es nulo o vacío");
-                return;
-            }
-
-            var client = Services.MetadataService.Client;
-            if (client == null)
-            {
-                Debug.WriteLine("Abortando play: MetadataService.Client es null");
-                return;
-            }
+            var client = MetadataService.Client;
+            if (client == null) return;
 
             try
             {
-                // Si CurrentUserId no está seteado, lo obtenemos
                 if (string.IsNullOrWhiteSpace(CurrentUserId))
                 {
                     var auth = new AuthService();
                     var usuario = await auth.ObtenerPerfilUsuarioAsync();
-
                     CurrentUserId = usuario.id.ToString();
-
-                    if (string.IsNullOrWhiteSpace(CurrentUserId))
-                    {
-                        Debug.WriteLine("Abortando play: No se pudo obtener el CurrentUserId");
-                        return;
-                    }
                 }
 
                 var request = new UserPlayRequest
@@ -173,17 +205,11 @@ namespace pasadena_vistas.Services
                 };
 
                 var response = await client.RegisterUserPlayAsync(request);
-                Debug.WriteLine($"Registro de play: {songId}, segundos={seconds}, success={response.Success}");
-            }
-            catch (RpcException rpcEx)
-            {
-                Debug.WriteLine($"Error gRPC al registrar play: {rpcEx.Status.Detail}");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error al registrar play: {ex}");
+                Debug.WriteLine($"Error al registrar estadísticas: {ex}");
             }
         }
-
     }
 }
