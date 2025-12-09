@@ -5,51 +5,82 @@
              Title="Crear nueva playlist"
              BackgroundColor="#121212">
 
-    <VerticalStackLayout Spacing="15" Padding="25" VerticalOptions="Start" Margin="0,20,0,0">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="25" VerticalOptions="Start" Margin="0,10,0,0">
 
-        <Label Text="Crea tu playlist"
-               TextColor="White"
-               FontSize="24"
-               FontAttributes="Bold"
-               HorizontalOptions="Center"/>
+            <Label Text="Crea tu playlist"
+                   TextColor="White"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
 
-        <Label Text="Nombre" TextColor="Gray" Margin="0,20,0,0"/>
-        <Entry x:Name="NombreEntry" 
-               Placeholder="El nombre de tu playlist" 
-               TextColor="White" 
-               PlaceholderColor="Gray" />
+            <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Frame CornerRadius="10" 
+                       HeightRequest="150" 
+                       WidthRequest="150" 
+                       Padding="0" 
+                       IsClippedToBounds="True"
+                       BorderColor="Gray"
+                       BackgroundColor="#2c2c2c">
+                    <Image x:Name="PlaylistImage" 
+                           Aspect="AspectFill"
+                           Source="music_placeholder.png"/>
+                </Frame>
 
-        <Label x:Name="NombreErrorLabel"
-               Text="Campo faltante"
-               TextColor="Red"
-               IsVisible="False" 
-               FontSize="12"/>
+                <Button Text="Subir imagen"
+                        TextColor="#1DB954"
+                        BackgroundColor="Transparent"
+                        FontAttributes="Bold"
+                        Clicked="SelectImageButton_Clicked"/>
+            </VerticalStackLayout>
 
-        <Label Text="Descripción" TextColor="Gray" Margin="0,15,0,0"/>
-        <Editor x:Name="DescripcionEntry" 
-                Placeholder="Añade una descripción (opcional)" 
-                TextColor="White" 
-                PlaceholderColor="Gray"
-                HeightRequest="100"
-                AutoSize="Disabled"/>
+            <VerticalStackLayout>
+                <Label Text="Nombre" TextColor="Gray"/>
+                <Entry x:Name="NombreEntry" 
+                       Placeholder="El nombre de tu playlist" 
+                       TextColor="White" 
+                       PlaceholderColor="Gray" />
 
-        <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,30,0,0">
+                <Label x:Name="NombreErrorLabel"
+                       Text="Campo faltante"
+                       TextColor="Red"
+                       IsVisible="False" 
+                       FontSize="12"/>
+            </VerticalStackLayout>
 
-            <Button Grid.Column="0"
-                    Text="Cancelar"
-                    BackgroundColor="#535353"
-                    TextColor="White"
-                    CornerRadius="25"
-                    Clicked="CancelButton_Clicked"/>
+            <Grid ColumnDefinitions="*, Auto" Margin="0,10,0,0">
+                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                    <Label Text="Playlist Pública" 
+                           TextColor="White" 
+                           FontSize="16"/>
+                    <Label Text="Visible para todos los usuarios" 
+                           TextColor="Gray" 
+                           FontSize="12"/>
+                </VerticalStackLayout>
 
-            <Button Grid.Column="1"
-                    Text="Aceptar"
-                    BackgroundColor="White"
-                    TextColor="Black"
-                    FontAttributes="Bold"
-                    CornerRadius="25"
-                    Clicked="AcceptButton_Clicked"/>
-        </Grid>
+                <Switch Grid.Column="1" 
+                        x:Name="IsPublicSwitch"
+                        OnColor="#1DB954"
+                        ThumbColor="White"/>
+            </Grid>
 
-    </VerticalStackLayout>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,30,0,0">
+                <Button Grid.Column="0"
+                        Text="Cancelar"
+                        BackgroundColor="#535353"
+                        TextColor="White"
+                        CornerRadius="25"
+                        Clicked="CancelButton_Clicked"/>
+
+                <Button Grid.Column="1"
+                        Text="Aceptar"
+                        BackgroundColor="White"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        CornerRadius="25"
+                        Clicked="AcceptButton_Clicked"/>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

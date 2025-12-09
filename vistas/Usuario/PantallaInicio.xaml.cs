@@ -51,6 +51,22 @@ public partial class PantallaInicio : ContentPage
     private async void PantallaInicio_Loaded(object sender, EventArgs e)
     {
         await CargarFotoUsuario();
+        await CargarBotonCrearPlaylistr();
+    }
+
+    private async Task CargarBotonCrearPlaylistr()
+    {
+        bool tokenValido = await _authService.ValidarTokenAsync();
+
+        if (!tokenValido)
+        {
+            CreatePlaylistButton.IsVisible = false;
+        }
+        else
+        {
+            CreatePlaylistButton.IsVisible = true;
+        }
+
     }
 
     private async Task CargarFotoUsuario()
@@ -91,6 +107,8 @@ public partial class PantallaInicio : ContentPage
     }
     private async void CrearPlaylist_Clicked(object sender, EventArgs e)
     {
+
+
         await Shell.Current.GoToAsync(nameof(CrearPlaylistPage));
     }
     private async void Playlist_SelectionChanged(object? sender, SelectionChangedEventArgs e)

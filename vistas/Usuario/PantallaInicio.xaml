@@ -65,7 +65,9 @@
                             BackgroundColor="#222222"
                             TextColor="White"
                             CornerRadius="20"
-                            FontAttributes="Bold"/>
+                            FontAttributes="Bold"
+                            Clicked="CrearPlaylist_Clicked"
+                            x:Name="CreatePlaylistButton"/>
                     
 
                     <Label Text="TU BIBLIOTECA"
