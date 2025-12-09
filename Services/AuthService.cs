@@ -167,4 +167,66 @@ public class AuthService
         }
     }
 
+    // ================== BAN / UNBAN USUARIOS ==================
+
+    public async Task<bool> BanUserAsync(int userId)
+    {
+        // 1. Tomar el token guardado (el mismo que usas para auth)
+        var token = await SecureStorage.GetAsync("auth_token");
+        if (string.IsNullOrEmpty(token))
+            throw new Exception("No hay token de autenticación. Inicia sesión de nuevo.");
+
+        // 2. Configurar cabecera Authorization
+        _clienteHttp.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        // 3. URL desde Config (usa PATCH /admin/users/{id}/ban)
+        var url = Config.Config.BanUser(userId);
+
+        // 4. Petición PATCH al backend
+        var request = new HttpRequestMessage(HttpMethod.Patch, url)
+        {
+            Content = null // normalmente ban/unban no necesitan body
+        };
+
+        var response = await _clienteHttp.SendAsync(request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error al banear usuario {userId}: {error}");
+            throw new Exception("No se pudo banear al usuario.");
+        }
+
+        return true;
+    }
+
+    public async Task<bool> UnbanUserAsync(int userId)
+    {
+        var token = await SecureStorage.GetAsync("auth_token");
+        if (string.IsNullOrEmpty(token))
+            throw new Exception("No hay token de autenticación. Inicia sesión de nuevo.");
+
+        _clienteHttp.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var url = Config.Config.UnbanUser(userId);
+
+        var request = new HttpRequestMessage(HttpMethod.Patch, url)
+        {
+            Content = null
+        };
+
+        var response = await _clienteHttp.SendAsync(request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error al desbanear usuario {userId}: {error}");
+            throw new Exception("No se pudo desbanear al usuario.");
+        }
+
+        return true;
+    }
+
 }

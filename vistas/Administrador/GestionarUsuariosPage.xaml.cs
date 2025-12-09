@@ -1,6 +1,11 @@
+Ôªøusing pasadena_vistas.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Nodes;
+using System.Net.Http.Headers;
+using pasadena_vistas.Config;
 
 namespace pasadena_vistas.vistas.Administrador;
 
@@ -8,8 +13,10 @@ namespace pasadena_vistas.vistas.Administrador;
 public class UserAdminViewModel : INotifyPropertyChanged
 {
     private bool _isBanned;
+
+    public int UserId { get; set; }                 // ID real del usuario
     public string Username { get; set; }
-    public string ProfilePicture { get; set; } = "user_profile_icon.png"; // Imagen por defecto
+    public string ProfilePicture { get; set; } = "user_profile_icon.png"; 
 
     public bool IsBanned
     {
@@ -17,64 +24,160 @@ public class UserAdminViewModel : INotifyPropertyChanged
         set
         {
             _isBanned = value;
+            OnPropertyChanged(nameof(IsBanned));
             OnPropertyChanged(nameof(BanButtonText));
             OnPropertyChanged(nameof(BanButtonColor));
         }
     }
 
-    // Propiedades din·micas para el botÛn
     public string BanButtonText => IsBanned ? "Desbanear" : "Banear";
     public Color BanButtonColor => IsBanned ? Colors.Green : Colors.Red;
 
     public event PropertyChangedEventHandler PropertyChanged;
-    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+
+    protected void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
 
-// LÛgica principal de la p·gina
-public partial class GestionarUsuariosPage : ContentPage
-{
-    public ObservableCollection<UserAdminViewModel> Users { get; set; }
 
-    public GestionarUsuariosPage()
+// L√≥gica principal de la p√°gina
+    public partial class GestionarUsuariosPage : ContentPage
     {
-        InitializeComponent();
-        LoadUsers(); // Cargamos usuarios de ejemplo
-        UsersCollectionView.ItemsSource = Users;
-    }
+        public ObservableCollection<UserAdminViewModel> Users { get; set; }
 
-    private void LoadUsers()
-    {
-        // En un caso real, estos datos vendrÌan de tu backend
-        Users = new ObservableCollection<UserAdminViewModel>
+        private readonly AuthService _authService = new();   
+
+        public GestionarUsuariosPage()
         {
-            new UserAdminViewModel { Username = "Daniela_22", IsBanned = false },
-            new UserAdminViewModel { Username = "carlos_music", IsBanned = true },
-            new UserAdminViewModel { Username = "Sofia_Rock", IsBanned = false }
-        };
-    }
+            InitializeComponent();
+            Users = new ObservableCollection<UserAdminViewModel>();
+            UsersCollectionView.ItemsSource = Users;
 
-    // LÛgica para el botÛn de Banear/Desbanear (CU-06)
-    private async void BanButton_Clicked(object sender, EventArgs e)
+            LoadUsers(); 
+        }
+
+        private async void LoadUsers()
+        {
+            Users.Clear();
+
+            try
+            {
+                var token = await SecureStorage.GetAsync("auth_token");
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    await DisplayAlert("Error", "No tienes sesi√≥n iniciada.", "OK");
+                    return;
+                }
+
+                using var client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+
+                // Llamamos al endpoint
+                var response = await client.GetAsync(Config.Config.AdminUsersList);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errText = await response.Content.ReadAsStringAsync();
+                    await DisplayAlert(
+                        "Error",
+                        $"No se pudieron cargar los usuarios ({(int)response.StatusCode}): {errText}",
+                        "OK"
+                    );
+                    return;
+                }
+
+                var jsonText = await response.Content.ReadAsStringAsync();
+
+                var root = JsonNode.Parse(jsonText);
+
+                if (root is JsonArray arr)
+                {
+                    foreach (var node in arr)
+                    {
+                        if (node is null) continue;
+
+                        int id = node["id"]?.GetValue<int>() ?? 0;
+                        string username = node["username"]?.GetValue<string>() ?? "";
+                        bool isBanned = node["is_banned"]?.GetValue<bool>() ?? false;
+
+                        Users.Add(new UserAdminViewModel
+                        {
+                            UserId = id,
+                            Username = username,
+                            IsBanned = isBanned,
+                            ProfilePicture = "ic-admin-default.png"
+                        });
+                    }
+                }
+                else
+                {
+                    if (root is not null)
+                    {
+                        int id = root["id"]?.GetValue<int>() ?? 0;
+                        string username = root["username"]?.GetValue<string>() ?? "";
+                        bool isBanned = root["is_banned"]?.GetValue<bool>() ?? false;
+
+                        Users.Add(new UserAdminViewModel
+                        {
+                            UserId = id,
+                            Username = username,
+                            IsBanned = isBanned,
+                            ProfilePicture = "ic-admin-default.png"
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Ocurri√≥ un error al cargar usuarios: {ex.Message}", "OK");
+            }
+        }
+
+
+        // L√≥gica para el bot√≥n de Banear/Desbanear 
+        private async void BanButton_Clicked(object sender, EventArgs e)
     {
         var button = sender as Button;
         var user = button?.CommandParameter as UserAdminViewModel;
 
-        if (user == null) return;
+        if (user == null)
+            return;
 
-        // Invertimos el estado de baneo
-        user.IsBanned = !user.IsBanned;
-
-        // Mostramos el mensaje correspondiente
-        if (user.IsBanned)
+        try
         {
-            await DisplayAlert("Usuario Baneado", $"El usuario {user.Username} ha sido baneado.", "Aceptar");
+            if (user.IsBanned)
+            {
+                // Est√° baneado ‚Üí desbanear en backend
+                await _authService.UnbanUserAsync(user.UserId);
+                user.IsBanned = false;
+
+                await DisplayAlert(
+                    "Baneo removido",
+                    $"Se ha removido el baneo al usuario {user.Username}.",
+                    "Aceptar"
+                );
+            }
+            else
+            {
+                // Est√° activo ‚Üí banear en backend
+                await _authService.BanUserAsync(user.UserId);
+                user.IsBanned = true;
+
+                await DisplayAlert(
+                    "Usuario baneado",
+                    $"El usuario {user.Username} ha sido baneado.",
+                    "Aceptar"
+                );
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await DisplayAlert("Baneo Removido", $"Se ha removido el baneo al usuario {user.Username}.", "Aceptar");
+            await DisplayAlert("Error", ex.Message, "Aceptar");
         }
     }
+
 }
