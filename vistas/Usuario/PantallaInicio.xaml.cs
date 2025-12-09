@@ -26,7 +26,7 @@ public partial class PantallaInicio : ContentPage
     public ObservableCollection<SearchResultClass> SearchResults { get; set; } = new();
     public ObservableCollection<pasadena_vistas.Models.Album> AlbumsRecomendados { get; set; } = new();
     public ObservableCollection<PlaylistItem> Playlists { get; } = new();
-    private PlayerService _player;
+    private readonly PlayerService _player;
 
     public PantallaInicio(PlayerService player)
     {
@@ -352,32 +352,17 @@ public partial class PantallaInicio : ContentPage
     }
     private void PlayPause_Clicked(object sender, EventArgs e)
     {
-        if (_currentPlayer == null) return;
-
-        if (_currentPlayer.IsPlaying)
-            _currentPlayer.Pause();
-        else
-            _currentPlayer.Play();
+        _player.TogglePlayPause();
     }
 
-    private void PreviousButton_Clicked(object sender, EventArgs e)
+    private async void NextButton_Clicked(object sender, EventArgs e)
     {
-        if (_currentPlayer == null) return;
-
-        if (_currentPlayer.IsPlaying)
-            _currentPlayer.Pause();
-        else
-            _currentPlayer.Play();
+        await _player.PlayNextAsync();
     }
 
-    private void NextButton_Clicked(object sender, EventArgs e)
+    private async void PreviousButton_Clicked(object sender, EventArgs e)
     {
-        if (_currentPlayer == null) return;
-
-        if (_currentPlayer.IsPlaying)
-            _currentPlayer.Pause();
-        else
-            _currentPlayer.Play();
+        await _player.PlayPreviousAsync();
     }
 
     private async void Dashboard_Clicked(object sender, EventArgs e)

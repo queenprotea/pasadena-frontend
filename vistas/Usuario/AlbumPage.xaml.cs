@@ -13,6 +13,15 @@ public partial class AlbumPage : ContentPage
         _player = player;
         // Conectamos los datos a la vista
         BindingContext = albumSeleccionado;
+        _player.OnSongChanged += Player_OnSongChanged;
+        _player.OnSongChanged += song =>
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                SongName.Text = song.title;
+                SongArtist.Text = song.artist;
+            });
+        };
     }
 
     private async void BtnVolver_Clicked(object sender, EventArgs e)
@@ -50,4 +59,29 @@ public partial class AlbumPage : ContentPage
 
         ((CollectionView)sender).SelectedItem = null;
     }
+    private void PlayPause_Clicked(object sender, EventArgs e)
+    {
+        _player.TogglePlayPause();
+    }
+
+    private async void NextButton_Clicked(object sender, EventArgs e)
+    {
+        await _player.PlayNextAsync();
+    }
+
+    private async void PreviousButton_Clicked(object sender, EventArgs e)
+    {
+        await _player.PlayPreviousAsync();
+    }
+    private void Player_OnSongChanged(pasadena_vistas.Models.Song song)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            SongName.Text = song.title;
+            SongArtist.Text = song.artist;
+
+            
+        });
+    }
+
 }
