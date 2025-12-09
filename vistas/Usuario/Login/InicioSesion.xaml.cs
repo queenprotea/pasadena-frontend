@@ -1,4 +1,6 @@
 using pasadena_vistas.Services;
+using pasadena_vistas.Models.Login;
+using pasadena_vistas.vistas.Usuario.Registro;
 using System.Threading.Tasks;
 
 namespace pasadena_vistas.vistas.Usuario.Login;
@@ -15,33 +17,55 @@ public partial class InicioSesion : ContentPage
 
     private async void btnLoginClick(object sender, EventArgs e)
     {
-		string identifier = IdentifierEntry.Text;
-		string password = PasswordEntry.Text;
-
-		if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrWhiteSpace(password))
-		{
-			await DisplayAlert("Error", "Llena todos los campos", "Aceptar");
-			return;
-		}
+        await camposIncompletos();
 
 		try
-		{
-			var token = await _authService.LoginAsync(identifier, password);
+        {
+            var token = await _authService.LoginAsync(IdentifierEntry.Text, PasswordEntry.Text);
 
-			await SecureStorage.SetAsync("auth_token", token.access_token);
+            await SecureStorage.SetAsync("auth_token", token.access_token);
 
-			await DisplayAlert("Exito", "Iniciaste sesion", "Aceptar");
+            var usuario = await _authService.ObtenerPerfilUsuarioAsync();
 
-			await Shell.Current.GoToAsync($"///{nameof(PantallaInicio)}");
-		}
-		catch (Exception ex)
-		{
-			await DisplayAlert("Error al iniciar sesion", ex.Message, "Aceptar");
-		}
+            if (!string.IsNullOrWhiteSpace(usuario.profile_picture))
+                await SecureStorage.SetAsync("profile_picture", usuario.profile_picture);
+            else
+                SecureStorage.Remove("profile_picture");
+
+            await DisplayAlert("Éxito", "Iniciaste sesión", "Aceptar");
+
+            await Shell.Current.GoToAsync($"///{nameof(PantallaInicio)}");
+        }
+        catch (HttpRequestException)
+        {
+            await DisplayAlert("Error", "No hay conexion a internet", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error al iniciar sesion", ex.Message, "Aceptar");
+        }
     }
 
     private async void btnRegistro_Clicked(object sender, EventArgs e)
     {
-		await Shell.Current.GoToAsync(nameof(PantallaInicio));
+		await Shell.Current.GoToAsync(nameof(RegistrarUsuarioPage));
+    }
+
+	private async Task<bool> camposIncompletos()
+	{
+		bool resultado = true;
+
+		if (string.IsNullOrWhiteSpace(IdentifierEntry.Text) || string.IsNullOrWhiteSpace(PasswordEntry.Text))
+        {
+			await DisplayAlert("Error", "Llena todos los campos", "Aceptar");
+            resultado = false;
+        }
+
+		return resultado;
+    }
+
+    private async void btnModificarContrasena(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(RecuperarContrasena));
     }
 }

@@ -69,7 +69,8 @@
                                 HeightRequest="55"
                                 WidthRequest="55"
                                 CornerRadius="28"
-                                HorizontalOptions="End"/>
+                                HorizontalOptions="End"
+                                Clicked="PlayButton_Clicked"/>
 
                         <Label Grid.Column="0" Text="Descargar" TextColor="Gray" VerticalOptions="Center"/>
                     </Grid>

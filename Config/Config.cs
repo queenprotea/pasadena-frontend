@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace pasadena_vistas.Config;
 
 public static class Config
@@ -14,7 +15,17 @@ public static class Config
     public static string AuthLogin => $"{URL_BASE}/auth/login";
     public static string AuthRegister => $"{URL_BASE}/auth/register";
 
+    public static string GetProfile => $"{URL_BASE}/auth/me";
+
+    public static string PasswordRecovery => $"{URL_BASE}/auth/password-recovery/initiate";
+    public static string PasswordVerify => $"{URL_BASE}/auth/password-recovery/verify";
+    public static string PasswordReset => $"{URL_BASE}/auth/password-recovery/reset";
+
     //User only
     public static string UserRegister => $"{URL_BASE}/profiles/register";
     public static string UserById(int id) => $"{URL_BASE}/profiles/{id}";
+   public static string UserByUsername(string username) => $"{URL_BASE}/auth/users/username/{username}";
+    public static string MetadataURL => $"{URL_BASE}/metadata.MetadataService";
+    public static string StreamingURL => $"{URL_BASE}/streaming.StreamingService";
+    public static string ProfilePic(string fotoUrl) => $"{URL_BASE}/profiles/static/avatars/{fotoUrl}";
 }

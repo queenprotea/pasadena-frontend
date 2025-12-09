@@ -112,9 +112,14 @@
                         Style="{StaticResource SecondaryButton}"
                         Clicked="AdminStats_Clicked"/>
 
-                <Button Text="Gestionar Canciones"
-                        Style="{StaticResource SecondaryButton}"
-                        Clicked="AdminCanciones_Clicked"/>
+                    <Button Text="Gestionar Canciones"
+                            BackgroundColor="#181818"
+                            TextColor="White"
+                            Clicked="AdminCanciones_Clicked"/>
+                    <Button Text="Estadisticas"
+                            BackgroundColor="#181818"
+                            TextColor="White"
+                            Clicked="Dashboard_Clicked"/>
 
             </VerticalStackLayout>
         </ScrollView>
@@ -169,30 +174,49 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <!-- Resultados de búsqueda -->
-                <Label Text="Resultados de búsqueda"
-                       Style="{StaticResource TitleLabel}"/>
 
-                <CollectionView x:Name="SearchResultsView"
-                                IsVisible="False"
-                                ItemsSource="{Binding SearchResults}"
+                <!-- CONTENIDO NORMAL (ScrollView limitado para NO tapar el reproductor) -->
+                <Grid Grid.Row="2">
+                    <ScrollView>
+                        <VerticalStackLayout Spacing="20">
+
+                            <Label Text="Esto puede gustarte"
+                                   TextColor="White"
+                                   FontSize="22"
+                                   FontAttributes="Bold"/>
+
+                            <CollectionView x:Name="AlbumsCollection"
+                                HeightRequest="220"
+                                ItemsSource="{Binding AlbumsRecomendados}"
                                 SelectionMode="Single"
-                                SelectionChanged="OnSearchResultSelected">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Padding="8"
-                                  ColumnDefinitions="*,Auto">
-                                <Label Text="{Binding Nombre}"
-                                       TextColor="White"
-                                       FontSize="14"/>
-                                <Label Grid.Column="1"
-                                       Text="{Binding Tipo}"
-                                       TextColor="#B0B0B0"
-                                       FontSize="12"/>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                                SelectionChanged="OnAlbumSelected">
+                                
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Horizontal"
+                                         ItemSpacing="20"/>
+                                </CollectionView.ItemsLayout>
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <VerticalStackLayout WidthRequest="180">
+                                            <Image Source="album_art_placeholder.png"
+                                                   HeightRequest="170"
+                                                   Aspect="AspectFill" />
+                                            <Label Text="{Binding .}"
+                                               TextColor="White"
+                                               FontAttributes="Bold"
+                                               FontSize="14"
+                                               LineBreakMode="TailTruncation"
+                                               Margin="0,8,0,0"/>
+
+                                            <Label Text="{Binding Artist}"
+                                               TextColor="#B0B0B0"
+                                               FontSize="12"
+                                               LineBreakMode="TailTruncation"/>
+                                        </VerticalStackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
 
             </VerticalStackLayout>
         </ScrollView>

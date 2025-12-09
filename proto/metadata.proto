@@ -12,6 +12,11 @@ service MetadataService {
   rpc SearchArtists (SearchRequest) returns (SearchArtistsResponse);
   rpc SearchAlbums (SearchRequest) returns (SearchAlbumsResponse);
   rpc SearchGenres (SearchRequest) returns (SearchGenresResponse);
+  rpc UpdateSong (UpdateSongRequest) returns (SongResponse);
+  rpc GetAlbumById(GetAlbumByIdRequest) returns (GetAlbumByIdResponse);
+  rpc RegisterUserPlay(UserPlayRequest) returns (UserPlayResponse);
+  rpc GetUserStatistics(UserStatisticsRequest) returns (UserStatisticsResponse);
+
 }
 
 message SearchRequest { string query = 1; }
@@ -50,6 +55,19 @@ message SongResponse {
   string message = 2;
 }
 
+message UpdateSongRequest {
+  string song_id = 1;
+
+  // Campos a modificar (opcionales)
+  string title = 2;
+  string artist = 3;
+  string album = 4;
+  string year = 5;
+  string genre = 6;
+  double duration = 7;
+  bytes file_data = 8;     // nuevo audio (opcional)
+  bytes album_cover = 9;   // nueva portada (opcional)
+}
 /* Others */
 message SongPathResponse { string path = 1; }
 message DeleteResponse { bool success = 1; string message = 2; }
@@ -64,3 +82,81 @@ message SearchAlbumsResponse { repeated Album albums = 1; }
 
 message Genre { int32 genre_id = 1; string name = 2; }
 message SearchGenresResponse { repeated Genre genres = 1; }
+
+message GetAlbumByIdRequest {
+  int32 id = 1;
+}
+
+message AlbumSong {
+  string song_id = 1;
+  string title = 2;
+  string artist = 3;
+  string genre = 4;
+  double duration = 5;
+  int32 artist_id = 6;
+  int32 genre_id = 7;
+}
+
+message AlbumFull {
+  int32 id = 1;
+  string name = 2;
+  int32 artist_id = 3;
+  bytes cover = 4;
+  string release_date = 5;
+  repeated AlbumSong songs = 6;
+  string artist_name = 7;
+}
+
+message GetAlbumByIdResponse {
+  AlbumFull album = 1;
+}
+
+message UserPlayRequest {
+  string user_id = 1;
+  string song_id = 2;
+  double seconds = 3; // cuanto escuchó
+}
+
+message UserPlayResponse {
+  bool success = 1;
+}
+
+message UserStatisticsRequest {
+  string user_id = 1;
+}
+
+/* TOP CANCIONES */
+message TopSong {
+  string song_id = 1;
+  string title = 2;
+  int32 play_count = 3;
+}
+
+/* TOP ARTISTAS */
+message TopArtist {
+  string name = 1;
+  int32 play_count = 2;
+}
+
+/* TOP GÉNEROS */
+message TopGenre {
+  string name = 1;
+  int32 play_count = 2;
+}
+
+/* ÚLTIMAS ESCUCHADAS */
+message LastPlayed {
+  string song_id = 1;
+  string title = 2;
+  string last_play = 3;
+}
+
+/* RESPUESTA COMPLETA DE ESTADÍSTICAS */
+message UserStatisticsResponse {
+  repeated TopSong topSongs = 1;
+  repeated TopArtist topArtists = 2;
+  repeated TopGenre topGenres = 3;
+  double totalTime = 4;
+  repeated LastPlayed lastPlayed = 5;
+  int32 totalSongs = 6;
+}

@@ -8,7 +8,7 @@ namespace pasadena_vistas.Models
 {
     public class Song
     {
-        public int Id { get; set; } = 0;
+        public string Id { get; set; }
         public string title { get; set; }
         public string artist { get; set; }
         public string album { get; set; }
