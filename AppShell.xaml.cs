@@ -18,6 +18,7 @@
             Routing.RegisterRoute(nameof(vistas.Administrador.GestionarUsuariosPage), typeof(vistas.Administrador.GestionarUsuariosPage));
             Routing.RegisterRoute(nameof(vistas.Administrador.GestionarCancionesPage), typeof(vistas.Administrador.GestionarCancionesPage));
             Routing.RegisterRoute(nameof(vistas.Administrador.AgregarCancionAdminPage), typeof(vistas.Administrador.AgregarCancionAdminPage));
+            Routing.RegisterRoute(nameof(vistas.Administrador.AdminDashboardPage), typeof(vistas.Administrador.AdminDashboardPage));
         }
     }
 }

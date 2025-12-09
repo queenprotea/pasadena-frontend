@@ -66,9 +66,19 @@ namespace Metadata {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Metadata.SearchGenresResponse> __Marshaller_metadata_SearchGenresResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.SearchGenresResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Metadata.UpdateSongRequest> __Marshaller_metadata_UpdateSongRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.UpdateSongRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Metadata.GetAlbumByIdRequest> __Marshaller_metadata_GetAlbumByIdRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.GetAlbumByIdRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Metadata.GetAlbumByIdResponse> __Marshaller_metadata_GetAlbumByIdResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.GetAlbumByIdResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Metadata.UserPlayRequest> __Marshaller_metadata_UserPlayRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.UserPlayRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Metadata.UserPlayResponse> __Marshaller_metadata_UserPlayResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.UserPlayResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Metadata.UserStatisticsRequest> __Marshaller_metadata_UserStatisticsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.UserStatisticsRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Metadata.UserStatisticsResponse> __Marshaller_metadata_UserStatisticsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.UserStatisticsResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Metadata.AddSongRequest, global::Metadata.SongResponse> __Method_AddSong = new grpc::Method<global::Metadata.AddSongRequest, global::Metadata.SongResponse>(
@@ -135,12 +145,36 @@ namespace Metadata {
         __Marshaller_metadata_SearchGenresResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Metadata.UpdateSongRequest, global::Metadata.SongResponse> __Method_UpdateSong = new grpc::Method<global::Metadata.UpdateSongRequest, global::Metadata.SongResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "UpdateSong",
+        __Marshaller_metadata_UpdateSongRequest,
+        __Marshaller_metadata_SongResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Metadata.GetAlbumByIdRequest, global::Metadata.GetAlbumByIdResponse> __Method_GetAlbumById = new grpc::Method<global::Metadata.GetAlbumByIdRequest, global::Metadata.GetAlbumByIdResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
         "GetAlbumById",
         __Marshaller_metadata_GetAlbumByIdRequest,
         __Marshaller_metadata_GetAlbumByIdResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Metadata.UserPlayRequest, global::Metadata.UserPlayResponse> __Method_RegisterUserPlay = new grpc::Method<global::Metadata.UserPlayRequest, global::Metadata.UserPlayResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "RegisterUserPlay",
+        __Marshaller_metadata_UserPlayRequest,
+        __Marshaller_metadata_UserPlayResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Metadata.UserStatisticsRequest, global::Metadata.UserStatisticsResponse> __Method_GetUserStatistics = new grpc::Method<global::Metadata.UserStatisticsRequest, global::Metadata.UserStatisticsResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetUserStatistics",
+        __Marshaller_metadata_UserStatisticsRequest,
+        __Marshaller_metadata_UserStatisticsResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -201,7 +235,25 @@ namespace Metadata {
       }
 
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Metadata.SongResponse> UpdateSong(global::Metadata.UpdateSongRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Metadata.GetAlbumByIdResponse> GetAlbumById(global::Metadata.GetAlbumByIdRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Metadata.UserPlayResponse> RegisterUserPlay(global::Metadata.UserPlayRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Metadata.UserStatisticsResponse> GetUserStatistics(global::Metadata.UserStatisticsRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -396,6 +448,26 @@ namespace Metadata {
         return CallInvoker.AsyncUnaryCall(__Method_SearchGenres, null, options, request);
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Metadata.SongResponse UpdateSong(global::Metadata.UpdateSongRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return UpdateSong(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Metadata.SongResponse UpdateSong(global::Metadata.UpdateSongRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_UpdateSong, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Metadata.SongResponse> UpdateSongAsync(global::Metadata.UpdateSongRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return UpdateSongAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Metadata.SongResponse> UpdateSongAsync(global::Metadata.UpdateSongRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_UpdateSong, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Metadata.GetAlbumByIdResponse GetAlbumById(global::Metadata.GetAlbumByIdRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetAlbumById(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -414,6 +486,46 @@ namespace Metadata {
       public virtual grpc::AsyncUnaryCall<global::Metadata.GetAlbumByIdResponse> GetAlbumByIdAsync(global::Metadata.GetAlbumByIdRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetAlbumById, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Metadata.UserPlayResponse RegisterUserPlay(global::Metadata.UserPlayRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return RegisterUserPlay(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Metadata.UserPlayResponse RegisterUserPlay(global::Metadata.UserPlayRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_RegisterUserPlay, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Metadata.UserPlayResponse> RegisterUserPlayAsync(global::Metadata.UserPlayRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return RegisterUserPlayAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Metadata.UserPlayResponse> RegisterUserPlayAsync(global::Metadata.UserPlayRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_RegisterUserPlay, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Metadata.UserStatisticsResponse GetUserStatistics(global::Metadata.UserStatisticsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetUserStatistics(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Metadata.UserStatisticsResponse GetUserStatistics(global::Metadata.UserStatisticsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetUserStatistics, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Metadata.UserStatisticsResponse> GetUserStatisticsAsync(global::Metadata.UserStatisticsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetUserStatisticsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Metadata.UserStatisticsResponse> GetUserStatisticsAsync(global::Metadata.UserStatisticsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetUserStatistics, null, options, request);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -437,7 +549,10 @@ namespace Metadata {
           .AddMethod(__Method_SearchArtists, serviceImpl.SearchArtists)
           .AddMethod(__Method_SearchAlbums, serviceImpl.SearchAlbums)
           .AddMethod(__Method_SearchGenres, serviceImpl.SearchGenres)
-          .AddMethod(__Method_GetAlbumById, serviceImpl.GetAlbumById).Build();
+          .AddMethod(__Method_UpdateSong, serviceImpl.UpdateSong)
+          .AddMethod(__Method_GetAlbumById, serviceImpl.GetAlbumById)
+          .AddMethod(__Method_RegisterUserPlay, serviceImpl.RegisterUserPlay)
+          .AddMethod(__Method_GetUserStatistics, serviceImpl.GetUserStatistics).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the service binding logic.
@@ -455,7 +570,10 @@ namespace Metadata {
       serviceBinder.AddMethod(__Method_SearchArtists, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.SearchRequest, global::Metadata.SearchArtistsResponse>(serviceImpl.SearchArtists));
       serviceBinder.AddMethod(__Method_SearchAlbums, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.SearchRequest, global::Metadata.SearchAlbumsResponse>(serviceImpl.SearchAlbums));
       serviceBinder.AddMethod(__Method_SearchGenres, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.SearchRequest, global::Metadata.SearchGenresResponse>(serviceImpl.SearchGenres));
+      serviceBinder.AddMethod(__Method_UpdateSong, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.UpdateSongRequest, global::Metadata.SongResponse>(serviceImpl.UpdateSong));
       serviceBinder.AddMethod(__Method_GetAlbumById, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.GetAlbumByIdRequest, global::Metadata.GetAlbumByIdResponse>(serviceImpl.GetAlbumById));
+      serviceBinder.AddMethod(__Method_RegisterUserPlay, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.UserPlayRequest, global::Metadata.UserPlayResponse>(serviceImpl.RegisterUserPlay));
+      serviceBinder.AddMethod(__Method_GetUserStatistics, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.UserStatisticsRequest, global::Metadata.UserStatisticsResponse>(serviceImpl.GetUserStatistics));
     }
 
   }
