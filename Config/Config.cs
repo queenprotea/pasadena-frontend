@@ -29,6 +29,12 @@ public static class Config
     public static string StreamingURL => $"{URL_BASE}/streaming.StreamingService";
     public static string ProfilePic(string fotoUrl) => $"{URL_BASE}/profiles/static/avatars/{fotoUrl}";
 
+
+    //Admin – gestión de usuarios 
+    public static string AdminUsersList => $"{URL_BASE}/admin/users";
+    public static string BanUser(int id) => $"{URL_BASE}/admin/users/{id}/ban";
+    public static string UnbanUser(int id) => $"{URL_BASE}/admin/users/{id}/unban";
+
     //Playlist only
 
     public static string PlaylistRegister => $"{URL_BASE}/playlist";
