@@ -1,7 +1,8 @@
-using System.Diagnostics;
-using pasadena_vistas.Services;
-using pasadena_vistas.Models;
 using Metadata;
+using MisDatosGrpc;
+using pasadena_vistas.Models;
+using pasadena_vistas.Services;
+using System.Diagnostics;
 
 namespace pasadena_vistas.vistas.Administrador;
 
@@ -17,51 +18,64 @@ public partial class AdminDashboardPage : ContentPage
     {
         try
         {
-            // 1?? Obtener usuario actual
             var auth = new AuthService();
             var usuario = await auth.ObtenerPerfilUsuarioAsync();
 
             if (usuario == null || string.IsNullOrWhiteSpace(usuario.id.ToString()))
             {
-                lblTotalUsuarios.Text = "-";
-                lblTotalCanciones.Text = "-";
-                lblTopGenero.Text = "-";
-                lblTotalPlaylists.Text = "-";
-                lblTotalArtistas.Text = "-";
+                SetPlaceholders();
                 return;
             }
 
-            // 2?? Crear request gRPC
-            var client = Services.MetadataService.Client; // tu cliente gRPC
+            var client = MetadataService.Client;
+
             if (client == null)
-                throw new InvalidOperationException("MetadataService.Client no inicializado");
+            {
+                Debug.WriteLine("MetadataService.Client es null");
+                SetPlaceholders();
+                return;
+            }
 
             var request = new UserStatisticsRequest
             {
-                UserId = usuario.id.ToString() // <-- string
+                UserId = usuario.id.ToString()
             };
 
             var response = await client.GetUserStatisticsAsync(request);
 
-            // 3?? Asignar valores a los labels
-            lblTotalUsuarios.Text = response.TotalTime.ToString(); // opcional, si quieres mostrar nombre
-            lblTotalCanciones.Text = response.TotalSongs.ToString("N0"); // ej: 12,345
-            lblTopGenero.Text = response.TopGenres.Count > 0 ? response.TopGenres[0].Name : "-";
-            lblTotalPlaylists.Text = response.TopSongs.Count.ToString("N0"); // si quieres contar top canciones
-            lblTotalArtistas.Text = response.TopArtists.Count.ToString("N0");
 
+            // totalTime  -> Tiempo total reproducido (min)
+            lblTotalUsuarios.Text = response.TotalTime.ToString("N0");
+
+            // totalSongs -> Total de canciones escuchadas
+            lblTotalCanciones.Text = response.TotalSongs.ToString("N0");
+
+            // topGenres[0].name -> Género más escuchado
+            lblTopGenero.Text = response.TopGenres.Count > 0
+                ? response.TopGenres[0].Name
+                : "-";
+
+            // topSongs.Count -> Canciones en tu Top
+            lblTotalPlaylists.Text = response.TopSongs.Count.ToString("N0");
+
+            // topArtists.Count -> Artistas en tu Top
+            lblTotalArtistas.Text = response.TopArtists.Count.ToString("N0");
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Error al cargar estadísticas: {ex}");
-            lblTotalUsuarios.Text = "-";
-            lblTotalCanciones.Text = "-";
-            lblTopGenero.Text = "-";
-            lblTotalPlaylists.Text = "-";
-            lblTotalArtistas.Text = "-";
+            SetPlaceholders();
         }
     }
 
+    private void SetPlaceholders()
+    {
+        lblTotalUsuarios.Text = "-";
+        lblTotalCanciones.Text = "-";
+        lblTopGenero.Text = "-";
+        lblTotalPlaylists.Text = "-";
+        lblTotalArtistas.Text = "-";
+    }
 
     private async void Volver_Clicked(object sender, EventArgs e)
     {
