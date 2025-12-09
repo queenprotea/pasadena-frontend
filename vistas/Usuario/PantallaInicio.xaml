@@ -1,228 +1,223 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-          
-
              x:Class="pasadena_vistas.vistas.Usuario.PantallaInicio"
-             NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#121212">
+             BackgroundColor="#050509">
 
-    <!-- GRID PRINCIPAL -->
-    <Grid RowDefinitions="Auto, *, Auto"
-          RowSpacing="0">
+    <ContentPage.Resources>
+        <!-- Estilos básicos -->
+        <Style TargetType="Label" x:Key="TitleLabel">
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
 
-        <!-- HEADER -->
+        <Style TargetType="Button" x:Key="PrimaryButton">
+            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="BackgroundColor" Value="#1DB954" />
+            <Setter Property="TextColor" Value="Black" />
+            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
+
+        <Style TargetType="Button" x:Key="SecondaryButton">
+            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="BackgroundColor" Value="#181818" />
+            <Setter Property="TextColor" Value="White" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto"
+          ColumnDefinitions="220,*">
+
+        <!-- ================= CABECERA (fila 0, columnas 0-1) ================= -->
         <Grid Grid.Row="0"
-              BackgroundColor="#1F1B24"
-              Padding="15"
-              ColumnDefinitions="Auto, *">
+              Grid.ColumnSpan="2"
+              Padding="16"
+              ColumnDefinitions="Auto,*,Auto"
+              BackgroundColor="#121212"
+              VerticalOptions="Center">
 
-            <ImageButton x:Name="MenuButton"
-                         Source="menu_icon.png"
-                         HeightRequest="28"
-                         WidthRequest="28"
-                         Clicked="ToggleMenu"
-                         BackgroundColor="Transparent"/>
+            <!-- Botón menú (por ahora solo decorativo, pero con handler por si lo quieres usar) -->
+            <Button Text="☰"
+                    WidthRequest="40"
+                    HeightRequest="40"
+                    BackgroundColor="#262626"
+                    TextColor="White"
+                    CornerRadius="20"
+                    Clicked="ToggleMenu_Clicked"/>
 
-            <Grid Grid.Column="1"
-                  ColumnDefinitions="*, Auto"
-                  Margin="10,0,0,0">
+            <!-- Buscador -->
+            <SearchBar x:Name="SearchBar"
+                       Grid.Column="1"
+                       Margin="16,0"
+                       Placeholder="¿Qué quieres escuchar?"
+                       BackgroundColor="#262626"
+                       TextColor="White"
+                       PlaceholderColor="#888888"
+                       SearchButtonPressed="SearchSong_clicked"
+                       TextChanged="SearchSong_textChanged"/>
 
-                <SearchBar x:Name="SearchBar"
-                           Placeholder="¿Qué quieres escuchar?"
-                           TextColor="White"
-                           BackgroundColor="#2B2B2B"
-                           CancelButtonColor="White"
-                           SearchButtonPressed="SearchSong_clicked"
-                           TextChanged="SearchSong_textChanged"/>
-
-                <ImageButton Grid.Column="1"
-                             Source="user_profile_icon.png"
-                             HeightRequest="40"
-                             WidthRequest="40"
-                             Aspect="AspectFill"
-                             CornerRadius="20"
-                             Margin="10,0,0,0"
-                             x:Name="ProfileButton"
-                             Clicked="ProfileButton_Clicked"/>
-            </Grid>
+            <ImageButton Grid.Column="2"
+                       BackgroundColor="Black"
+                       Source="default_user.png"
+                       HeightRequest="40"
+                       WidthRequest="40"
+                       Aspect="AspectFill"
+                       CornerRadius="20"
+                       Margin="10,0,0,0"
+                       x:Name="ProfileButton"
+                       Clicked="ProfileButton_Clicked"/>
 
         </Grid>
 
+        <!-- ================= MENÚ LATERAL (fila 1, columna 0) ================= -->
+        <ScrollView Grid.Row="1"
+                    Grid.Column="0">
+            <VerticalStackLayout x:Name="LeftMenu"
+                                 Padding="16"
+                                 Spacing="16"
+                                 BackgroundColor="#000000">
 
-        <!-- CONTENIDO PRINCIPAL -->
-        <Grid Grid.Row="1" ColumnDefinitions="Auto, *">
+                <Button Text="+ Crear Playlist"
+                        Style="{StaticResource PrimaryButton}"
+                        x:Name="CreatePlaylistButton"
+                        Clicked="CrearPlaylist_Clicked"/>
 
-            <!-- MENÚ LATERAL -->
-            <Grid x:Name="LeftMenu"
-                  WidthRequest="240"
-                  BackgroundColor="#000000"
-                  Padding="15"
-                  IsVisible="True">
+                <Label Text="TU BIBLIOTECA"
+                       TextColor="#B0B0B0"
+                       FontSize="12"
+                       FontAttributes="Bold"/>
 
-                <VerticalStackLayout Spacing="16">
-                    <Button Text="+ Crear Playlist"
-                            BackgroundColor="#222222"
-                            TextColor="White"
-                            CornerRadius="20"
-                            FontAttributes="Bold"/>
-                    
-
-                    <Label Text="TU BIBLIOTECA"
-                           TextColor="Gray"
-                           FontSize="12"
-                           FontAttributes="Bold"/>
-
-                    <CollectionView>
-                        <CollectionView.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>🎵 Tus me gusta</x:String>
-                                <x:String>🎧 Canciones tristes</x:String>
-                                <x:String>🎸 Rock clásico</x:String>
-                            </x:Array>
-                        </CollectionView.ItemsSource>
-
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Label Text="{Binding .}"
-                                       TextColor="White"
-                                       Padding="5"
-                                       FontSize="16" />
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-
-                    <Label Text="PANEL DE ADMIN"
-                           TextColor="Gray"
-                           FontSize="12"
-                           FontAttributes="Bold"
-                           Margin="0,20,0,0" />
-
-                    <Button Text="Gestionar Usuarios"
-                            BackgroundColor="#181818"
-                            TextColor="White"/>
-
-                    <Button Text="Gestionar Canciones"
-                            BackgroundColor="#181818"
-                            TextColor="White"
-                            Clicked="AdminCanciones_Clicked"/>
-                    <Button Text="Estadisticas"
-                            BackgroundColor="#181818"
-                            TextColor="White"
-                            Clicked="Dashboard_Clicked"/>
-
-                </VerticalStackLayout>
-
-            </Grid>
-
-
-            <!-- CUERPO PRINCIPAL -->
-            <Grid Grid.Column="1"
-                  RowDefinitions="Auto, Auto, *"
-                  Padding="20">
-
-                <!-- RESULTADOS DE BUSQUEDA -->
-                <CollectionView x:Name="SearchResultsView"
-                                Grid.Row="0"
-                                ItemsSource="{Binding SearchResults}"
-                                IsVisible="False"
-                                BackgroundColor="#1E1E1E"
-                                Margin="0,10,0,10"
-                                HeightRequest="250"
+                <!-- LISTA DE PLAYLISTS -->
+                <CollectionView x:Name="PlaylistsCollection"
+                                ItemsSource="{Binding Playlists}"
                                 SelectionMode="Single"
-                                SelectionChanged="OnSearchResultSelected">
-
+                                SelectionChanged="PlaylistsCollection_SelectionChanged">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="10">
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding Nombre}"
-                                           TextColor="White"
-                                           FontSize="16"
-                                           FontAttributes="Bold" />
-                                    <Label Text="{Binding Tipo}"
-                                           TextColor="Gray"
-                                           FontSize="12" />
-                                </VerticalStackLayout>
+                            <Label Text="{Binding DisplayName}"
+                                   TextColor="White"
+                                   FontSize="14"
+                                   Padding="4,2" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label Text="PANEL DE ADMIN"
+                       Margin="0,16,0,0"
+                       TextColor="#B0B0B0"
+                       FontSize="12"
+                       FontAttributes="Bold"/>
+
+                <Button Text="Ver Estadísticas"
+                        Style="{StaticResource SecondaryButton}"
+                        Clicked="AdminStats_Clicked"/>
+
+                <Button Text="Gestionar Canciones"
+                        Style="{StaticResource SecondaryButton}"
+                        Clicked="AdminCanciones_Clicked"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ================= CONTENIDO PRINCIPAL (fila 1, columna 1) ================= -->
+        <ScrollView Grid.Row="1"
+                    Grid.Column="1">
+            <VerticalStackLayout Padding="24"
+                                 Spacing="24">
+
+                <!-- Resultados de búsqueda -->
+                <Label Text="Resultados de búsqueda"
+                Style="{StaticResource TitleLabel}"/>
+
+                <CollectionView x:Name="SearchResultsView"
+                IsVisible="False"
+                ItemsSource="{Binding SearchResults}"
+                SelectionMode="Single"
+                SelectionChanged="OnSearchResultSelected">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="8"
+                  ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding Nombre}"
+                       TextColor="White"
+                       FontSize="14"/>
+                                <Label Grid.Column="1"
+                       Text="{Binding Tipo}"
+                       TextColor="#B0B0B0"
+                       FontSize="12"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-
                 </CollectionView>
 
+                <!-- Sección de recomendaciones -->
+                <Label Text="Esto puede gustarte"
+                       Style="{StaticResource TitleLabel}"/>
 
-                <!-- CONTENIDO NORMAL (ScrollView limitado para NO tapar el reproductor) -->
-                <Grid Grid.Row="2">
-                    <ScrollView>
-                        <VerticalStackLayout Spacing="20">
-
-                            <Label Text="Esto puede gustarte"
-                                   TextColor="White"
-                                   FontSize="22"
-                                   FontAttributes="Bold"/>
-
-                            <CollectionView x:Name="AlbumsCollection"
+                <CollectionView x:Name="AlbumsCollection"
                                 HeightRequest="220"
                                 ItemsSource="{Binding AlbumsRecomendados}"
                                 SelectionMode="Single"
                                 SelectionChanged="OnAlbumSelected">
-                                
-                                <CollectionView.ItemsLayout>
-                                    <LinearItemsLayout Orientation="Horizontal"
-                                         ItemSpacing="20"/>
-                                </CollectionView.ItemsLayout>
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal"
+                                           ItemSpacing="20"/>
+                    </CollectionView.ItemsLayout>
 
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <VerticalStackLayout WidthRequest="180">
-                                            <Image Source="album_art_placeholder.png"
-                                                   HeightRequest="170"
-                                                   Aspect="AspectFill" />
-                                            <Label Text="{Binding .}"
-                                               TextColor="White"
-                                               FontAttributes="Bold"
-                                               FontSize="14"
-                                               LineBreakMode="TailTruncation"
-                                               Margin="0,8,0,0"/>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout WidthRequest="160">
+                                <Frame CornerRadius="12"
+                                       HasShadow="False"
+                                       Padding="0"
+                                       HeightRequest="160"
+                                       WidthRequest="160">
+                                    <Image Source="{Binding CoverUrl}"
+                                           Aspect="AspectFill"
+                                           HeightRequest="160"
+                                           WidthRequest="160"/>
+                                </Frame>
 
-                                            <Label Text="{Binding Artist}"
-                                               TextColor="#B0B0B0"
-                                               FontSize="12"
-                                               LineBreakMode="TailTruncation"/>
-                                        </VerticalStackLayout>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
+                                <Label Text="{Binding Name}"
+                                       TextColor="White"
+                                       FontAttributes="Bold"
+                                       FontSize="14"
+                                       LineBreakMode="TailTruncation"
+                                       Margin="0,8,0,0"/>
 
-                        </VerticalStackLayout>
-                    </ScrollView>
-                </Grid>
+                                <Label Text="{Binding Artist}"
+                                       TextColor="#B0B0B0"
+                                       FontSize="12"
+                                       LineBreakMode="TailTruncation"/>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-            </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
 
-        </Grid>
-
-
-        <!-- PLAYER INFERIOR (YA NO SE OCULTA) -->
-        <!-- PLAYER INFERIOR (DISEÑO MÓVIL CORRECTO) -->
+        <!-- ================= REPRODUCTOR INFERIOR (fila 2, columnas 0-1) ================= -->
         <Grid Grid.Row="2"
-      BackgroundColor="#1C1C1C"
-      Padding="10"
-      RowDefinitions="Auto, Auto"
-      ColumnDefinitions="Auto, *">
+              Grid.ColumnSpan="2"
+              BackgroundColor="#101010"
+              Padding="20"
+              ColumnDefinitions="*,Auto,Auto,Auto,*"
+              VerticalOptions="Center">
 
-         
-
-
+            <!-- Espacio a la izquierda -->
             <!-- Fila de info -->
             <HorizontalStackLayout Grid.Row="0"
                            Grid.ColumnSpan="2"
                            Spacing="10">
 
                 <Image Source="current_song_art.png"
-               HeightRequest="50" WidthRequest="50"
-               Aspect="AspectFill"
-               Margin="0,0,10,0"/>
+                    HeightRequest="50" WidthRequest="50"
+                    Aspect="AspectFill"
+                    Margin="0,0,10,0"/>
 
                 <VerticalStackLayout VerticalOptions="Center">
                     <Label x:Name="SongName" Text="Nombre de la canción"
@@ -237,37 +232,36 @@
 
             </HorizontalStackLayout>
 
+            <!-- Botón retroceder -->
+            <ImageButton Grid.Column="1"
+             Source="icon_prev.png"
+             BackgroundColor="Transparent"
+             HeightRequest="36"
+             WidthRequest="36"
+             Padding="0"
+             Clicked="PreviousButton_Clicked"/>
 
-            <!-- Fila de controles -->
-            <HorizontalStackLayout Grid.Row="1"
-                           Grid.ColumnSpan="2"
-                           HorizontalOptions="Center"
-                           Spacing="40"
-                           Margin="0,5,0,0">
+            <!-- Botón play / pausa -->
+            <ImageButton Grid.Column="2"
+             x:Name="PlayPauseButton"
+             Source="icon_play.png"
+             BackgroundColor="Transparent"
+             HeightRequest="42"
+             WidthRequest="42"
+             Padding="0"
+             Clicked="PlayPause_Clicked"/>
 
-                <ImageButton Source="previous_icon.png"
-                     BackgroundColor="Transparent"
-                     HeightRequest="35"
-                     WidthRequest="35"
-                     Clicked="PreviousButton_Clicked"/>
+            <!-- Botón siguiente -->
+            <ImageButton Grid.Column="3"
+             Source="icon_next.png"
+             BackgroundColor="Transparent"
+             HeightRequest="36"
+             WidthRequest="36"
+             Padding="0"
+             Clicked="NextButton_Clicked"/>
 
-                <ImageButton Source="play_icon.png"
-                     BackgroundColor="Transparent"
-                     HeightRequest="45"
-                     WidthRequest="45"
-                     Clicked="PlayPause_Clicked"/>
 
-                <ImageButton Source="next_icon.png"
-                     BackgroundColor="Transparent"
-                     HeightRequest="35"
-                     WidthRequest="35"
-                     Clicked="NextButton_Clicked"/>
-
-            </HorizontalStackLayout>
-
+            <!-- Espacio a la derecha -->
         </Grid>
-
-
     </Grid>
-
 </ContentPage>

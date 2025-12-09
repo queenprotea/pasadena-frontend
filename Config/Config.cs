@@ -28,4 +28,11 @@ public static class Config
     public static string MetadataURL => $"{URL_BASE}/metadata.MetadataService";
     public static string StreamingURL => $"{URL_BASE}/streaming.StreamingService";
     public static string ProfilePic(string fotoUrl) => $"{URL_BASE}/profiles/static/avatars/{fotoUrl}";
+
+    //Playlist only
+
+    public static string PlaylistRegister => $"{URL_BASE}/playlist";
+    public static string PlaylistPostCover(int playlistId) => $"{URL_BASE}/playlist/{playlistId}/cover";
+    public static string PlaylistById(int playlistId) => $"{URL_BASE}/playlist/{playlistId}";
+    public static string PlaylistsByOwner(int ownerId) => $"{URL_BASE}/playlist/owner/{ownerId}";
 }

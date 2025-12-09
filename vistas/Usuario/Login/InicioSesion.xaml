@@ -7,8 +7,8 @@
 
         <VerticalStackLayout Padding="25" Spacing="20" VerticalOptions="Center">
             <!-- Header -->
-            <Label Text="Iniciar sesion"
-                   TextColor="White"
+            <Label Text="Iniciar sesión"
+                   TextColor="Black"
                    FontSize="32"
                    FontAttributes="Bold"
                    HorizontalOptions="Center"
@@ -102,7 +102,7 @@
             </HorizontalStackLayout>
             <Button Text="Olvidaste tu contraseña?"
                     BackgroundColor="Transparent"
-                    TextColor="AliceBlue"
+                    TextColor="Gray"
                     FontSize="12"
                     FontAttributes="Italic"
                     Clicked="btnModificarContrasena"

@@ -51,6 +51,27 @@ public partial class PantallaInicio : ContentPage
     private async void PantallaInicio_Loaded(object sender, EventArgs e)
     {
         await CargarFotoUsuario();
+        await CargarBotonCrearPlaylistr();
+    }
+
+    private void ToggleMenu_Clicked(object sender, EventArgs e)
+    {
+        LeftMenu.IsVisible = !LeftMenu.IsVisible;
+    }
+
+    private async Task CargarBotonCrearPlaylistr()
+    {
+        bool tokenValido = await _authService.ValidarTokenAsync();
+
+        if (!tokenValido)
+        {
+            CreatePlaylistButton.IsVisible = false;
+        }
+        else
+        {
+            CreatePlaylistButton.IsVisible = true;
+        }
+
     }
 
     private async Task CargarFotoUsuario()
@@ -62,7 +83,7 @@ public partial class PantallaInicio : ContentPage
             if (!tokenValido)
             {
                 _authService.LimpiarSesion();
-                ProfileButton.Source = "user_profile_icon.png";
+                ProfileButton.Source = "default_user.png";
                 return;
             }
 
@@ -91,6 +112,8 @@ public partial class PantallaInicio : ContentPage
     }
     private async void CrearPlaylist_Clicked(object sender, EventArgs e)
     {
+
+
         await Shell.Current.GoToAsync(nameof(CrearPlaylistPage));
     }
     private async void Playlist_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -435,6 +458,42 @@ public partial class PantallaInicio : ContentPage
         }
 
         return album;
+    }
+
+    private async void PlaylistsCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var selected = e.CurrentSelection.FirstOrDefault() as PlaylistItem;
+        if (selected == null) return;
+
+        if (sender is CollectionView cv)
+            cv.SelectedItem = null;
+
+        await Shell.Current.GoToAsync(nameof(EditarPlaylistPage), new Dictionary<string, object>
+        {
+            { "PlaylistId", selected.Id },
+            { "PlaylistName", selected.Name }
+        });
+    }
+
+    private async void OnAlbumSelected(object sender, SelectionChangedEventArgs e)
+    {
+        var selected = e.CurrentSelection.FirstOrDefault() as Models.Album;
+        if (selected == null) return;
+
+        if (sender is CollectionView cv)
+            cv.SelectedItem = null;
+
+        // Navegar a la página de detalle de álbum tipo Spotify
+        await Shell.Current.GoToAsync(nameof(AlbumPage), new Dictionary<string, object>
+        {
+            { "Album", selected }
+        });
+    }
+
+    private async void AdminStats_Clicked(object sender, EventArgs e)
+    {
+        // Navegar a la página de estadísticas
+        await Shell.Current.GoToAsync(nameof(AdminDashboardPage));
     }
 
 
