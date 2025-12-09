@@ -33,4 +33,14 @@ public static class Config
     public static string AdminUsersList => $"{URL_BASE}/admin/users";
     public static string BanUser(int id) => $"{URL_BASE}/admin/users/{id}/ban";
     public static string UnbanUser(int id) => $"{URL_BASE}/admin/users/{id}/unban";
+
+    //Playlist only
+    public static string PlaylistRegister => $"{URL_BASE}/playlist";
+    public static string PlaylistPostCover(int playlistId) => $"{URL_BASE}/playlist/{playlistId}/cover";
+    public static string PlaylistById(int playlistId) => $"{URL_BASE}/playlist/{playlistId}";
+    public static string PlaylistsByOwner(int ownerId) => $"{URL_BASE}/playlist/{ownerId}/owner";
+
+    public static string PlaylistCover(string coverName) => $"{URL_BASE}/static/{coverName}";
+
+    public static string PlaylistSongs(int playlistId) => $"{URL_BASE}/playlist/{playlistId}/songs";
 }
