@@ -54,6 +54,11 @@ public partial class PantallaInicio : ContentPage
         await CargarBotonCrearPlaylistr();
     }
 
+    private void ToggleMenu_Clicked(object sender, EventArgs e)
+    {
+        LeftMenu.IsVisible = !LeftMenu.IsVisible;
+    }
+
     private async Task CargarBotonCrearPlaylistr()
     {
         bool tokenValido = await _authService.ValidarTokenAsync();
@@ -453,6 +458,42 @@ public partial class PantallaInicio : ContentPage
         }
 
         return album;
+    }
+
+    private async void PlaylistsCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var selected = e.CurrentSelection.FirstOrDefault() as PlaylistItem;
+        if (selected == null) return;
+
+        if (sender is CollectionView cv)
+            cv.SelectedItem = null;
+
+        await Shell.Current.GoToAsync(nameof(EditarPlaylistPage), new Dictionary<string, object>
+        {
+            { "PlaylistId", selected.Id },
+            { "PlaylistName", selected.Name }
+        });
+    }
+
+    private async void OnAlbumSelected(object sender, SelectionChangedEventArgs e)
+    {
+        var selected = e.CurrentSelection.FirstOrDefault() as Models.Album;
+        if (selected == null) return;
+
+        if (sender is CollectionView cv)
+            cv.SelectedItem = null;
+
+        // Navegar a la página de detalle de álbum tipo Spotify
+        await Shell.Current.GoToAsync(nameof(AlbumPage), new Dictionary<string, object>
+        {
+            { "Album", selected }
+        });
+    }
+
+    private async void AdminStats_Clicked(object sender, EventArgs e)
+    {
+        // Navegar a la página de estadísticas
+        await Shell.Current.GoToAsync(nameof(AdminDashboardPage));
     }
 
 
