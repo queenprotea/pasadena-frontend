@@ -15,7 +15,39 @@ public partial class CrearPlaylistPage : ContentPage
         InitializeComponent();
         _authService = new AuthService();
         _playlistService = new PlaylistService();
+
+        //DEBUG
+        //DebugObtenerCancionesPlaylist(7);
     }
+
+    private async void DebugObtenerCancionesPlaylist(int playlistId)
+    {
+        try
+        {
+            var canciones = await _playlistService.ObtenerCancionesDePlaylistAsync(playlistId);
+
+            if (canciones.Count == 0)
+            {
+                await DisplayAlert("Debug", $"La playlist {playlistId} no tiene canciones.", "OK");
+                return;
+            }
+
+            // Construir un texto con todas las canciones
+            var mensaje = $"Playlist {playlistId}:\n";
+            foreach (var c in canciones)
+            {
+                mensaje += $"Posición {c.position} - SongId: {c.song_id}\n";
+            }
+
+            await DisplayAlert("Canciones obtenidas", mensaje, "Cerrar");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"No se pudieron obtener canciones: {ex.Message}", "OK");
+        }
+    }
+
+
 
     private async void AcceptButton_Clicked(object sender, EventArgs e)
     {

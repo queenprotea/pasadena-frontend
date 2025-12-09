@@ -122,5 +122,30 @@ namespace pasadena_vistas.Services
             return playlists ?? new List<PlaylistRespuesta>();
         }
 
+
+        // Obtener canciones de una playlist
+        public async Task<List<PlaylistSongs>> ObtenerCancionesDePlaylistAsync(int playlistId)
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para ver las canciones de la playlist");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var url = Config.Config.PlaylistSongs(playlistId);
+
+            var respuesta = await _clienteHttp.GetAsync(url);
+
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+                throw new Exception($"Error al obtener canciones de la playlist: {respuesta.StatusCode} - {error}");
+            }
+
+            var canciones = await respuesta.Content.ReadFromJsonAsync<List<PlaylistSongs>>();
+            return canciones ?? new List<PlaylistSongs>();
+        }
+
     }
 }

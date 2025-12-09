@@ -37,4 +37,6 @@ public static class Config
     public static string PlaylistsByOwner(int ownerId) => $"{URL_BASE}/playlist/{ownerId}/owner";
 
     public static string PlaylistCover(string coverName) => $"{URL_BASE}/static/{coverName}";
+
+    public static string PlaylistSongs(int playlistId) => $"{URL_BASE}/playlist/{playlistId}/songs";
 }

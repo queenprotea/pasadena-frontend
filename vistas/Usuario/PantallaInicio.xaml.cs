@@ -482,7 +482,7 @@ public partial class PantallaInicio : ContentPage
         return album;
     }
 
-    private async void PlaylistsCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    /*private async void PlaylistsCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         var selected = e.CurrentSelection.FirstOrDefault() as PlaylistItem;
         if (selected == null) return;
@@ -495,6 +495,11 @@ public partial class PantallaInicio : ContentPage
             { "PlaylistId", selected.Id },
             { "PlaylistName", selected.Name }
         });
+    }*/
+
+    private async void PlaylistsCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    { 
+        
     }
 
     private async void OnAlbumSelected(object sender, SelectionChangedEventArgs e)
