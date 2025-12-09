@@ -25,6 +25,14 @@ public partial class AlbumPage : ContentPage
         var album = BindingContext as Album;
         if (album == null) return;
 
+        var auth = new AuthService();
+        var usuario = await auth.ObtenerPerfilUsuarioAsync();
+
+        if (usuario != null)
+            _player.CurrentUserId = usuario.id.ToString();
+        else
+            _player.CurrentUserId = null;
+
         await _player.PlayAlbumAsync(album.Songs);
 
        
