@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -96,6 +97,30 @@ namespace pasadena_vistas.Services
         }
 
 
+        // Obtener playlists por owner_id
+        public async Task<List<PlaylistRespuesta>> ObtenerPlaylistsPorOwnerAsync(int ownerId)
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para ver tus playlists");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var url = Config.Config.PlaylistsByOwner(ownerId);
+
+            var respuesta = await _clienteHttp.GetAsync(url);
+
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                throw new Exception($"Error al obtener playlists: {respuesta.StatusCode} - {error}");
+            }
+
+            var playlists = await respuesta.Content.ReadFromJsonAsync<List<PlaylistRespuesta>>();
+            return playlists ?? new List<PlaylistRespuesta>();
+        }
 
     }
 }

@@ -4,6 +4,7 @@ using Metadata;
 using pasadena_vistas.Config;
 using pasadena_vistas.Models;
 using pasadena_vistas.Models;
+using pasadena_vistas.Models.Playlist;
 using pasadena_vistas.Services;
 using pasadena_vistas.Services;
 using pasadena_vistas.vistas.Administrador;
@@ -27,6 +28,7 @@ public partial class PantallaInicio : ContentPage
     public ObservableCollection<pasadena_vistas.Models.Album> AlbumsRecomendados { get; set; } = new();
     public ObservableCollection<PlaylistItem> Playlists { get; } = new();
     private PlayerService _player;
+
 
     public PantallaInicio(PlayerService player)
     {
@@ -106,6 +108,46 @@ public partial class PantallaInicio : ContentPage
         }
     }
 
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        try
+        {
+            bool tokenValido = await _authService.ValidarTokenAsync();
+
+            if (tokenValido)
+            {
+                var servicio = new PlaylistService();
+                // Aquí debes pasar el owner_id del usuario autenticado
+                var owner = await _authService.ObtenerPerfilUsuarioAsync();
+
+                var playlists = await servicio.ObtenerPlaylistsPorOwnerAsync(owner.id);
+
+                Playlists.Clear();
+
+                foreach (var p in playlists)
+                {
+                    // Mapear PlaylistRespuesta -> PlaylistItem
+                    Playlists.Add(new PlaylistItem
+                    {
+                        Id = p.id.ToString(),   
+                        Name = p.name,          
+                        Emoji = "🎵"           
+                    });
+                }
+
+                PlaylistsCollection.ItemsSource = Playlists;
+            }
+
+            
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
 
     private async void ProfileButton_Clicked(object sender, EventArgs e)
     {
@@ -113,8 +155,6 @@ public partial class PantallaInicio : ContentPage
     }
     private async void CrearPlaylist_Clicked(object sender, EventArgs e)
     {
-
-
         await Shell.Current.GoToAsync(nameof(CrearPlaylistPage));
     }
     private async void Playlist_SelectionChanged(object? sender, SelectionChangedEventArgs e)
