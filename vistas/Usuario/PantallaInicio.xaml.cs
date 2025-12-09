@@ -1,18 +1,19 @@
-﻿using Grpc.Net.Client;
+﻿using Grpc.Core;
+using Grpc.Net.Client;
 using Metadata;
 using pasadena_vistas.Config;
 using pasadena_vistas.Models;
-using Streaming;
-using System.Collections.ObjectModel;
-using System.DirectoryServices;
 using pasadena_vistas.Models;
 using pasadena_vistas.Services;
-
-using Plugin.Maui.Audio;
-using Grpc.Core;
+using pasadena_vistas.Services;
 using pasadena_vistas.vistas.Administrador;
 using pasadena_vistas.vistas.Usuario;
-using pasadena_vistas.Services;
+using Plugin.Maui.Audio;
+using Streaming;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.DirectoryServices;
+
 
 namespace pasadena_vistas.vistas.Usuario;
 
@@ -197,7 +198,40 @@ public partial class PantallaInicio : ContentPage
         switch (item.Tipo)
         {
             case "Canción":
-                await ReproducirCancion(item.Id, item.Nombre);
+
+                
+                // Asegúrate de convertirlo a string
+
+
+                // Llamamos al cliente gRPC para obtener la canción por ID
+                var client = Services.MetadataService.Client;
+                var searchResponse = await client.SearchSongsAsync(new SearchRequest { Query = item.Nombre });
+
+
+
+                if (searchResponse.Songs.Count == 0)
+                {
+                    Debug.WriteLine($"Canción no encontrada: {item.Nombre}");
+                    return;
+                }
+
+                // Tomamos la primera coincidencia (o implementa lógica de selección si quieres)
+                var songData = searchResponse.Songs[0];
+
+                // Creamos modelo local de Song
+                var songToPlay = new pasadena_vistas.Models.Song
+                {
+                    Id = songData.SongId,
+                    title = songData.Title,
+                    artist = songData.Artist,
+                    album = songData.Album,
+                    genre = songData.Genre,
+                    duration = songData.Duration
+                };
+
+                // Reproducimos la canción usando PlayerService
+                await _player.PlaySongAsync(songToPlay);
+
                 break;
 
             case "Album":
