@@ -28,7 +28,7 @@ public partial class AdminDashboardPage : ContentPage
             }
 
             // 2) Obtener cliente gRPC de metadata
-            var client = MetadataService.Client;
+            var client = pasadena_vistas.Services.MetadataService.Client;
 
             if (client == null)
             {

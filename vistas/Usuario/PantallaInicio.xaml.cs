@@ -260,43 +260,6 @@ public partial class PantallaInicio : ContentPage
     ((CollectionView)sender).SelectedItem = null;
     }
 
-
-
-    private async Task ReproducirCancion(string songId, string title)
-    {
-        SongName.Text = title;
-        // SongArtist.Text = artist;
-
-
-        await StartStreaming(songId);
-    }
-    private async Task StartStreaming(string songId)
-    {
-        var client = Services.StreamingService.Client;
-
-        using var call = client.StreamSong(new StreamRequest { SongId = songId });
-
-        var ms = new MemoryStream();
-
-        while (await call.ResponseStream.MoveNext())
-        {
-            var bytes = call.ResponseStream.Current.Chunk.ToByteArray();
-            ms.Write(bytes, 0, bytes.Length);
-        }
-
-        ms.Position = 0;
-
-        _currentPlayer?.Stop();
-        _currentPlayer?.Dispose();
-
-        _currentPlayer = AudioManager.Current.CreatePlayer(ms);
-        _currentPlayer.Play();
-
-
-    }
-
-
-
     private async Task<List<SearchResultClass>> BuscarTodoAsync(string query)
     {
         var results = new List<SearchResultClass>();
