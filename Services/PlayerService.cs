@@ -81,11 +81,14 @@ namespace pasadena_vistas.Services
 
         public async Task PlayNextAsync()
         {
+            StopCurrentPlayer();   // <- DETENER PLAYER ACTUAL
+
             if (_currentSong != null)
                 _history.Push(_currentSong);
 
             await InternalPlayNextAsync();
         }
+
 
         private async Task InternalPlayNextAsync()
         {
@@ -99,7 +102,7 @@ namespace pasadena_vistas.Services
             _currentSong = song;
 
             OnSongChanged?.Invoke(song);
-            StopCurrentPlayer();
+            
             try
             {
                 var stream = await StreamSongAsync(song.Id);
