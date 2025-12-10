@@ -99,7 +99,7 @@ namespace pasadena_vistas.Services
             _currentSong = song;
 
             OnSongChanged?.Invoke(song);
-
+            StopCurrentPlayer();
             try
             {
                 var stream = await StreamSongAsync(song.Id);
