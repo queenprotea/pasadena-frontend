@@ -3,10 +3,10 @@ using Grpc.Net.Client;
 using Metadata;
 using pasadena_vistas.Config;
 using pasadena_vistas.Models;
-using pasadena_vistas.Models;
+
 using pasadena_vistas.Models.Playlist;
 using pasadena_vistas.Services;
-using pasadena_vistas.Services;
+
 using pasadena_vistas.vistas.Administrador;
 using pasadena_vistas.vistas.Usuario;
 using Plugin.Maui.Audio;
@@ -238,25 +238,16 @@ public partial class PantallaInicio : ContentPage
         switch (item.Tipo)
         {
             case "Canción":
-
-                
-                // Asegúrate de convertirlo a string
-
-
-                // Llamamos al cliente gRPC para obtener la canción por ID
+               
                 var client = Services.MetadataService.Client;
-                var searchResponse = await client.SearchSongsAsync(new SearchRequest { Query = item.Nombre });
+                var searchResponse = await client.GetSongByIdAsync(new GetSongByIdRequest { SongId = item.Id });
 
-
-
-                if (searchResponse.Songs.Count == 0)
+                if (searchResponse == null)
                 {
                     Debug.WriteLine($"Canción no encontrada: {item.Nombre}");
                     return;
                 }
-
-                // Tomamos la primera coincidencia (o implementa lógica de selección si quieres)
-                var songData = searchResponse.Songs[0];
+                var songData = searchResponse.Song;
 
                 // Creamos modelo local de Song
                 var songToPlay = new pasadena_vistas.Models.Song
@@ -482,7 +473,7 @@ public partial class PantallaInicio : ContentPage
         return album;
     }
 
-    /*private async void PlaylistsCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void PlaylistsCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         var selected = e.CurrentSelection.FirstOrDefault() as PlaylistItem;
         if (selected == null) return;
@@ -490,17 +481,10 @@ public partial class PantallaInicio : ContentPage
         if (sender is CollectionView cv)
             cv.SelectedItem = null;
 
-        await Shell.Current.GoToAsync(nameof(EditarPlaylistPage), new Dictionary<string, object>
-        {
-            { "PlaylistId", selected.Id },
-            { "PlaylistName", selected.Name }
-        });
-    }*/
-
-    private async void PlaylistsCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    { 
-        
+        await AbrirPlaylistComoAlbum(int.Parse(selected.Id), selected.Name);
     }
+
+   
 
     private async void OnAlbumSelected(object sender, SelectionChangedEventArgs e)
     {
@@ -523,6 +507,91 @@ public partial class PantallaInicio : ContentPage
         await Shell.Current.GoToAsync(nameof(AdminDashboardPage));
     }
 
+
+    private async Task<List<pasadena_vistas.Models.Song>> ConvertirPlaylistSongsAsync(
+    List<PlaylistSongs> lista)
+    {
+        var grpc = Services.MetadataService.Client;
+        var canciones = new List<pasadena_vistas.Models.Song>();
+
+        foreach (var item in lista)
+        {
+            var resp = await grpc.GetSongByIdAsync(
+                new GetSongByIdRequest { SongId = item.song_id }
+            );
+
+            if (resp.Song == null)
+                continue;
+
+            canciones.Add(new pasadena_vistas.Models.Song
+            {
+                Id = resp.Song.SongId,
+                title = resp.Song.Title,
+                artist = resp.Song.Artist,
+                album = resp.Song.Album,
+                year = "",
+                genre = resp.Song.Genre,
+                duration = resp.Song.Duration,
+                album_cover = null,
+                file_data = null
+            });
+        }
+
+        return canciones;
+    }
+
+    private pasadena_vistas.Models.Album ConvertirPlaylistEnAlbumModel(
+    string nombrePlaylist,
+    List<pasadena_vistas.Models.Song> canciones)
+    {
+        var album = new pasadena_vistas.Models.Album
+        {
+            Name = nombrePlaylist,
+            Artist = "Varios artistas",
+            Year = "",
+            CoverUrl = 0,
+            Songs = new ObservableCollection<pasadena_vistas.Models.Song>()
+        };
+
+        int index = 1;
+        foreach (var s in canciones)
+        {
+            s.songNumber = index++;   // numeración visual
+            album.Songs.Add(s);
+        }
+
+        return album;
+    }
+
+    private async Task AbrirPlaylistComoAlbum(int playlistId, string playlistName)
+    {
+        try
+        {
+            var service = new PlaylistService();
+            var listaIds = await service.ObtenerCancionesDePlaylistAsync(playlistId);
+
+            if (listaIds == null || listaIds.Count == 0)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Playlist vacía",
+                    "Esta playlist no contiene canciones.",
+                    "OK"
+                );
+                return;
+            }
+
+            var canciones = await ConvertirPlaylistSongsAsync(listaIds);
+
+            var albumModel = ConvertirPlaylistEnAlbumModel(playlistName, canciones);
+
+            await Application.Current.MainPage.Navigation
+                .PushAsync(new AlbumPage(albumModel, _player));
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
 
 
     public class AlbumResponse
