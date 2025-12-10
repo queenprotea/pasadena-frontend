@@ -449,7 +449,9 @@ public partial class PantallaInicio : ContentPage
             Name = dto.Name,
             Artist = dto.ArtistName,        // viene directo del proto
             Year = dto.ReleaseDate ?? "",
-            CoverUrl = 0,                    // tú luego lo cambias
+            CoverUrl = dto.Cover != null
+            ? ImageSource.FromStream(() => new MemoryStream(dto.Cover.ToByteArray()))
+            : null,                  // tú luego lo cambias
             Songs = new ObservableCollection<pasadena_vistas.Models.Song>()
         };
 
@@ -549,7 +551,7 @@ public partial class PantallaInicio : ContentPage
             Name = nombrePlaylist,
             Artist = "Varios artistas",
             Year = "",
-            CoverUrl = 0,
+            CoverUrl = null,
             Songs = new ObservableCollection<pasadena_vistas.Models.Song>()
         };
 
@@ -605,7 +607,7 @@ public partial class PantallaInicio : ContentPage
         public string name { get; set; }
         public int artist_id { get; set; }
         public string artist_name { get; set; }
-        public string cover { get; set; }
+        public ImageSource cover { get; set; }
         public string release_date { get; set; }
         public List<SongDTO> songs { get; set; }
     }
