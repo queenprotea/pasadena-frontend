@@ -90,6 +90,9 @@
 	  <MauiXaml Update="vistas\Administrador\GestionarUsuariosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="vistas\Usuario\ConsultarUsuario.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="vistas\Usuario\AgregarCancionPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

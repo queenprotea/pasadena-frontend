@@ -14,6 +14,7 @@ using Streaming;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.DirectoryServices;
+using System.Threading.Tasks;
 
 
 namespace pasadena_vistas.vistas.Usuario;
@@ -133,7 +134,8 @@ public partial class PantallaInicio : ContentPage
                     {
                         Id = p.id.ToString(),   
                         Name = p.name,          
-                        Emoji = "🎵"           
+                        Emoji = "🎵",
+                        Cover = p.playlist_cover ?? ""
                     });
                 }
 
@@ -483,7 +485,7 @@ public partial class PantallaInicio : ContentPage
         if (sender is CollectionView cv)
             cv.SelectedItem = null;
 
-        await AbrirPlaylistComoAlbum(int.Parse(selected.Id), selected.Name);
+        await AbrirPlaylistComoAlbum(int.Parse(selected.Id), selected.Name, selected.Cover);
     }
 
    
@@ -542,16 +544,19 @@ public partial class PantallaInicio : ContentPage
         return canciones;
     }
 
-    private pasadena_vistas.Models.Album ConvertirPlaylistEnAlbumModel(
+    private async Task<pasadena_vistas.Models.Album> ConvertirPlaylistEnAlbumModel(
     string nombrePlaylist,
+    string cover,
     List<pasadena_vistas.Models.Song> canciones)
     {
+        var servicio = new PlaylistService();
+
         var album = new pasadena_vistas.Models.Album
         {
             Name = nombrePlaylist,
             Artist = "Varios artistas",
             Year = "",
-            CoverUrl = null,
+            CoverUrl = await servicio.ObtenerCoverPlaylistAsync(cover),
             Songs = new ObservableCollection<pasadena_vistas.Models.Song>()
         };
 
@@ -565,7 +570,7 @@ public partial class PantallaInicio : ContentPage
         return album;
     }
 
-    private async Task AbrirPlaylistComoAlbum(int playlistId, string playlistName)
+    private async Task AbrirPlaylistComoAlbum(int playlistId, string playlistName, string cover)
     {
         try
         {
@@ -584,7 +589,7 @@ public partial class PantallaInicio : ContentPage
 
             var canciones = await ConvertirPlaylistSongsAsync(listaIds);
 
-            var albumModel = ConvertirPlaylistEnAlbumModel(playlistName, canciones);
+            var albumModel = await ConvertirPlaylistEnAlbumModel(playlistName, cover, canciones);
 
             await Application.Current.MainPage.Navigation
                 .PushAsync(new AlbumPage(albumModel, _player));
@@ -629,6 +634,8 @@ public partial class PantallaInicio : ContentPage
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Emoji { get; set; } = "🎵";
+
+        public string Cover { get; set; } = string.Empty;
 
         public string DisplayName => $"{Emoji} {Name}";
     }
