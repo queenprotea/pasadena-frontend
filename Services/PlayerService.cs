@@ -81,11 +81,14 @@ namespace pasadena_vistas.Services
 
         public async Task PlayNextAsync()
         {
+            StopCurrentPlayer();   // <- DETENER PLAYER ACTUAL
+
             if (_currentSong != null)
                 _history.Push(_currentSong);
 
             await InternalPlayNextAsync();
         }
+
 
         private async Task InternalPlayNextAsync()
         {
@@ -99,7 +102,7 @@ namespace pasadena_vistas.Services
             _currentSong = song;
 
             OnSongChanged?.Invoke(song);
-
+            
             try
             {
                 var stream = await StreamSongAsync(song.Id);
@@ -126,6 +129,8 @@ namespace pasadena_vistas.Services
             if (_history.Count == 0)
                 return;
 
+            StopCurrentPlayer();   // <- EVITA DOBLE AUDIO
+
             if (_currentSong != null)
                 _queue = new Queue<pasadena_vistas.Models.Song>(new[] { _currentSong }.Concat(_queue));
 
@@ -135,6 +140,7 @@ namespace pasadena_vistas.Services
 
             await StartQueueAsync();
         }
+
 
         public void TogglePlayPause()
         {
