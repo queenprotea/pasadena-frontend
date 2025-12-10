@@ -214,7 +214,7 @@ namespace pasadena_vistas.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error al registrar estadísticas: {ex}");
+               
             }
         }
     }

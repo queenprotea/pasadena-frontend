@@ -296,83 +296,97 @@ public partial class PantallaInicio : ContentPage
     private async Task<List<SearchResultClass>> BuscarTodoAsync(string query)
     {
         var results = new List<SearchResultClass>();
-        ;
-        // Crear cliente gRPC una sola vez
-        var client =  Services.MetadataService.Client;
+        var client = Services.MetadataService.Client;
 
-        // ===============================
-        // 🔎 BUSCAR CANCIONES
-        // ===============================
-        var songResponse = await client.SearchSongsAsync(new SearchRequest { Query = query });
-
-        foreach (var c in songResponse.Songs)
+        // ========== BUSCAR CANCIONES ==========
+        try
         {
-            results.Add(new SearchResultClass
+            var songResponse = await client.SearchSongsAsync(new SearchRequest { Query = query });
+
+            foreach (var c in songResponse.Songs)
             {
-                Id = c.SongId,
-                Tipo = "Canción",
-                Nombre = c.Title,
-                Imagen = ImageSource.FromStream(() => new MemoryStream(c.AlbumCover.ToByteArray()))
-            });
+                results.Add(new SearchResultClass
+                {
+                    Id = c.SongId,
+                    Tipo = "Canción",
+                    Nombre = c.Title,
+                    Imagen = ImageSource.FromStream(() => new MemoryStream(c.AlbumCover.ToByteArray()))
+                });
+            }
+        }
+        catch (Grpc.Core.RpcException ex)
+        {
+           
+            // opcional: DisplayAlert("Error", "No se pudo conectar al servidor.", "OK");
         }
 
-        // ===============================
-        // 🔎 BUSCAR ARTISTAS
-        // ===============================
-        var artistResponse = await client.SearchArtistsAsync(new SearchRequest { Query = query });
-
-        foreach (var a in artistResponse.Artists)
+        // ========== BUSCAR ARTISTAS ==========
+        try
         {
-            results.Add(new SearchResultClass
+            var artistResponse = await client.SearchArtistsAsync(new SearchRequest { Query = query });
+
+            foreach (var a in artistResponse.Artists)
             {
-                Id = a.ArtistId.ToString(),
-                Nombre = a.Name,
-                Tipo = "Artista",
-                Imagen = ImageSource.FromFile("default_artist.png")
-            });
+                results.Add(new SearchResultClass
+                {
+                    Id = a.ArtistId.ToString(),
+                    Nombre = a.Name,
+                    Tipo = "Artista",
+                    Imagen = ImageSource.FromFile("default_artist.png")
+                });
+            }
+        }
+        catch (Grpc.Core.RpcException ex)
+        {
+            
         }
 
-        // ===============================
-        // 🔎 BUSCAR ALBUMS
-        // ===============================
-        var albumResponse = await client.SearchAlbumsAsync(new SearchRequest { Query = query });
-
-        foreach (var a in albumResponse.Albums)
+        // ========== BUSCAR ALBUMS ==========
+        try
         {
-            results.Add(new SearchResultClass
+            var albumResponse = await client.SearchAlbumsAsync(new SearchRequest { Query = query });
+
+            foreach (var a in albumResponse.Albums)
             {
-                Id = a.Id.ToString(),
-                Nombre = a.Name,
-                Tipo = "Album",
-                Imagen = ImageSource.FromStream(() => new MemoryStream(a.Cover.ToByteArray()))
-            });
+                results.Add(new SearchResultClass
+                {
+                    Id = a.Id.ToString(),
+                    Nombre = a.Name,
+                    Tipo = "Album",
+                    Imagen = ImageSource.FromStream(() => new MemoryStream(a.Cover.ToByteArray()))
+                });
+            }
+        }
+        catch (Grpc.Core.RpcException ex)
+        {
+            
         }
 
-
-        // ===============================
-        // 🔎 BUSCAR USUARIOS
-        // ===============================
-
-        var auth = new AuthService();
-        var userResponse = await auth.GetUserByUsernameAsync(query.ToString());
-
-        if (userResponse != null)
+        // ========== BUSCAR USUARIOS (REST API) ==========
+        try
         {
-            results.Add(new SearchResultClass
+            var auth = new AuthService();
+            var userResponse = await auth.GetUserByUsernameAsync(query);
+
+            if (userResponse != null)
             {
-                Id = userResponse.id.ToString(),
-                Nombre = userResponse.full_name,
-                Tipo = "Usuario",
-                Imagen = ImageSource.FromFile("default_artist.png")
-            });
+                results.Add(new SearchResultClass
+                {
+                    Id = userResponse.id.ToString(),
+                    Nombre = userResponse.full_name,
+                    Tipo = "Usuario",
+                    Imagen = ImageSource.FromFile("default_artist.png")
+                });
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine("Usuario no encontrado o API devolvió error.");
+            
         }
 
         return results;
     }
+
 
     void OnSizeChanged(object? sender, EventArgs e)
     {
@@ -587,8 +601,12 @@ public partial class PantallaInicio : ContentPage
             var canciones = await ConvertirPlaylistSongsAsync(listaIds);
 
             var albumModel = ConvertirPlaylistEnAlbumModel(playlistName, canciones);
-            var coverSource = new PlaylistService();
-            albumModel.CoverUrl = await coverSource.ObtenerCoverPlaylistAsync(playlistId.ToString());
+
+            var coverService = new PlaylistService();
+            string cover =  coverService.ObtenerPlaylistPorId(playlistId).Result.playlist_cover;
+            albumModel.CoverUrl = await coverService.ObtenerCoverPlaylistAsync(
+                cover
+            );
 
             await Application.Current.MainPage.Navigation
                 .PushAsync(new AlbumPage(albumModel, _player, true));
