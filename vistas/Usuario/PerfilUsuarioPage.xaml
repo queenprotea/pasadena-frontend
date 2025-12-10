@@ -50,6 +50,13 @@
                            TextColor="White"
                            FontSize="14"
                            HorizontalOptions="Center"/>
+
+                    <Button
+                           x:Name="GestionarUsuariosButton"
+                           Text="Gestionar usuarios"
+                           Clicked="GestionarUsuariosButton_Clicked"
+                           IsVisible="False"
+                           Margin="0,10,0,0" />
                 </VerticalStackLayout>
 
                 <!-- Ajustes -->

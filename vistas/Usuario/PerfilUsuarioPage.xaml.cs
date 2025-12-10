@@ -44,6 +44,16 @@ public partial class PerfilUsuarioPage : ContentPage
             NombreUsuarioLabel.Text = usuario.username;
             CorreoLabel.Text = usuario.email;
 
+            if (usuario.role_id == 1)
+            {
+                GestionarUsuariosButton.IsVisible = true;
+            }
+            else
+            {
+                GestionarUsuariosButton.IsVisible = false;
+            }
+
+
             var foto = await SecureStorage.GetAsync("profile_picture");
             if (!string.IsNullOrEmpty(foto))
             {
@@ -73,6 +83,7 @@ public partial class PerfilUsuarioPage : ContentPage
     {
         AuthLayout.IsVisible = false;
         NoAuthLayout.IsVisible = true;
+        GestionarUsuariosButton.IsVisible = false;
     }
 
     private async void EditarPerfil_Tapped(object sender, TappedEventArgs e)
@@ -91,6 +102,10 @@ public partial class PerfilUsuarioPage : ContentPage
     private async void LoginClicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(vistas.Usuario.Login.InicioSesion));
+    }
+    private async void GestionarUsuariosButton_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(vistas.Administrador.GestionarUsuariosPage));
     }
 
     private async void BtnCerrarSesion(object sender, EventArgs e)
