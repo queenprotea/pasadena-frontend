@@ -147,5 +147,30 @@ namespace pasadena_vistas.Services
             return canciones ?? new List<PlaylistSongs>();
         }
 
+        // Obtener playlist por id 
+        public async Task<PlaylistRespuesta> ObtenerPlaylistPorId(int playlistId)
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para ver tus playlists");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var url = Config.Config.PlaylistById(playlistId);
+
+            var respuesta = await _clienteHttp.GetAsync(url);
+
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                throw new Exception($"Error al obtener la playlist: {respuesta.StatusCode} - {error}");
+            }
+
+            var playlist = await respuesta.Content.ReadFromJsonAsync<PlaylistRespuesta>();
+            return playlist ?? new PlaylistRespuesta();
+        }
+
     }
 }
