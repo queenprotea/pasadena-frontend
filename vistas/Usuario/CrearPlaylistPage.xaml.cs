@@ -18,6 +18,8 @@ public partial class CrearPlaylistPage : ContentPage
 
         //DEBUG
         //DebugObtenerCancionesPlaylist(7);
+        //DebugObtenerPlaylist(1);
+
     }
 
     private async void DebugObtenerCancionesPlaylist(int playlistId)
@@ -44,6 +46,30 @@ public partial class CrearPlaylistPage : ContentPage
         catch (Exception ex)
         {
             await DisplayAlert("Error", $"No se pudieron obtener canciones: {ex.Message}", "OK");
+        }
+    }
+
+    private async void DebugObtenerPlaylist(int playlistId)
+    {
+        try
+        {
+            var pl = await _playlistService.ObtenerPlaylistPorId(playlistId);
+
+            if (pl == null)
+            {
+                await DisplayAlert("Debug", $"La playlist {playlistId} no se encontro", "OK");
+                return;
+            }
+
+            // Construir un texto con todas las canciones
+            var mensaje = $"Playlist {playlistId}:\n";
+            mensaje += $"nombre: {pl.name} - dueno: {pl.owner_id}\n";
+
+            await DisplayAlert("playlist obtenido", mensaje, "Cerrar");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"No se pudo obtener playlist: {ex.Message}", "OK");
         }
     }
 

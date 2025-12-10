@@ -20,6 +20,8 @@ namespace pasadena_vistas.Services
         {
             _clienteHttp = new HttpClient();
         }
+
+        // Registrar nueva playlist
         public async Task<PlaylistRespuesta> RegistrarPlaylistAsync(PlaylistRegistro solicitud)
         {
             var token = await SecureStorage.GetAsync("auth_token");
@@ -47,6 +49,7 @@ namespace pasadena_vistas.Services
             return await respuesta.Content.ReadFromJsonAsync<PlaylistRespuesta>();
         }
 
+        // Subir cover de playlist
         public async Task SubirCoverPlaylistAsync(int playlistId, FileResult fileResult)
         {
             var token = await SecureStorage.GetAsync("auth_token");
@@ -95,6 +98,20 @@ namespace pasadena_vistas.Services
             var playlistActualizado = await respuesta.Content.ReadFromJsonAsync<PlaylistRespuesta>();
             Console.WriteLine($"Cover actualizado");
         }
+
+        // Obtener cover de playlist
+        public async Task<ImageSource> ObtenerCoverPlaylistAsync(string coverFileName)
+        {
+            if (string.IsNullOrEmpty(coverFileName))
+                throw new Exception("La playlist no tiene cover asignado");
+
+            // Construir la URL completa usando tu config
+            var url = Config.Config.PlaylistCover(coverFileName);
+
+            // Retornar directamente como ImageSource
+            return ImageSource.FromUri(new Uri(url));
+        }
+
 
 
         // Obtener playlists por owner_id
@@ -145,6 +162,31 @@ namespace pasadena_vistas.Services
 
             var canciones = await respuesta.Content.ReadFromJsonAsync<List<PlaylistSongs>>();
             return canciones ?? new List<PlaylistSongs>();
+        }
+
+        // Obtener playlist por id 
+        public async Task<PlaylistRespuesta> ObtenerPlaylistPorId(int playlistId)
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para ver tus playlists");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var url = Config.Config.PlaylistById(playlistId);
+
+            var respuesta = await _clienteHttp.GetAsync(url);
+
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                throw new Exception($"Error al obtener la playlist: {respuesta.StatusCode} - {error}");
+            }
+
+            var playlist = await respuesta.Content.ReadFromJsonAsync<PlaylistRespuesta>();
+            return playlist ?? new PlaylistRespuesta();
         }
 
     }
