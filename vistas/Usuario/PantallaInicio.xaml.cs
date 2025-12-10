@@ -499,7 +499,7 @@ public partial class PantallaInicio : ContentPage
         if (sender is CollectionView cv)
             cv.SelectedItem = null;
 
-        await AbrirPlaylistComoAlbum(int.Parse(selected.Id), selected.Name);
+        await AbrirPlaylistComoAlbum(int.Parse(selected.Id), selected.Name, selected.Cover);
     }
 
    
@@ -527,7 +527,7 @@ public partial class PantallaInicio : ContentPage
 
 
     private async Task<List<pasadena_vistas.Models.Song>> ConvertirPlaylistSongsAsync(
-     List<PlaylistSongs> lista)
+    List<PlaylistSongs> lista)
     {
         var grpc = Services.MetadataService.Client;
         var canciones = new List<pasadena_vistas.Models.Song>();
@@ -558,16 +558,19 @@ public partial class PantallaInicio : ContentPage
         return canciones;
     }
 
-    private pasadena_vistas.Models.Album ConvertirPlaylistEnAlbumModel(
+    private async Task<pasadena_vistas.Models.Album> ConvertirPlaylistEnAlbumModel(
     string nombrePlaylist,
+    string cover,
     List<pasadena_vistas.Models.Song> canciones)
     {
+        var servicio = new PlaylistService();
+
         var album = new pasadena_vistas.Models.Album
         {
             Name = nombrePlaylist,
             Artist = "Varios artistas",
             Year = "",
-            CoverUrl = null,
+            CoverUrl = await servicio.ObtenerCoverPlaylistAsync(cover),
             Songs = new ObservableCollection<pasadena_vistas.Models.Song>()
         };
 
@@ -581,7 +584,7 @@ public partial class PantallaInicio : ContentPage
         return album;
     }
 
-    private async Task AbrirPlaylistComoAlbum(int playlistId, string playlistName)
+    private async Task AbrirPlaylistComoAlbum(int playlistId, string playlistName, string cover)
     {
         try
         {
@@ -600,13 +603,7 @@ public partial class PantallaInicio : ContentPage
 
             var canciones = await ConvertirPlaylistSongsAsync(listaIds);
 
-            var albumModel = ConvertirPlaylistEnAlbumModel(playlistName, canciones);
-
-            var coverService = new PlaylistService();
-            string cover =  coverService.ObtenerPlaylistPorId(playlistId).Result.playlist_cover;
-            albumModel.CoverUrl = await coverService.ObtenerCoverPlaylistAsync(
-                cover
-            );
+            var albumModel = await ConvertirPlaylistEnAlbumModel(playlistName, cover, canciones);
 
             await Application.Current.MainPage.Navigation
                 .PushAsync(new AlbumPage(albumModel, _player, true));
@@ -616,7 +613,6 @@ public partial class PantallaInicio : ContentPage
             await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
         }
     }
-
 
     public class AlbumResponse
     {

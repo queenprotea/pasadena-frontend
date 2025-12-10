@@ -22,7 +22,6 @@ public partial class AlbumPage : ContentPage
         {
             AdminButton.IsVisible = true;
         }
-        else
         
 
         // Conectamos los datos a la vista
