@@ -93,25 +93,40 @@ public partial class GestionarCancionesPage : ContentPage
     {
         var results = new List<SearchResultClass>();
 
-        // Cliente gRPC
-        var client = Services.MetadataService.Client;
-
-
-        var songResponse = await client.SearchSongsAsync(new SearchRequest { Query = query });
-
-        foreach (var c in songResponse.Songs)
+        try
         {
-            results.Add(new SearchResultClass
+            var client = Services.MetadataService.Client;
+
+            // Intentar hacer la llamada gRPC
+            var songResponse = await client.SearchSongsAsync(
+                new SearchRequest { Query = query }
+            );
+
+            foreach (var c in songResponse.Songs)
             {
-                Id = c.SongId,
-                Tipo = "Canción",
-                Nombre = c.Title,
-                Imagen = ImageSource.FromStream(() => new MemoryStream(c.AlbumCover.ToByteArray()))
-            });
+                results.Add(new SearchResultClass
+                {
+                    Id = c.SongId,
+                    Tipo = "Canción",
+                    Nombre = c.Title,
+                    Imagen = ImageSource.FromStream(
+                        () => new MemoryStream(c.AlbumCover.ToByteArray())
+                    )
+                });
+            }
+        }
+        catch (Grpc.Core.RpcException rpcEx)
+        {
+            
+        }
+        catch (Exception ex)
+        {
+           
         }
 
-        return results;
+        return results; // Devuelve la lista (vacía si hubo error)
     }
+
 
 
 }
