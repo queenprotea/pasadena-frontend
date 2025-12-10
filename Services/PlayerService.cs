@@ -129,6 +129,8 @@ namespace pasadena_vistas.Services
             if (_history.Count == 0)
                 return;
 
+            StopCurrentPlayer();   // <- EVITA DOBLE AUDIO
+
             if (_currentSong != null)
                 _queue = new Queue<pasadena_vistas.Models.Song>(new[] { _currentSong }.Concat(_queue));
 
@@ -138,6 +140,7 @@ namespace pasadena_vistas.Services
 
             await StartQueueAsync();
         }
+
 
         public void TogglePlayPause()
         {
