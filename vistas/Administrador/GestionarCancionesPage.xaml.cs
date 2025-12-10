@@ -4,6 +4,8 @@ using pasadena_vistas.Models;
 using pasadena_vistas.vistas.Administrador;
 using System.Collections.ObjectModel;
 using System.DirectoryServices;
+using pasadena_vistas.Services;
+using pasadena_vistas.Models;
 
 
 namespace pasadena_vistas.vistas.Administrador;
@@ -17,24 +19,7 @@ public partial class GestionarCancionesPage : ContentPage
         InitializeComponent();
         BindingContext = this;
     }
-    public static class GrpcClientProvider
-    {
-        private static MetadataService.MetadataServiceClient? _client;
-
-        public static MetadataService.MetadataServiceClient Client
-        {
-            get
-            {
-                if (_client == null)
-                {
-                    var channel = GrpcChannel.ForAddress("http://localhost:50051");
-                    _client = new MetadataService.MetadataServiceClient(channel);
-                }
-
-                return _client;
-            }
-        }
-    }
+    
     private async void AgregarCancion_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(AgregarCancionAdminPage));
@@ -43,8 +28,22 @@ public partial class GestionarCancionesPage : ContentPage
     private async void Eliminar_Clicked(object sender, EventArgs e)
     {
         bool confirmado = await DisplayAlert("Confirmar", "¿Estás seguro de que quieres eliminar esta canción?", "Sí, eliminar", "Cancelar");
+        var boton = sender as Button;
+        var item = boton?.CommandParameter;
+
+        if (item == null)
+            return;
+
+        // CAST del item al tipo real
+        var modelo = item as SearchResultClass; // Cambia al tipo que uses
+
+        if (modelo == null)
+            return;
+
         if (confirmado)
         {
+            var client = Services.MetadataService.Client;
+            await client.DeleteSongAsync(new SongRequest {SongId = modelo.Id});
             await DisplayAlert("Éxito", "Canción eliminada (simulación)", "Aceptar");
         }
     }
@@ -95,7 +94,7 @@ public partial class GestionarCancionesPage : ContentPage
         var results = new List<SearchResultClass>();
 
         // Cliente gRPC
-        var client = GrpcClientProvider.Client;
+        var client = Services.MetadataService.Client;
 
 
         var songResponse = await client.SearchSongsAsync(new SearchRequest { Query = query });

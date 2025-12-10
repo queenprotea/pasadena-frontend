@@ -68,16 +68,36 @@
                         </HorizontalStackLayout>
 
                         <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,10">
-                            <Button Grid.Column="2"
-                                    Text="▶"
-                                    FontSize="20"
-                                    TextColor="Black"
-                                    BackgroundColor="#1ED760"
-                                    HeightRequest="55"
-                                    WidthRequest="55"
-                                    CornerRadius="28"
-                                    HorizontalOptions="End"
-                                    Clicked="PlayButton_Clicked"/>
+                            <VerticalStackLayout Grid.Column="2" Spacing="8" HorizontalOptions="End">
+
+                                <!-- Botón de Play -->
+                                <Button 
+            Text="▶"
+            FontSize="20"
+            TextColor="Black"
+            BackgroundColor="#1ED760"
+            HeightRequest="55"
+            WidthRequest="55"
+            CornerRadius="28"
+            Clicked="PlayButton_Clicked"/>
+
+                                <!-- NUEVO BOTÓN -->
+                                <Button 
+            x:Name="AdminButton"
+            Text="Opciones"
+            FontAttributes="Bold"
+            FontSize="14"
+            BackgroundColor="#333333"
+            TextColor="White"
+            HeightRequest="40"
+            WidthRequest="110"
+            CornerRadius="12"
+            HorizontalOptions="Center"
+            IsVisible="false" />
+                                <!-- Esta propiedad controla si se muestra -->
+                            </VerticalStackLayout>
+
+
 
                             <Label Grid.Column="0" Text="Descargar" TextColor="Gray" VerticalOptions="Center"/>
                         </Grid>

@@ -20,13 +20,13 @@
             <BoxView HeightRequest="1" Color="#282828"/>
         </VerticalStackLayout>
 
-        <CollectionView Grid.Row="1" x:Name="SongsCollectionView">
+        <CollectionView Grid.Row="1" x:Name="SongsCollectionView" ItemsSource="{Binding SearchResults}" SelectionMode="Single"  > 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="20,10" ColumnDefinitions="*, Auto">
                         <VerticalStackLayout Grid.Column="0">
-                            <Label Text="{Binding NombreCancion}" TextColor="White" FontSize="16" FontAttributes="Bold"/>
-                            <Label Text="{Binding NombreArtista}" TextColor="Gray" FontSize="14"/>
+                            <Label Text="{Binding Nombre}" TextColor="White" FontSize="16" FontAttributes="Bold"/>
+                            <Label Text="{Binding Tipo}" TextColor="Gray" FontSize="14"/>
                         </VerticalStackLayout>
 
                         <Button Grid.Column="1"

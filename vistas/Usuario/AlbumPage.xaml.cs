@@ -1,16 +1,30 @@
 using pasadena_vistas.Models;
 using pasadena_vistas.Services;
+using System.ComponentModel;
 
 namespace pasadena_vistas.vistas.Usuario;
 
 public partial class AlbumPage : ContentPage
 {
     private readonly PlayerService _player;
+    private bool isAdmi = false;
+    
     // Constructor que recibe el álbum seleccionado
-    public AlbumPage(Album albumSeleccionado, PlayerService player)
+
+    public AlbumPage(Album albumSeleccionado, PlayerService player, bool _isAdmi)
     {
         InitializeComponent();
         _player = player;
+
+        isAdmi = _isAdmi;
+
+        if (isAdmi)
+        {
+            AdminButton.IsVisible = true;
+        }
+        else
+        
+
         // Conectamos los datos a la vista
         BindingContext = albumSeleccionado;
         _player.OnSongChanged += Player_OnSongChanged;
@@ -84,5 +98,7 @@ public partial class AlbumPage : ContentPage
             
         });
     }
+
+    
 
 }
