@@ -1,65 +1,163 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="pasadena_vistas.vistas.Usuario.EditarPerfilPage"
              Title="Editar Información Personal"
              BackgroundColor="#121212">
 
-    <VerticalStackLayout Spacing="20" Padding="25" VerticalOptions="Start">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="25">
 
-        <Label Text="Foto de Perfil"
+            <!-- Foto actual -->
+            <Label Text="Foto de Perfil"
                TextColor="White"
                FontSize="18"
                FontAttributes="Bold"/>
 
-        <Frame HorizontalOptions="Center" 
-               HeightRequest="120" 
-               WidthRequest="120" 
-               CornerRadius="60" 
+            <Frame HorizontalOptions="Center"
+               HeightRequest="120"
+               WidthRequest="120"
+               CornerRadius="60"
                IsClippedToBounds="True"
                Padding="0">
-            <Image x:Name="ProfileImage" 
-                   Source="user_profile_icon.png" 
-                   Aspect="AspectFill"/>
-        </Frame>
+                <Image x:Name="FotoPerfil"
+                    Source="avatar1.png"
+                    HeightRequest="120"
+                    WidthRequest="120"
+                    Aspect="AspectFill"/>
+            </Frame>
 
-        <Button Text="Cambiar foto"
+            <Button Text="Cambiar foto"
+                x:Name="CambiarFotoButton"
                 BackgroundColor="#282828"
                 TextColor="White"
                 CornerRadius="20"
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center"
+                Clicked="CambiarFoto_Clicked"/>
 
-        <BoxView HeightRequest="1" Color="Gray" Margin="0,10"/>
+            <!-- Seleccion de foto -->
+            <VerticalStackLayout x:Name="AvatarSelector"
+                                 IsVisible="False"
+                                 Spacing="15">
+                <ScrollView HeightRequest="180">
+                    <Grid ColumnDefinitions="*,*,*"
+                      RowDefinitions="Auto,Auto,Auto,Auto"
+                      ColumnSpacing="15"
+                      RowSpacing="15">
 
-        <Label Text="Nombre de usuario" TextColor="Gray"/>
-        <Entry x:Name="UsernameEntry" 
-               Placeholder="Tu nombre de usuario" 
-               TextColor="White" 
-               PlaceholderColor="Gray" />
+                        <!-- Row 0 -->
+                        <ImageButton Grid.Row="0" Grid.Column="0"
+                                 Source="avatar1.png"
+                                 CommandParameter="avatar1.png"
+                                 Clicked="AvatarSeleccionado"
+                                 HeightRequest="70"
+                                 WidthRequest="70"
+                                 CornerRadius="35"/>
 
-        <Label Text="Nombre completo" TextColor="Gray" Margin="0,10,0,0"/>
-        <Entry x:Name="FullNameEntry" 
-               Placeholder="Tu nombre completo" 
-               TextColor="White" 
-               PlaceholderColor="Gray" />
+                        <ImageButton Grid.Row="0" Grid.Column="1"
+                                 Source="avatar2.png"
+                                 CommandParameter="avatar2.png"
+                                 Clicked="AvatarSeleccionado"
+                                 HeightRequest="70"
+                                 WidthRequest="70"
+                                 CornerRadius="35"/>
 
-        <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,30,0,0">
+                        <ImageButton Grid.Row="0" Grid.Column="2"
+                                 Source="avatar3.png"
+                                 CommandParameter="avatar3.png"
+                                 Clicked="AvatarSeleccionado"
+                                 HeightRequest="70"
+                                 WidthRequest="70"
+                                 CornerRadius="35"/>
 
-            <Button Grid.Column="0"
-                    x:Name="CancelButton"
-                    Text="Cancelar"
-                    BackgroundColor="#535353"
+                        <!-- Row 1 -->
+                        <ImageButton Grid.Row="1" Grid.Column="0"
+                                 Source="avatar4.png"
+                                 CommandParameter="avatar4.png"
+                                 Clicked="AvatarSeleccionado"
+                                 HeightRequest="70"
+                                 WidthRequest="70"
+                                 CornerRadius="35"/>
+
+                        <ImageButton Grid.Row="1" Grid.Column="1"
+                                 Source="avatar5.png"
+                                 CommandParameter="avatar5.png"
+                                 Clicked="AvatarSeleccionado"
+                                 HeightRequest="70"
+                                 WidthRequest="70"
+                                 CornerRadius="35"/>
+
+                        <ImageButton Grid.Row="1" Grid.Column="2"
+                                 Source="avatar6.png"
+                                 CommandParameter="avatar6.png"
+                                 Clicked="AvatarSeleccionado"
+                                 HeightRequest="70"
+                                 WidthRequest="70"
+                                 CornerRadius="35"/>
+
+                        <!-- Row 2 -->
+                        <ImageButton Grid.Row="2" Grid.Column="0"
+                                 Source="avatar7.png"
+                                 CommandParameter="avatar7.png"
+                                 Clicked="AvatarSeleccionado"
+                                 HeightRequest="70"
+                                 WidthRequest="70"
+                                 CornerRadius="35"/>
+
+                        <ImageButton Grid.Row="2" Grid.Column="1"
+                                 Source="avatar8.png"
+                                 CommandParameter="avatar8.png"
+                                 Clicked="AvatarSeleccionado"
+                                 HeightRequest="70"
+                                 WidthRequest="70"
+                                 CornerRadius="35"/>
+
+                        <ImageButton Grid.Row="2" Grid.Column="2"
+                                 Source="avatar9.png"
+                                 CommandParameter="avatar9.png"
+                                 Clicked="AvatarSeleccionado"
+                                 HeightRequest="70"
+                                 WidthRequest="70"
+                                 CornerRadius="35"/>
+
+                        <!-- Row 3 -->
+                        <ImageButton Grid.Row="3" Grid.Column="0"
+                                 Source="avatar10.png"
+                                 CommandParameter="avatar10.png"
+                                 Clicked="AvatarSeleccionado"
+                                 HeightRequest="70"
+                                 WidthRequest="70"
+                                 CornerRadius="35"/>
+                    </Grid>
+                </ScrollView>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1"
+                 Color="Gray"
+                 Margin="0,20"/>
+
+            <!-- Guardar cambios -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+
+                <Button Text="Cancelar"
+                    x:Name="Cancelar"
+                    Grid.Column="0"
+                    BackgroundColor="Gray"
                     TextColor="White"
-                    CornerRadius="25"/>
+                    CornerRadius="25"
+                    IsVisible="True"
+                    Clicked="Cancelar_Clicked"/>
 
-            <Button Grid.Column="1"
-                    x:Name="SaveChangesButton"
-                    Text="Guardar cambios"
+                <Button Text="Guardar cambios"
+                    x:Name="GuardarCambios"
+                    Grid.Column="1"
                     BackgroundColor="White"
                     TextColor="Black"
                     FontAttributes="Bold"
-                    CornerRadius="25"/>
-        </Grid>
+                    CornerRadius="25"
+                    IsEnabled="False"
+                    Clicked="GuardarCambios_Clicked"/>
+            </Grid>
 
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
