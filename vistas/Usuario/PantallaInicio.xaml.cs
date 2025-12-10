@@ -433,7 +433,7 @@ public partial class PantallaInicio : ContentPage
 
             // Abrir la página
             await Application.Current.MainPage.Navigation
-                .PushAsync(new AlbumPage(albumModel, _player));
+                .PushAsync(new AlbumPage(albumModel, _player, false));
         }
         catch (Exception ex)
         {
@@ -569,6 +569,16 @@ public partial class PantallaInicio : ContentPage
     {
         try
         {
+            var auth = new AuthService();
+            var usuario = await auth.ObtenerPerfilUsuarioAsync();
+
+            bool isAdmi = false;
+
+            if(usuario.id == 1)
+            {
+                isAdmi = true;
+            }
+
             var service = new PlaylistService();
             var listaIds = await service.ObtenerCancionesDePlaylistAsync(playlistId);
 
@@ -587,7 +597,7 @@ public partial class PantallaInicio : ContentPage
             var albumModel = ConvertirPlaylistEnAlbumModel(playlistName, canciones);
 
             await Application.Current.MainPage.Navigation
-                .PushAsync(new AlbumPage(albumModel, _player));
+                .PushAsync(new AlbumPage(albumModel, _player, isAdmi));
         }
         catch (Exception ex)
         {
