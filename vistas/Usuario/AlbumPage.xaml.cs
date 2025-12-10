@@ -18,6 +18,7 @@ public partial class AlbumPage : ContentPage
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
+               
                 SongName.Text = song.title;
                 SongArtist.Text = song.artist;
             });
