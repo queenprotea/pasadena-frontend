@@ -570,7 +570,7 @@ public partial class PantallaInicio : ContentPage
             Name = nombrePlaylist,
             Artist = "Varios artistas",
             Year = "",
-            CoverUrl = await servicio.ObtenerCoverPlaylistAsync(cover),
+            CoverUrl = await servicio.ObtenerCoverPlaylistAsync(cover) ,
             Songs = new ObservableCollection<pasadena_vistas.Models.Song>()
         };
 
@@ -590,16 +590,6 @@ public partial class PantallaInicio : ContentPage
         {
             var service = new PlaylistService();
             var listaIds = await service.ObtenerCancionesDePlaylistAsync(playlistId);
-
-            if (listaIds == null || listaIds.Count == 0)
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    "Playlist vacía",
-                    "Esta playlist no contiene canciones.",
-                    "OK"
-                );
-                return;
-            }
 
             var canciones = await ConvertirPlaylistSongsAsync(listaIds);
 

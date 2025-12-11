@@ -72,34 +72,30 @@
 
                                 <!-- Botón de Play -->
                                 <Button 
-            Text="▶"
-            FontSize="20"
-            TextColor="Black"
-            BackgroundColor="#1ED760"
-            HeightRequest="55"
-            WidthRequest="55"
-            CornerRadius="28"
-            Clicked="PlayButton_Clicked"/>
+                                    Text="▶"
+                                    FontSize="20"
+                                    TextColor="Black"
+                                    BackgroundColor="#1ED760"
+                                    HeightRequest="55"
+                                    WidthRequest="55"
+                                    CornerRadius="28"
+                                    Clicked="PlayButton_Clicked"
+                                    x:Name="PlayButton"
+                                    IsVisible="False"/>          
 
                                 <!-- NUEVO BOTÓN -->
                                 <Button 
-            x:Name="AdminButton"
-            Text="Opciones"
-            FontAttributes="Bold"
-            FontSize="14"
-            BackgroundColor="#333333"
-            TextColor="White"
-            HeightRequest="40"
-            WidthRequest="110"
-            CornerRadius="12"
-            HorizontalOptions="Center"
-            IsVisible="false" />
-                                <!-- Esta propiedad controla si se muestra -->
+                                    Text="Opciones"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    BackgroundColor="#333333"
+                                    TextColor="White"
+                                    HeightRequest="40"
+                                    WidthRequest="110"
+                                    CornerRadius="12"
+                                    HorizontalOptions="Center"/>   
                             </VerticalStackLayout>
 
-
-
-                            <Label Grid.Column="0" Text="Descargar" TextColor="Gray" VerticalOptions="Center"/>
                         </Grid>
 
                     </VerticalStackLayout>

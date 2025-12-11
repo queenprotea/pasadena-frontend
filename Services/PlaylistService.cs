@@ -102,14 +102,13 @@ namespace pasadena_vistas.Services
         // Obtener cover de playlist
         public async Task<ImageSource> ObtenerCoverPlaylistAsync(string coverFileName)
         {
-            if (string.IsNullOrEmpty(coverFileName))
-                throw new Exception("La playlist no tiene cover asignado");
 
-            // Construir la URL completa usando tu config
-            var url = Config.Config.PlaylistCover(coverFileName);
+            if (string.IsNullOrEmpty(coverFileName)) 
+                return ImageSource.FromFile("default_cover.jpg");
 
-            // Retornar directamente como ImageSource
-            return ImageSource.FromUri(new Uri(url));
+            else
+                return ImageSource.FromUri(new Uri(Config.Config.PlaylistCover(coverFileName))); // Construir la URL completa usando tu config
+
         }
 
 

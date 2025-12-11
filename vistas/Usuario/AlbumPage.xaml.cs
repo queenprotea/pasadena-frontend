@@ -20,7 +20,7 @@ public partial class AlbumPage : ContentPage
 
         if (isAdmi)
         {
-            AdminButton.IsVisible = true;
+            
         }
         
 
@@ -36,6 +36,11 @@ public partial class AlbumPage : ContentPage
                 SongArtist.Text = song.artist;
             });
         };
+
+        if(albumSeleccionado.Songs.Count > 0)
+        {
+            PlayButton.IsVisible = true;
+        }
     }
 
     private async void BtnVolver_Clicked(object sender, EventArgs e)
