@@ -449,7 +449,7 @@ public partial class PantallaInicio : ContentPage
 
             // Abrir la página
             await Application.Current.MainPage.Navigation
-                .PushAsync(new AlbumPage(albumModel, _player, false));
+                .PushAsync(new AlbumPage(albumModel, _player, -1));
         }
         catch (Exception ex)
         {
@@ -559,9 +559,9 @@ public partial class PantallaInicio : ContentPage
     }
 
     private async Task<pasadena_vistas.Models.Album> ConvertirPlaylistEnAlbumModel(
-    string nombrePlaylist,
-    string cover,
-    List<pasadena_vistas.Models.Song> canciones)
+        string nombrePlaylist,
+        string cover,
+        List<pasadena_vistas.Models.Song> canciones)
     {
         var servicio = new PlaylistService();
 
@@ -596,7 +596,7 @@ public partial class PantallaInicio : ContentPage
             var albumModel = await ConvertirPlaylistEnAlbumModel(playlistName, cover, canciones);
 
             await Application.Current.MainPage.Navigation
-                .PushAsync(new AlbumPage(albumModel, _player, true));
+                .PushAsync(new AlbumPage(albumModel, _player, playlistId));
         }
         catch (Exception ex)
         {

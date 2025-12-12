@@ -7,20 +7,19 @@ namespace pasadena_vistas.vistas.Usuario;
 public partial class AlbumPage : ContentPage
 {
     private readonly PlayerService _player;
-    private bool isAdmi = false;
-    
+    private int _playlistId;
+
     // Constructor que recibe el álbum seleccionado
 
-    public AlbumPage(Album albumSeleccionado, PlayerService player, bool _isAdmi)
+    public AlbumPage(Album albumSeleccionado, PlayerService player, int playlistId)
     {
         InitializeComponent();
         _player = player;
+        _playlistId = playlistId;
 
-        isAdmi = _isAdmi;
-
-        if (isAdmi)
+        if (playlistId > 0)
         {
-            
+            EditarButton.IsVisible = true;
         }
         
 
@@ -42,6 +41,28 @@ public partial class AlbumPage : ContentPage
             PlayButton.IsVisible = true;
         }
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if(_playlistId > 0)
+            try
+            {
+                var servicio = new PlaylistService();
+                var playlist = await servicio.ObtenerPlaylistPorId(_playlistId);
+                var coverUrl = await servicio.ObtenerCoverPlaylistAsync(playlist.playlist_cover);
+
+                NameLabel.Text = playlist.name;
+                coverImage.Source = coverUrl;
+
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudo refrescar la playlist: {ex.Message}", "OK");
+            }
+    }
+
 
     private async void BtnVolver_Clicked(object sender, EventArgs e)
     {
@@ -103,6 +124,13 @@ public partial class AlbumPage : ContentPage
         });
     }
 
-    
+    private async void EditarButton_Clicked(object sender, EventArgs e)
+    {
+        var album = BindingContext as Album;
+        if (album == null) return;
+        // Navegar a la página de edición de la playlist
+        await Application.Current.MainPage.Navigation
+                .PushAsync(new EditarPlaylistPage(album, _playlistId));
+    }
 
 }

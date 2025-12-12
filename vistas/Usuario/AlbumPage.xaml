@@ -51,14 +51,15 @@
                             <Border.Shadow>
                                 <Shadow Brush="Black" Offset="0,10" Radius="20" Opacity="0.6"/>
                             </Border.Shadow>
-                            <Image Source="{Binding CoverUrl}" Aspect="AspectFill"/>
+                            <Image Source="{Binding CoverUrl}" Aspect="AspectFill" x:Name="coverImage"/>
                         </Border>
 
                         <Label Text="{Binding Name}" 
                                TextColor="White" 
                                FontSize="24" 
                                FontAttributes="Bold" 
-                               HorizontalOptions="Start"/>
+                               HorizontalOptions="Start"
+                               x:Name="NameLabel"/>
 
                         <HorizontalStackLayout Spacing="5">
                             <Image Source="user_profile_icon.png" HeightRequest="20" WidthRequest="20" VerticalOptions="Center"/>
@@ -85,7 +86,7 @@
 
                                 <!-- NUEVO BOTÓN -->
                                 <Button 
-                                    Text="Opciones"
+                                    Text="Editar"
                                     FontAttributes="Bold"
                                     FontSize="14"
                                     BackgroundColor="#333333"
@@ -93,7 +94,10 @@
                                     HeightRequest="40"
                                     WidthRequest="110"
                                     CornerRadius="12"
-                                    HorizontalOptions="Center"/>   
+                                    HorizontalOptions="Center"
+                                    x:Name="EditarButton"
+                                    IsVisible="False"
+                                    Clicked="EditarButton_Clicked"/>   
                             </VerticalStackLayout>
 
                         </Grid>

@@ -188,5 +188,96 @@ namespace pasadena_vistas.Services
             return playlist ?? new PlaylistRespuesta();
         }
 
+        public async Task<PlaylistRespuesta> ActualizarPlaylistAsync(PlaylistRegistro editado, int playlistId)
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para crear playlist");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            var respuesta = await _clienteHttp.PutAsJsonAsync(Config.Config.PlaylistUpdate(playlistId), editado);
+
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                if (respuesta.StatusCode == HttpStatusCode.UnprocessableEntity)
+                {
+                    if (error.Contains("Playlist not found"))
+                        throw new Exception("Playlist no encontrado");
+                }
+
+                throw new Exception($"Error al registrar la playlist: {respuesta.StatusCode} - {error}");
+            }
+
+            return await respuesta.Content.ReadFromJsonAsync<PlaylistRespuesta>();
+        }
+
+        // Agregar canción a playlist
+        public async Task AgregarCancionAPlaylistAsync(int playlistId, string songId, int position)
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para agregar canciones a la playlist");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var url = Config.Config.PlaylistAddSong(playlistId);
+
+            var contenido = new StringContent(
+                JsonSerializer.Serialize(new { song_id = songId, position = position }),
+                Encoding.UTF8,
+                "application/json"
+            );
+            var respuesta = await _clienteHttp.PostAsync(url, contenido);
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                if (respuesta.StatusCode == HttpStatusCode.UnprocessableEntity)
+                {
+                    if (error.Contains("Not allowed"))
+                        throw new Exception("Sin acceso a la playlist");
+
+                    if (error.Contains("Song not found"))
+                        throw new Exception("Cancion no encontrada");
+                }
+
+                throw new Exception($"Error al agregar canción a la playlist: {respuesta.StatusCode} - {error}");
+            }
+        }
+
+        // Remover canción de playlist
+        public async Task RemoverCancionDePlaylistAsync(int playlistId, string songId)
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para remover canciones de la playlist");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var url = Config.Config.PlaylistRemoveSong(playlistId, songId);
+
+            
+            var respuesta = await _clienteHttp.DeleteAsync(url);
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                if (respuesta.StatusCode == HttpStatusCode.UnprocessableEntity)
+                {
+                    if (error.Contains("Not allowed"))
+                        throw new Exception("Sin acceso a la playlist");
+
+                }
+
+                throw new Exception($"Error al remover la canción a la playlist: {respuesta.StatusCode} - {error}");
+            }
+        }
+
     }
 }

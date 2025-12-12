@@ -45,4 +45,9 @@ public static class Config
     public static string PlaylistCover(string coverName) => $"{URL_BASE}/static/{coverName}";
 
     public static string PlaylistSongs(int playlistId) => $"{URL_BASE}/playlist/{playlistId}/songs";
+
+    public static string PlaylistUpdate(int playlistId) => $"{URL_BASE}/playlist/{playlistId}";
+
+    public static string PlaylistAddSong(int playlistId) => $"{URL_BASE}/playlist/{playlistId}/songs";
+    public static string PlaylistRemoveSong(int playlistId, string songId) => $"{URL_BASE}/playlist/{playlistId}/songs/{songId}";
 }

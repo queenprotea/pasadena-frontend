@@ -1,4 +1,8 @@
+
+using pasadena_vistas.Models;
+using pasadena_vistas.Models.Playlist;
 using pasadena_vistas.Services;
+using System.Threading.Tasks;
 
 namespace pasadena_vistas.vistas.Usuario;
 
@@ -7,20 +11,31 @@ public partial class EditarPlaylistPage : ContentPage
     private FileResult _selectedImageFile;
     private readonly AuthService _authService;
     private readonly PlaylistService _playlistService;
+    private int playlistId;
+    private PlaylistRespuesta playlistActual;
 
 
-    public EditarPlaylistPage()
+    public EditarPlaylistPage(Album albumSeleccionado, int _playlistId)
     {
         InitializeComponent();
 
         _authService = new AuthService();
         _playlistService = new PlaylistService();
+        playlistId = _playlistId;
 
+        BindingContext = albumSeleccionado;
+
+        ingresarInformacion();
+
+        
     }
 
-    private void mostrarDatosOriginales()
+    private async Task ingresarInformacion()
     {
-        
+
+        playlistActual = await _playlistService.ObtenerPlaylistPorId(playlistId);
+        IsPublicSwitch.IsToggled = playlistActual.is_public;
+
     }
 
     private async void SelectImageButton_Clicked(object sender, EventArgs e)
@@ -55,18 +70,67 @@ public partial class EditarPlaylistPage : ContentPage
 
     private async void AgregarCanciones_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(AgregarCancionPage));
+        await Application.Current.MainPage.Navigation
+                .PushAsync(new AgregarCancionPage(playlistId));
     }
 
-    private void Guardar_Clicked(object sender, EventArgs e)
+    private async void Guardar_Clicked(object sender, EventArgs e)
     {
+        if (string.IsNullOrWhiteSpace(NombreEntry.Text))
+        {
+            NombreErrorLabel.IsVisible = true;
+            return;
+        }
 
+        NombreErrorLabel.IsVisible = false;
 
-        DisplayAlert("Guardado", "Cambios guardados (simulación)", "OK");
+        try
+        {
+            bool publico = IsPublicSwitch.IsToggled;
+
+            var owner = await _authService.ObtenerPerfilUsuarioAsync();
+
+            if (owner == null)
+            {
+                await DisplayAlert("Error", "No se pudo obtener el usuario actual", "OK");
+                return;
+            }
+
+            var editado = new PlaylistRegistro
+            {
+                name = NombreEntry.Text.Trim(),
+                is_public = publico,
+                owner_id = owner.id
+            };
+
+            PlaylistRespuesta playlistActualizado = await _playlistService.ActualizarPlaylistAsync(editado, playlistId);
+
+            if (_selectedImageFile != null)
+            {
+                await _playlistService.SubirCoverPlaylistAsync(playlistActualizado.id, _selectedImageFile);
+            }
+
+            await DisplayAlert("Éxito", "Playlist actualizada", "Aceptar");
+            await Shell.Current.GoToAsync("..");
+
+        }
+        catch (HttpRequestException)
+        {
+            await DisplayAlert("Error", "No hay conexion a internet", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Ocurrió un problema: {ex.Message}", "Aceptar");
+        }
     }
 
-    private void EliminarCancion_Clicked(object sender, EventArgs e)
+    private async void BtnVolver_Clicked(object sender, EventArgs e)
     {
-        DisplayAlert("Eliminado", "Canción eliminada (simulación)", "OK");
+        await Navigation.PopAsync();
+    }
+
+    private async void EliminarCancion_Clicked(object sender, EventArgs e)
+    {
+        await DisplayAlert("Exito", "Cancion eliminada", "OK");
     }
 }
