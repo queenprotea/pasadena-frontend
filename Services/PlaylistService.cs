@@ -279,5 +279,110 @@ namespace pasadena_vistas.Services
             }
         }
 
+        // Eliminar playlist
+        public async Task EliminarPlaylistAsync(int playlistId)
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para eliminar la playlist");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var url = Config.Config.PlaylistDelete(playlistId);
+
+
+            var respuesta = await _clienteHttp.DeleteAsync(url);
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                if (respuesta.StatusCode == HttpStatusCode.UnprocessableEntity)
+                {
+                    if (error.Contains("Not allowed"))
+                        throw new Exception("Sin acceso a la playlist");
+
+                }
+
+                throw new Exception($"Error al eliminar la playlist: {respuesta.StatusCode} - {error}");
+            }
+        }
+
+
+        // Obtener playlists activas y publicas por owner_id
+        public async Task<List<PlaylistRespuesta>> ObtenerPlaylistsActivasPublicasPorOwnerAsync(int ownerId)
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para ver tus playlists");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var url = Config.Config.PlaylistActivePublicByOwner(ownerId);
+
+            var respuesta = await _clienteHttp.GetAsync(url);
+
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                throw new Exception($"Error al obtener playlists: {respuesta.StatusCode} - {error}");
+            }
+
+            var playlists = await respuesta.Content.ReadFromJsonAsync<List<PlaylistRespuesta>>();
+            return playlists ?? new List<PlaylistRespuesta>();
+        }
+
+        // Obtener playlists activas por owner_id
+        public async Task<List<PlaylistRespuesta>> ObtenerPlaylistsActivasPorOwnerAsync(int ownerId)
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para ver tus playlists");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var url = Config.Config.PlaylistActiveByOwner(ownerId);
+
+            var respuesta = await _clienteHttp.GetAsync(url);
+
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                throw new Exception($"Error al obtener playlists: {respuesta.StatusCode} - {error}");
+            }
+
+            var playlists = await respuesta.Content.ReadFromJsonAsync<List<PlaylistRespuesta>>();
+            return playlists ?? new List<PlaylistRespuesta>();
+        }
+
+        // Obtener playlists activas y publicas
+        public async Task<List<PlaylistRespuesta>> ObtenerPlaylistsActivasPublicas()
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para ver tus playlists");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var url = Config.Config.PlaylistActivePublic();
+
+            var respuesta = await _clienteHttp.GetAsync(url);
+
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                throw new Exception($"Error al obtener playlists: {respuesta.StatusCode} - {error}");
+            }
+
+            var playlists = await respuesta.Content.ReadFromJsonAsync<List<PlaylistRespuesta>>();
+            return playlists ?? new List<PlaylistRespuesta>();
+        }
+
     }
 }

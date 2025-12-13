@@ -7,6 +7,17 @@
 
     <VerticalStackLayout Spacing="10" Padding="15">
 
+        <ImageButton Source="previous_icon.png"
+             HorizontalOptions="Start"
+             VerticalOptions="Start"
+             Margin="5,10"
+             HeightRequest="30"
+             WidthRequest="30"
+             BackgroundColor="#33000000"
+             CornerRadius="15"
+             Clicked="BtnVolver_Clicked"
+             ZIndex="99"/>
+
         <Label Text="Buscar canciones" TextColor="White" FontSize="24" FontAttributes="Bold"/>
 
         <SearchBar Placeholder="Busca por nombre o artista..." x:Name="SearchBar" TextChanged="SearchSong_textChanged"/>

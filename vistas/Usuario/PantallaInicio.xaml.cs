@@ -123,7 +123,7 @@ public partial class PantallaInicio : ContentPage
                 // Aquí debes pasar el owner_id del usuario autenticado
                 var owner = await _authService.ObtenerPerfilUsuarioAsync();
 
-                var playlists = await servicio.ObtenerPlaylistsPorOwnerAsync(owner.id);
+                var playlists = await servicio.ObtenerPlaylistsActivasPorOwnerAsync(owner.id);
 
                 Playlists.Clear();
 
@@ -158,19 +158,6 @@ public partial class PantallaInicio : ContentPage
     private async void CrearPlaylist_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(CrearPlaylistPage));
-    }
-    private async void Playlist_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        // CurrentSelection puede ser vacío → validamos
-        var selectedPlaylist = e.CurrentSelection?.FirstOrDefault() as string;
-
-        if (selectedPlaylist is not null && sender is CollectionView cv)
-        {
-            await Shell.Current.GoToAsync(nameof(EditarPlaylistPage));
-
-            // limpiar selección
-            cv.SelectedItem = null;
-        }
     }
 
     private async void AdminUsuarios_Clicked(object sender, EventArgs e)

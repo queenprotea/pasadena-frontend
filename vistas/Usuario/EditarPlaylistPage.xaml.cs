@@ -129,8 +129,20 @@ public partial class EditarPlaylistPage : ContentPage
         await Navigation.PopAsync();
     }
 
-    private async void EliminarCancion_Clicked(object sender, EventArgs e)
+    private async void Eliminar_Clicked(object sender, EventArgs e)
     {
-        await DisplayAlert("Exito", "Cancion eliminada", "OK");
+        bool confirm = await DisplayAlert("Confirmar", $"¿Estás seguro de que deseas eliminar la playlist {playlistActual.name}?", "Sí", "No");
+        if (!confirm) return;
+        try
+        {
+            var servicio = new PlaylistService();
+            await servicio.EliminarPlaylistAsync(playlistId);
+            await DisplayAlert("Éxito", "Playlist eliminada.", "OK");
+            await Shell.Current.GoToAsync("//PantallaInicio");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"No se pudo eliminar la playlist: {ex.Message}", "OK");
+        }
     }
 }

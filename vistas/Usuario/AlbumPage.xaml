@@ -2,9 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="pasadena_vistas.vistas.Usuario.AlbumPage"
+             x:Name="AlbumPageRoot"
              Title="Album"
              BackgroundColor="#121212"
              NavigationPage.HasNavigationBar="False">
+
 
     <!-- GRID PRINCIPAL 3 FILAS -->
     <Grid RowDefinitions="*,1,85">
@@ -125,12 +127,16 @@
                                        FontSize="13"/>
                             </VerticalStackLayout>
 
-                            <Label Grid.Column="2" 
-                                   Text="..." 
-                                   TextColor="Gray" 
-                                   FontSize="20"
-                                   VerticalOptions="Center"
-                                   Rotation="90"/>
+                            <ImageButton Grid.Column="2"
+                                 Source="icon_x.png"
+                                 BackgroundColor="#1ED760"
+                                 WidthRequest="14"
+                                 HeightRequest="14"
+                                 Padding="0"
+                                 CornerRadius="12"
+                                 Clicked="RemoverButton_Clicked"
+                                 IsVisible="{Binding Source={x:Reference AlbumPageRoot}, Path=BindingContext.IsPlaylist}"/>
+
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

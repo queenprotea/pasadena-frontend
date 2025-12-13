@@ -12,6 +12,8 @@ namespace pasadena_vistas.Models
         public string Name { get; set; }
         public string Artist { get; set; }
         public string Year { get; set; }
+
+        public bool IsPlaylist { get; set; } = false;
         public ImageSource CoverUrl { get; set; } // imagen random por ahora
         public string PrimaryColor { get; set; } = "#582018"; // Para el fondo degradado
         public ObservableCollection<Song> Songs { get; set; } = new ObservableCollection<Song>();

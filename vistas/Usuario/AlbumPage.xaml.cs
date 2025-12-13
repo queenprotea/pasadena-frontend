@@ -1,6 +1,7 @@
 using pasadena_vistas.Models;
 using pasadena_vistas.Services;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace pasadena_vistas.vistas.Usuario;
 
@@ -16,6 +17,8 @@ public partial class AlbumPage : ContentPage
         InitializeComponent();
         _player = player;
         _playlistId = playlistId;
+
+        albumSeleccionado.IsPlaylist = playlistId > 0;
 
         if (playlistId > 0)
         {
@@ -133,4 +136,30 @@ public partial class AlbumPage : ContentPage
                 .PushAsync(new EditarPlaylistPage(album, _playlistId));
     }
 
+    private async void RemoverButton_Clicked(object sender, EventArgs e) // pendiente
+    {
+        var boton = sender as ImageButton;
+        var song = boton?.BindingContext as Song;
+        if (song == null) return;
+
+        bool confirm = await DisplayAlert("Confirmar", $"¿Estás seguro de que deseas remover {song.title} de la playlist?", "Sí", "No");
+        if (!confirm) return;
+        try
+        {
+            var servicio = new PlaylistService();
+            await servicio.RemoverCancionDePlaylistAsync(_playlistId, song.Id);
+            // Quitar de la lista local para refrescar la UI
+            var album = BindingContext as Album;
+            if (album != null)
+            {
+                album.Songs.Remove(song);
+            }
+            await DisplayAlert("Éxito", "Cancion removida correctamente.", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"No se pudo remover la cancion: {ex.Message}", "OK");
+        }
+    }
 }
+

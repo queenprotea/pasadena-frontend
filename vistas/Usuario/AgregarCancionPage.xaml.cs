@@ -91,7 +91,7 @@ public partial class AgregarCancionPage : ContentPage
             
             await _playlistService.AgregarCancionAPlaylistAsync(playlistId, modelo.Id, nuevaPosicion);
             await ObtenerCancionesEnPlaylistAsync(playlistId); // refrescar lista
-            boton.Text = "Remover";
+            boton.Text = "-";
             boton.BackgroundColor = Colors.Red;
         }
         
@@ -175,5 +175,11 @@ public partial class AgregarCancionPage : ContentPage
         }
 
         return results; // Devuelve la lista (vacía si hubo error)
+    }
+
+
+    private async void BtnVolver_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("//PantallaInicio");
     }
 }
