@@ -384,5 +384,27 @@ namespace pasadena_vistas.Services
             return playlists ?? new List<PlaylistRespuesta>();
         }
 
+
+        // Remover canción de la bd de playlist
+        public async Task RemoverReferenciasDeCancionAsync(string songId)
+        {
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("Debes iniciar sesión para remover canciones de la playlist");
+
+            _clienteHttp.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var url = Config.Config.PlaylistRemoveSongReference(songId);
+
+
+            var respuesta = await _clienteHttp.DeleteAsync(url);
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                throw new Exception($"Error al remover la canción a la playlist: {respuesta.StatusCode} - {error}");
+            }
+        }
     }
 }

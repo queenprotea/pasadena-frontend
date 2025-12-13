@@ -30,6 +30,7 @@ public partial class GestionarCancionesPage : ContentPage
         bool confirmado = await DisplayAlert("Confirmar", "¿Estás seguro de que quieres eliminar esta canción?", "Sí, eliminar", "Cancelar");
         var boton = sender as Button;
         var item = boton?.CommandParameter;
+        var servicio = new PlaylistService();
 
         if (item == null)
             return;
@@ -44,6 +45,8 @@ public partial class GestionarCancionesPage : ContentPage
         {
             var client = Services.MetadataService.Client;
             await client.DeleteSongAsync(new SongRequest {SongId = modelo.Id});
+            await servicio.RemoverReferenciasDeCancionAsync(modelo.Id);
+
             await DisplayAlert("Éxito", "Canción eliminada (simulación)", "Aceptar");
         }
     }
