@@ -2,45 +2,38 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="pasadena_vistas.vistas.Usuario.ConsultarUsuario"
-             Title="ConsultarUsuario">
+             Title="Usuario">
+
     <ScrollView>
         <VerticalStackLayout Spacing="15" Padding="20">
-            <BoxView VerticalOptions="Start" HeightRequest="350">
-                <BoxView.Background>
-                    <LinearGradientBrush EndPoint="0,1">
-                        <GradientStop Color="{Binding PrimaryColor}" Offset="0.0" />
-                        <GradientStop Color="#121212" Offset="1.0" />
-                    </LinearGradientBrush>
-                </BoxView.Background>
-            </BoxView>
 
-            <VerticalStackLayout x:Name="AuthLayout" IsVisible="False" Spacing="15">
+            <!-- AVATAR -->
+            <Image Source="{Binding FotoPerfil}"
+                   HeightRequest="100"
+                   WidthRequest="100"
+                   HorizontalOptions="Center"
+                   Aspect="AspectFill"/>
 
-                <!-- Perfil -->
-                <VerticalStackLayout Spacing="15">
-                    <Image x:Name="FotoPerfil"
-                       HeightRequest="100"
-                       WidthRequest="100"
-                       HorizontalOptions="Center"
-                       Aspect="AspectFill"/>
+            <!-- NOMBRE -->
+            <Label Text="{Binding UsuarioConsultado.full_name}"
+                   FontSize="20"
+                   TextColor="White"
+                   HorizontalOptions="Center"/>
 
-                    <Label x:Name="NombreUsuarioLabel"
-                       TextColor="White"
-                       FontSize="20"
-                       HorizontalOptions="Center"/>
+            <!-- USERNAME -->
+            <Label Text="{Binding UsuarioConsultado.username}"
+                   FontSize="14"
+                   TextColor="Gray"
+                   HorizontalOptions="Center"/>
 
-                </VerticalStackLayout>
+            <!-- FOLLOW -->
+            <Button Text="Seguir"
+                    IsVisible="{Binding MostrarSeguir}"
+                    Clicked="Seguir_Clicked"/>
 
-                
-                <Button Text="Seguir"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    BackgroundColor="Transparent"
-                    BorderColor="White"
-                    CornerRadius="10"
-                    Clicked="BtnSeguir_Clicked"/>
-
-            </VerticalStackLayout>
+            <Button Text="Dejar de seguir"
+                    IsVisible="{Binding MostrarDejarSeguir}"
+                    Clicked="DejarSeguir_Clicked"/>
 
         </VerticalStackLayout>
     </ScrollView>

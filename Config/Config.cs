@@ -28,6 +28,15 @@ public static class Config
     public static string MetadataURL => $"{URL_BASE}/metadata.MetadataService";
     public static string StreamingURL => $"{URL_BASE}/streaming.StreamingService";
     public static string ProfilePic(string fotoUrl) => $"{URL_BASE}/profiles/static/avatars/{fotoUrl}";
+    public static string Followers(int id) => $"{URL_BASE}/profiles/{id}/followers";
+    public static string Following(int id) => $"{URL_BASE}/profiles/{id}/following";
+
+    public static string FollowUser(int id) => $"{URL_BASE}/profiles/{id}/follow";
+    public static string UnfollowUser(int id) => $"{URL_BASE}/profiles/{id}/unfollow";
+    public static string IsFollowing(int followerId, int followedId)
+    => $"{URL_BASE}/profiles/{followerId}/follows/{followedId}";
+
+
 
 
     //Admin – gestión de usuarios 

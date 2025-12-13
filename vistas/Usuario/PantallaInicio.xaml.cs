@@ -273,6 +273,12 @@ public partial class PantallaInicio : ContentPage
                 
                 break;
 
+            case "Usuario":
+
+                await Application.Current.MainPage.Navigation
+               .PushAsync(new ConsultarUsuario(item.Nombre));
+
+                break;
             default:
                 break;
         }
@@ -360,7 +366,7 @@ public partial class PantallaInicio : ContentPage
                 results.Add(new SearchResultClass
                 {
                     Id = userResponse.id.ToString(),
-                    Nombre = userResponse.full_name,
+                    Nombre = userResponse.username,
                     Tipo = "Usuario",
                     Imagen = ImageSource.FromFile("default_artist.png")
                 });
