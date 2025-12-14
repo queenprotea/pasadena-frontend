@@ -302,7 +302,7 @@ public partial class PantallaInicio : ContentPage
             case "Usuario":
 
                 await Application.Current.MainPage.Navigation
-               .PushAsync(new ConsultarUsuario(item.Nombre));
+               .PushAsync(new ConsultarUsuario(item.Nombre, _player));
 
                 break;
             default:
