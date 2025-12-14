@@ -142,12 +142,6 @@ namespace pasadena_vistas.Services
         // Obtener canciones de una playlist
         public async Task<List<PlaylistSongs>> ObtenerCancionesDePlaylistAsync(int playlistId)
         {
-            var token = await SecureStorage.GetAsync("auth_token");
-            if (string.IsNullOrEmpty(token))
-                throw new Exception("Debes iniciar sesión para ver las canciones de la playlist");
-
-            _clienteHttp.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
 
             var url = Config.Config.PlaylistSongs(playlistId);
 
@@ -166,12 +160,6 @@ namespace pasadena_vistas.Services
         // Obtener playlist por id 
         public async Task<PlaylistRespuesta> ObtenerPlaylistPorId(int playlistId)
         {
-            var token = await SecureStorage.GetAsync("auth_token");
-            if (string.IsNullOrEmpty(token))
-                throw new Exception("Debes iniciar sesión para ver tus playlists");
-
-            _clienteHttp.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
 
             var url = Config.Config.PlaylistById(playlistId);
 
@@ -312,12 +300,6 @@ namespace pasadena_vistas.Services
         // Obtener playlists activas y publicas por owner_id
         public async Task<List<PlaylistRespuesta>> ObtenerPlaylistsActivasPublicasPorOwnerAsync(int ownerId)
         {
-            var token = await SecureStorage.GetAsync("auth_token");
-            if (string.IsNullOrEmpty(token))
-                throw new Exception("Debes iniciar sesión para ver tus playlists");
-
-            _clienteHttp.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
 
             var url = Config.Config.PlaylistActivePublicByOwner(ownerId);
 
@@ -362,14 +344,27 @@ namespace pasadena_vistas.Services
         // Obtener playlists activas y publicas
         public async Task<List<PlaylistRespuesta>> ObtenerPlaylistsActivasPublicas()
         {
-            var token = await SecureStorage.GetAsync("auth_token");
-            if (string.IsNullOrEmpty(token))
-                throw new Exception("Debes iniciar sesión para ver tus playlists");
 
-            _clienteHttp.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
+            var url = Config.Config.PlaylistActivePublic;
 
-            var url = Config.Config.PlaylistActivePublic();
+            var respuesta = await _clienteHttp.GetAsync(url);
+
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                var error = await respuesta.Content.ReadAsStringAsync();
+
+                throw new Exception($"Error al obtener playlists: {respuesta.StatusCode} - {error}");
+            }
+
+            var playlists = await respuesta.Content.ReadFromJsonAsync<List<PlaylistRespuesta>>();
+            return playlists ?? new List<PlaylistRespuesta>();
+        }
+
+        
+        public async Task<List<PlaylistRespuesta>> ObtenerPlaylistsActivasPublicasPorNombreAsync(string nombre)
+        {
+
+            var url = Config.Config.PlaylistActivePublicByName(nombre);
 
             var respuesta = await _clienteHttp.GetAsync(url);
 

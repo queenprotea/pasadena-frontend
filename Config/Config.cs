@@ -63,7 +63,8 @@ public static class Config
 
     public static string PlaylistActiveByOwner(int ownerId) => $"{URL_BASE}/playlist/{ownerId}/active";
     public static string PlaylistActivePublicByOwner(int ownerId) => $"{URL_BASE}/playlist/{ownerId}/active/public";
-    public static string PlaylistActivePublic() => $"{URL_BASE}/playlist/active/private";
+    public static string PlaylistActivePublic => $"{URL_BASE}/playlist/active/public";
+    public static string PlaylistActivePublicByName(string name) => $"{URL_BASE}/playlist/active/public/{name}";
 
     public static string PlaylistRemoveSongReference(string songId) => $"{URL_BASE}/playlist/songs/{songId}";
 }

@@ -8,7 +8,7 @@
         <VerticalStackLayout Padding="25" Spacing="20" VerticalOptions="Center">
             <!-- Header -->
             <Label Text="Iniciar sesión"
-                   TextColor="Black"
+                   TextColor="White"
                    FontSize="32"
                    FontAttributes="Bold"
                    HorizontalOptions="Center"

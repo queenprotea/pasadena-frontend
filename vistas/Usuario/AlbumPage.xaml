@@ -135,7 +135,7 @@
                                  Padding="0"
                                  CornerRadius="12"
                                  Clicked="RemoverButton_Clicked"
-                                 IsVisible="{Binding Source={x:Reference AlbumPageRoot}, Path=BindingContext.IsPlaylist}"/>
+                                 IsVisible="{Binding Source={x:Reference AlbumPageRoot}, Path=BindingContext.IsPlaylistAndOwner}"/>
 
                         </Grid>
                     </DataTemplate>

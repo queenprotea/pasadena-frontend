@@ -12,6 +12,7 @@ namespace pasadena_vistas.Models
         public string Nombre { get; set; }
         public string Tipo { get; set; }   // Canción, Artista, Álbum, Género
         public ImageSource Imagen { get; set; }
+        public string Detalles { get; set; } 
 
         public SearchResultClass(){
         

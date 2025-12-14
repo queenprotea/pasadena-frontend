@@ -1,19 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace pasadena_vistas.Models
 {
-    public class Album
+    public class Album : INotifyPropertyChanged
     {
         public string Name { get; set; }
         public string Artist { get; set; }
         public string Year { get; set; }
 
-        public bool IsPlaylist { get; set; } = false;
+        private bool _isPlaylistAndOwner;
+        public bool IsPlaylistAndOwner
+        {
+            get => _isPlaylistAndOwner;
+            set
+            {
+                if (_isPlaylistAndOwner != value)
+                {
+                    _isPlaylistAndOwner = value;
+                    OnPropertyChanged(nameof(IsPlaylistAndOwner));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
         public ImageSource CoverUrl { get; set; } // imagen random por ahora
         public string PrimaryColor { get; set; } = "#582018"; // Para el fondo degradado
         public ObservableCollection<Song> Songs { get; set; } = new ObservableCollection<Song>();

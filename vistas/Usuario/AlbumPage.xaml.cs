@@ -8,23 +8,26 @@ namespace pasadena_vistas.vistas.Usuario;
 public partial class AlbumPage : ContentPage
 {
     private readonly PlayerService _player;
+    private readonly AuthService _authService = new AuthService();
     private int _playlistId;
+    private int idUsuarioActual;
+    private Album album;
 
     // Constructor que recibe el álbum seleccionado
 
-    public AlbumPage(Album albumSeleccionado, PlayerService player, int playlistId)
+    public AlbumPage(Album albumSeleccionado, PlayerService player, int playlistId, int ownerId)
     {
         InitializeComponent();
         _player = player;
         _playlistId = playlistId;
+        album = albumSeleccionado;
 
-        albumSeleccionado.IsPlaylist = playlistId > 0;
 
-        if (playlistId > 0)
+        /*if (playlistId > 0)
         {
             EditarButton.IsVisible = true;
-        }
-        
+        }*/
+
 
         // Conectamos los datos a la vista
         BindingContext = albumSeleccionado;
@@ -45,7 +48,7 @@ public partial class AlbumPage : ContentPage
         }
     }
 
-    protected override async void OnAppearing()
+    /*protected override async void OnAppearing()
     {
         base.OnAppearing();
 
@@ -64,7 +67,40 @@ public partial class AlbumPage : ContentPage
             {
                 await DisplayAlert("Error", $"No se pudo refrescar la playlist: {ex.Message}", "OK");
             }
+    }*/
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (_playlistId > 0)
+        {
+            try
+            {
+                // 1) Refrescar datos de la playlist
+                var servicio = new PlaylistService();
+                var playlist = await servicio.ObtenerPlaylistPorId(_playlistId);
+                var coverUrl = await servicio.ObtenerCoverPlaylistAsync(playlist.playlist_cover);
+
+                NameLabel.Text = playlist.name;
+                coverImage.Source = coverUrl;
+
+                // 2) Verificar si el usuario actual es el dueño
+                var usuarioActual = await _authService.ObtenerPerfilUsuarioAsync();
+                if (usuarioActual != null && playlist.owner_id == usuarioActual.id)
+                {
+                    EditarButton.IsVisible = true;
+                    
+                    album.IsPlaylistAndOwner = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudo refrescar la playlist: {ex.Message}", "OK");
+            }
+        }
     }
+
 
 
     private async void BtnVolver_Clicked(object sender, EventArgs e)

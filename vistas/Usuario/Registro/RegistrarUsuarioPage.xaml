@@ -31,30 +31,30 @@
             <Entry x:Name="CorreoEntry"
                    Placeholder="Correo electrónico"
                    Keyboard="Email"
-                   TextColor="Black"
+                   TextColor="White"
                    PlaceholderColor="#999"/>
 
             <Entry x:Name="NombreCompletoEntry"
                    Placeholder="Nombre completo"
-                   TextColor="Black"
+                   TextColor="White"
                    PlaceholderColor="#999"/>
 
             <Entry x:Name="UsuarioEntry"
                    Placeholder="Nombre de usuario"
-                   TextColor="Black"
+                   TextColor="White"
                    PlaceholderColor="#999"
                    TextChanged="UsuarioEntry_TextChanged"/>
 
             <Entry x:Name="ContrasenaEntry"
                    Placeholder="Contraseña"
                    IsPassword="True"
-                   TextColor="Black"
+                   TextColor="White"
                    PlaceholderColor="#999"/>
 
             <Entry x:Name="ConfirmarContrasenaEntry"
                    Placeholder="Confirma tu contraseña"
                    IsPassword="True"
-                   TextColor="Black"
+                   TextColor="White"
                    PlaceholderColor="#999"/>
             
             <!--Botones-->

@@ -123,6 +123,13 @@ public partial class PantallaInicio : ContentPage
                 // Aquí debes pasar el owner_id del usuario autenticado
                 var owner = await _authService.ObtenerPerfilUsuarioAsync();
 
+                if (owner != null)
+                {
+                    EstadisticasButton.IsVisible = true;
+                    GestionCancionesButton.IsVisible = owner.role_id == 1;
+                }
+
+
                 var playlists = await servicio.ObtenerPlaylistsActivasPorOwnerAsync(owner.id);
 
                 Playlists.Clear();
@@ -141,8 +148,16 @@ public partial class PantallaInicio : ContentPage
 
                 PlaylistsCollection.ItemsSource = Playlists;
             }
+            else
+            {
+                // limpia la UI cuando no hay sesión
+                EstadisticasButton.IsVisible = false;
+                GestionCancionesButton.IsVisible = false;
+                Playlists.Clear();
+                PlaylistsCollection.ItemsSource = Playlists;
+            }
 
-            
+
         }
         catch (Exception ex)
         {
@@ -270,7 +285,18 @@ public partial class PantallaInicio : ContentPage
                 break;
 
             case "Playlist":
-                
+                if (int.TryParse(item.Id, out int playlistId))
+                {
+                    await AbrirPlaylistComoAlbum(playlistId, item.Nombre, item.Detalles);
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Error",
+                        "El ID de la playlist no es un número válido.",
+                        "OK"
+                    );
+                }
                 break;
 
             case "Usuario":
@@ -351,6 +377,28 @@ public partial class PantallaInicio : ContentPage
             }
         }
         catch (Grpc.Core.RpcException ex)
+        {
+            
+        }
+
+        // ========== BUSCAR PLAYLISTS ==========
+        try
+        {
+            var playlist = new PlaylistService();
+            var playlistResponse = await playlist.ObtenerPlaylistsActivasPublicasPorNombreAsync(query);
+
+            foreach (var a in playlistResponse)
+            {
+                results.Add(new SearchResultClass
+                {
+                    Id = a.id.ToString(),
+                    Nombre = a.name,
+                    Tipo = "Playlist",
+                    Detalles = a.playlist_cover
+                });
+            }
+        }
+        catch (Exception ex)
         {
             
         }
@@ -442,7 +490,7 @@ public partial class PantallaInicio : ContentPage
 
             // Abrir la página
             await Application.Current.MainPage.Navigation
-                .PushAsync(new AlbumPage(albumModel, _player, -1));
+                .PushAsync(new AlbumPage(albumModel, _player, -1, -1));
         }
         catch (Exception ex)
         {
@@ -576,12 +624,21 @@ public partial class PantallaInicio : ContentPage
 
         return album;
     }
+    
 
     private async Task AbrirPlaylistComoAlbum(int playlistId, string playlistName, string cover)
     {
         try
         {
             var service = new PlaylistService();
+
+            int idUsuarioActual; 
+
+            if (await _authService.ObtenerPerfilUsuarioAsync() == null)
+                idUsuarioActual = -1;
+            else
+                idUsuarioActual = (await _authService.ObtenerPerfilUsuarioAsync()).id;
+
             var listaIds = await service.ObtenerCancionesDePlaylistAsync(playlistId);
 
             var canciones = await ConvertirPlaylistSongsAsync(listaIds);
@@ -589,7 +646,7 @@ public partial class PantallaInicio : ContentPage
             var albumModel = await ConvertirPlaylistEnAlbumModel(playlistName, cover, canciones);
 
             await Application.Current.MainPage.Navigation
-                .PushAsync(new AlbumPage(albumModel, _player, playlistId));
+                .PushAsync(new AlbumPage(albumModel, _player, playlistId, idUsuarioActual));
         }
         catch (Exception ex)
         {

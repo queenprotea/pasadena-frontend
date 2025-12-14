@@ -113,11 +113,15 @@
 
                 <Button Text="Ver Estadísticas"
                         Style="{StaticResource SecondaryButton}"
-                        Clicked="AdminStats_Clicked"/>
+                        Clicked="AdminStats_Clicked"
+                        IsVisible="False"
+                        x:Name="EstadisticasButton"/>
 
                 <Button Text="Gestionar Canciones"
                         Style="{StaticResource SecondaryButton}"
-                        Clicked="AdminCanciones_Clicked"/>
+                        Clicked="AdminCanciones_Clicked"
+                        IsVisible="False"
+                        x:Name="GestionCancionesButton"/>
 
             </VerticalStackLayout>
         </ScrollView>
