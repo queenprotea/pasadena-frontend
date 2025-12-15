@@ -50,6 +50,8 @@ public partial class PantallaInicio : ContentPage
                 SongArtist.Text = song.artist;
             });
         };
+
+
     }
 
     private async void PantallaInicio_Loaded(object sender, EventArgs e)
@@ -157,7 +159,7 @@ public partial class PantallaInicio : ContentPage
                 PlaylistsCollection.ItemsSource = Playlists;
             }
 
-
+            await CargarUltimosAlbumesAsync();
         }
         catch (Exception ex)
         {
@@ -186,7 +188,41 @@ public partial class PantallaInicio : ContentPage
 
     private async void SearchSong_clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(vistas.Administrador.GestionarCancionesPage));
+        string text = SearchBar.Text;
+
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            SearchResultsView.IsVisible = false;
+            SearchResults.Clear();
+            return;
+        }
+
+        _cts.Cancel();
+        _cts = new CancellationTokenSource();
+        var token = _cts.Token;
+
+        try
+        {
+            await Task.Delay(350, token);
+
+            var results = await BuscarTodoAsync(text);
+
+            if (token.IsCancellationRequested)
+                return;
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                SearchResults.Clear();
+                foreach (var r in results)
+                    SearchResults.Add(r);
+
+                SearchResultsView.IsVisible = SearchResults.Count > 0;
+            });
+        }
+        catch (TaskCanceledException)
+        {
+            // ignorar
+        }
     }
     private async void SearchSong_textChanged(object sender, TextChangedEventArgs e)
     {
@@ -460,9 +496,14 @@ public partial class PantallaInicio : ContentPage
 
     
 
-    private async void OnAlbumSelected(object sender, EventArgs e)
+    private async void OnAlbumSelected(object sender, SelectionChangedEventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(AlbumPage));
+        var selected = e.CurrentSelection.FirstOrDefault() as Models.Album;
+        if (selected == null) return;
+
+        if (sender is CollectionView cv)
+            cv.SelectedItem = null;
+        await AbrirAlbum(selected.Id);
     }
 
     private async Task AbrirAlbum(int albumId)
@@ -541,23 +582,6 @@ public partial class PantallaInicio : ContentPage
             cv.SelectedItem = null;
 
         await AbrirPlaylistComoAlbum(int.Parse(selected.Id), selected.Name, selected.Cover);
-    }
-
-   
-
-    private async void OnAlbumSelected(object sender, SelectionChangedEventArgs e)
-    {
-        var selected = e.CurrentSelection.FirstOrDefault() as Models.Album;
-        if (selected == null) return;
-
-        if (sender is CollectionView cv)
-            cv.SelectedItem = null;
-
-        // Navegar a la página de detalle de álbum tipo Spotify
-        await Shell.Current.GoToAsync(nameof(AlbumPage), new Dictionary<string, object>
-        {
-            { "Album", selected }
-        });
     }
 
     private async void AdminStats_Clicked(object sender, EventArgs e)
@@ -654,6 +678,38 @@ public partial class PantallaInicio : ContentPage
         }
     }
 
+    private async Task CargarUltimosAlbumesAsync()
+    {
+        try
+        {
+            var client = Services.MetadataService.Client;
+
+            var response = await client.GetLatestAlbumsAsync(
+                new LatestAlbumsRequest { Limit = 5 }
+            );
+
+            AlbumsRecomendados.Clear();
+
+            foreach (var a in response.Albums)
+            {
+                AlbumsRecomendados.Add(new pasadena_vistas.Models.Album
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    Artist = "", // si luego quieres mostrar artista, lo agregamos
+                    CoverUrl = a.Cover != null && a.Cover.Length > 0
+                        ? ImageSource.FromStream(() => new MemoryStream(a.Cover.ToByteArray()))
+                        : ImageSource.FromFile("default_album.png")
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("❌ Error cargando álbumes recientes: " + ex.Message);
+        }
+    }
+
+
     public class AlbumResponse
     {
         public AlbumDTO album { get; set; }
@@ -692,5 +748,6 @@ public partial class PantallaInicio : ContentPage
 
         public string DisplayName => $"{Emoji} {Name}";
     }
+
 
 }
