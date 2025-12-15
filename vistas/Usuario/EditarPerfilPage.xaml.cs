@@ -91,9 +91,13 @@ public partial class EditarPerfilPage : ContentPage
             await DisplayAlert("Éxito", "Foto de perfil actualizada", "OK");
             await Shell.Current.GoToAsync("..");
         }
-        catch (Exception ex)
+        catch (HttpRequestException)
         {
-            await DisplayAlert("Error", ex.Message, "OK");
+            await DisplayAlert("Error", "No se pudo conectar con el servidor. Intenta mas tarde.", "OK");
+        }
+        catch (Exception)
+        {
+            await DisplayAlert("Error", "Ocurrio un error al cambiar tu foto, intenta mas tarde", "OK");
         }
     }
 
