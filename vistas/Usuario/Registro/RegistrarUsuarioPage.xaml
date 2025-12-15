@@ -32,30 +32,35 @@
                    Placeholder="Correo electrónico"
                    Keyboard="Email"
                    TextColor="White"
-                   PlaceholderColor="#999"/>
+                   PlaceholderColor="#999"
+                   MaxLength="50"/>
 
             <Entry x:Name="NombreCompletoEntry"
                    Placeholder="Nombre completo"
                    TextColor="White"
-                   PlaceholderColor="#999"/>
+                   PlaceholderColor="#999"
+                   MaxLength="50"/>
 
             <Entry x:Name="UsuarioEntry"
                    Placeholder="Nombre de usuario"
                    TextColor="White"
                    PlaceholderColor="#999"
-                   TextChanged="UsuarioEntry_TextChanged"/>
+                   TextChanged="UsuarioEntry_TextChanged"
+                   MaxLength="50"/>
 
             <Entry x:Name="ContrasenaEntry"
                    Placeholder="Contraseña"
                    IsPassword="True"
                    TextColor="White"
-                   PlaceholderColor="#999"/>
+                   PlaceholderColor="#999"
+                   MaxLength="30"/>
 
             <Entry x:Name="ConfirmarContrasenaEntry"
                    Placeholder="Confirma tu contraseña"
                    IsPassword="True"
                    TextColor="White"
-                   PlaceholderColor="#999"/>
+                   PlaceholderColor="#999"
+                   MaxLength="30"/>
             
             <!--Botones-->
             <Border BackgroundColor="Transparent" Margin="5, 0, 5, 5"
