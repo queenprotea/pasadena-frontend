@@ -27,10 +27,14 @@ public partial class InicioSesion : ContentPage
 
             var usuario = await _authService.ObtenerPerfilUsuarioAsync();
 
-            if (!string.IsNullOrWhiteSpace(usuario.profile_picture))
+            if (usuario != null && !string.IsNullOrWhiteSpace(usuario.profile_picture))
+            {
                 await SecureStorage.SetAsync("profile_picture", usuario.profile_picture);
+            }
             else
+            {
                 SecureStorage.Remove("profile_picture");
+            }
 
             await DisplayAlert("Éxito", "Iniciaste sesión", "Aceptar");
 
