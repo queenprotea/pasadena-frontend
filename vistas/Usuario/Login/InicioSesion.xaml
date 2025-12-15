@@ -41,7 +41,8 @@
                                TextColor="White" 
                                PlaceholderColor="#888888"
                                BackgroundColor="#2A2A2A"
-                               ClearButtonVisibility="WhileEditing"/>
+                               ClearButtonVisibility="WhileEditing"
+                               MaxLength="50"/>
                     </VerticalStackLayout>
 
                     <!-- Password Input -->
@@ -57,7 +58,8 @@
                                PlaceholderColor="#888888"
                                BackgroundColor="#2A2A2A"
                                IsPassword="True"
-                               ClearButtonVisibility="WhileEditing"/>
+                               ClearButtonVisibility="WhileEditing"
+                               MaxLength="30"/>
                     </VerticalStackLayout>
 
                     <!-- Error Message -->

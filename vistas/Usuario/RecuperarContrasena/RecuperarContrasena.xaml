@@ -15,10 +15,12 @@
             <!-- Formulario 1 -->
             <Entry x:Name="CorreoEntry"
                    Placeholder="Correo electronico"
-                   Keyboard="Email"/>
+                   Keyboard="Email"
+                   MaxLength="50"/>
 
             <Entry x:Name="UsuarioEntry"
-                   Placeholder="Nombre de usuario"/>
+                   Placeholder="Nombre de usuario"
+                   MaxLength="50"/>
             
             <Button Text="Enviar código"
                     Clicked="btnSolicitarCodigo"
@@ -42,12 +44,14 @@
                 <Entry x:Name="ContrasenaNuevaEntry"
                        Placeholder="Nueva contrasena"
                        IsPassword="True"
-                       Margin="0, 5, 0, 5"/>
+                       Margin="0, 5, 0, 5"
+                       MaxLength="50"/>
 
                 <Entry x:Name="ConfirmarContrasenaEntry"
                        Placeholder="Confirmar contrasena"
                        IsPassword="True"
-                       Margin="0, 5, 0, 5"/>
+                       Margin="0, 5, 0, 5"
+                       MaxLength="50"/>
 
                 <Button Text="Actualizar contraseña"
                         Clicked="btnModificarContrasena"
