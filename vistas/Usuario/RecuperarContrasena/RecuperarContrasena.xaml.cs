@@ -83,10 +83,10 @@ public partial class RecuperarContrasena : ContentPage
                 "Aceptar");
             await Shell.Current.GoToAsync("..");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             await DisplayAlert("Error",
-                "Ocurrió un error al realizar tu solicitud, intenta mas tarde",
+                "Contraseña invalida. 8 caracteres, 1 numero y una mayuscula.",
                 "OK");
         }
     }
