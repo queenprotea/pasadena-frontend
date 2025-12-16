@@ -73,16 +73,6 @@
                             <Label Grid.Column="2" Text=">" TextColor="Gray"/>
                         </Grid>
 
-                        <Grid ColumnDefinitions="Auto, *, Auto">
-                            <Grid.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="Social_Tapped"/>
-                            </Grid.GestureRecognizers>
-                            <Image Source="social_icon.png" HeightRequest="20"/>
-                            <Label Grid.Column="1" Text="Social"
-                                   TextColor="White" Margin="15,0"/>
-                            <Label Grid.Column="2" Text=">" TextColor="Gray"/>
-                        </Grid>
-
                     </VerticalStackLayout>
                 </Frame>
 

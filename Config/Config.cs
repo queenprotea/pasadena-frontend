@@ -9,7 +9,7 @@ namespace pasadena_vistas.Config;
 
 public static class Config
 {
-    public const string URL_BASE = "http://192.168.1.65:8080";
+    public const string URL_BASE = "http://localhost:8080";
 
     //Auth only
     public static string AuthLogin => $"{URL_BASE}/auth/login";
