@@ -31,7 +31,7 @@
     <Grid x:Name="MainGrid" RowDefinitions="Auto,*,Auto"
           ColumnDefinitions="220,*">
 
-        <!-- ================= CABECERA (fila 0, columnas 0-1) ================= -->
+        <!-- ================= CABECERA ================= -->
         <Grid Grid.Row="0"
               Grid.ColumnSpan="2"
               Padding="16"
@@ -39,7 +39,7 @@
               BackgroundColor="#121212"
               VerticalOptions="Center">
 
-            <!-- Botón menú (por ahora solo decorativo, pero con handler por si lo quieres usar) -->
+            <!-- Botón menú -->
             <Button Text="☰"
                     WidthRequest="40"
                     HeightRequest="40"
@@ -72,7 +72,7 @@
 
         </Grid>
 
-        <!-- ================= MENÚ LATERAL (fila 1, columna 0) ================= -->
+        <!-- ================= MENÚ LATERAL  ================= -->
         <ScrollView x:Name="MenuLateral" Grid.Row="1"
                     Grid.Column="0" IsVisible="True">
             <VerticalStackLayout x:Name="LeftMenu"
@@ -127,7 +127,6 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- ================= CONTENIDO PRINCIPAL (fila 1, columna 1) ================= -->
         <ScrollView Grid.Row="1"
                     Grid.Column="1">
             <VerticalStackLayout Padding="24"
@@ -204,13 +203,13 @@
 
             </VerticalStackLayout>
         </ScrollView>
+        
         <Grid Grid.Row="2"
       Grid.ColumnSpan="2"
       BackgroundColor="#101010"
       Padding="20"
       VerticalOptions="Center">
 
-            <!-- Imagen + texto alineado a la izquierda -->
             <HorizontalStackLayout HorizontalOptions="Start"
                            VerticalOptions="Center"
                            Spacing="10">
@@ -232,7 +231,7 @@
                 </StackLayout>
             </HorizontalStackLayout>
 
-            <!-- Botones centrados absolutamente -->
+          
             <HorizontalStackLayout x:Name="ButtomStack" HorizontalOptions="Center"
                            VerticalOptions="Center"
                            Spacing="10">
