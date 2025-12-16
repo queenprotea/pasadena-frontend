@@ -142,14 +142,7 @@ public partial class AlbumPage : ContentPage
     {
         _player.TogglePlayPause();
 
-        if (_player.IsPlaying)
-        {
-            PlayPauseButton.Source = "icon_pause.png";
-        }
-        else
-        {
-            PlayPauseButton.Source = "icon_play.png";
-        }
+      
     }
 
     private async void NextButton_Clicked(object sender, EventArgs e)
