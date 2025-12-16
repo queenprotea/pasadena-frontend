@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System;
+using System.Net.Http;
+
 namespace pasadena_vistas.Services
 {
     public static class MetadataService
@@ -18,12 +21,18 @@ namespace pasadena_vistas.Services
             {
                 if (_client == null)
                 {
-                    var handler = new HttpClientHandler
+                    // Validar que la URL sea válida
+                    if (!Uri.TryCreate(Config.Config.MetadataURL, UriKind.Absolute, out var grpcUri))
+                        throw new InvalidOperationException($"La URL de MetadataService no es válida: {Config.Config.MetadataURL}");
+
+                    // Usar SocketsHttpHandler para Android y compatibilidad con gRPC
+                    var handler = new SocketsHttpHandler
                     {
-                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                        PooledConnectionIdleTimeout = TimeSpan.FromMinutes(5),
+                        SslOptions = { RemoteCertificateValidationCallback = (sender, certificate, chain, errors) => true } // acepta cualquier certificado si es dev
                     };
 
-                    var channel = GrpcChannel.ForAddress(Config.Config.MetadataURL, new GrpcChannelOptions
+                    var channel = GrpcChannel.ForAddress(grpcUri, new GrpcChannelOptions
                     {
                         HttpHandler = handler
                     });

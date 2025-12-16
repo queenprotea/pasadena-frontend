@@ -28,7 +28,7 @@
         </Style>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,*,Auto"
+    <Grid x:Name="MainGrid" RowDefinitions="Auto,*,Auto"
           ColumnDefinitions="220,*">
 
         <!-- ================= CABECERA (fila 0, columnas 0-1) ================= -->
@@ -73,12 +73,13 @@
         </Grid>
 
         <!-- ================= MENÚ LATERAL (fila 1, columna 0) ================= -->
-        <ScrollView Grid.Row="1"
-                    Grid.Column="0">
+        <ScrollView x:Name="MenuLateral" Grid.Row="1"
+                    Grid.Column="0" IsVisible="True">
             <VerticalStackLayout x:Name="LeftMenu"
                                  Padding="16"
                                  Spacing="16"
-                                 BackgroundColor="#000000">
+                                 BackgroundColor="#000000"
+                                 IsVisible="True">
 
                 <Button Text="+ Crear Playlist"
                         Style="{StaticResource PrimaryButton}"
@@ -203,69 +204,58 @@
 
             </VerticalStackLayout>
         </ScrollView>
-
-        <!-- ================= REPRODUCTOR INFERIOR (fila 2, columnas 0-1) ================= -->
         <Grid Grid.Row="2"
-              Grid.ColumnSpan="2"
-              BackgroundColor="#101010"
-              Padding="20"
-              ColumnDefinitions="*,Auto,Auto,Auto,*"
-              VerticalOptions="Center">
+      Grid.ColumnSpan="2"
+      BackgroundColor="#101010"
+      Padding="20"
+      VerticalOptions="Center">
 
-            <!-- Espacio a la izquierda -->
-            <!-- Fila de info -->
-            <HorizontalStackLayout Grid.Row="0"
-                           Grid.ColumnSpan="2"
+            <!-- Imagen + texto alineado a la izquierda -->
+            <HorizontalStackLayout HorizontalOptions="Start"
+                           VerticalOptions="Center"
                            Spacing="10">
-
-                <Image Source="current_song_art.png"
-                    HeightRequest="50" WidthRequest="50"
-                    Aspect="AspectFill"
-                    Margin="0,0,10,0"/>
-
-                <VerticalStackLayout VerticalOptions="Center">
-                    <Label x:Name="SongName" Text="Nombre de la canción"
+               
+                <StackLayout Spacing="2" VerticalOptions="Center">
+                    <Label x:Name="SongName"
+                   Text="Nombre de la canción"
                    TextColor="White"
                    FontAttributes="Bold"
-                   FontSize="14"/>
-
-                    <Label x:Name="SongArtist" Text="Nombre del artista"
+                   FontSize="14"
+                   LineBreakMode="TailTruncation"
+                   MaxLines="1"/>
+                    <Label x:Name="SongArtist"
+                   Text="Nombre del artista"
                    TextColor="Gray"
-                   FontSize="12"/>
-                </VerticalStackLayout>
-
+                   FontSize="12"
+                   LineBreakMode="TailTruncation"
+                   MaxLines="1"/>
+                </StackLayout>
             </HorizontalStackLayout>
 
-            <!-- Botón retroceder -->
-            <ImageButton Grid.Column="1"
-             Source="icon_prev.png"
-             BackgroundColor="Transparent"
-             HeightRequest="36"
-             WidthRequest="36"
-             Padding="0"
-             Clicked="PreviousButton_Clicked"/>
-
-            <!-- Botón play / pausa -->
-            <ImageButton Grid.Column="2"
-             x:Name="PlayPauseButton"
-             Source="icon_play.png"
-             BackgroundColor="Transparent"
-             HeightRequest="42"
-             WidthRequest="42"
-             Padding="0"
-             Clicked="PlayPause_Clicked"/>
-
-            <!-- Botón siguiente -->
-            <ImageButton Grid.Column="3"
-             Source="icon_next.png"
-             BackgroundColor="Transparent"
-             HeightRequest="36"
-             WidthRequest="36"
-             Padding="0"
-             Clicked="NextButton_Clicked"/>
-
-
-            <!-- Espacio a la derecha -->
+            <!-- Botones centrados absolutamente -->
+            <HorizontalStackLayout x:Name="ButtomStack" HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Spacing="10">
+                <ImageButton Source="icon_prev.png"
+                     BackgroundColor="Transparent"
+                     HeightRequest="36"
+                     WidthRequest="36"
+                     Clicked="PreviousButton_Clicked"/>
+                <ImageButton x:Name="PlayPauseButton"
+                     Source="icon_play.png"
+                     BackgroundColor="Transparent"
+                     HeightRequest="42"
+                     WidthRequest="42"
+                     Clicked="PlayPause_Clicked"/>
+                <ImageButton Source="icon_next.png"
+                     BackgroundColor="Transparent"
+                     HeightRequest="36"
+                     WidthRequest="36"
+                     Clicked="NextButton_Clicked"/>
+            </HorizontalStackLayout>
         </Grid>
+
+
+
     </Grid>
 </ContentPage>

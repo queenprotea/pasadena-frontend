@@ -16,7 +16,7 @@ public class AuthService
 
     public AuthService()
     {
-        _clienteHttp = new HttpClient();
+        _clienteHttp = HttpClientFactory.Client;
     }
 
     public async Task RegistrarUsuarioAsync(SolicitudRegistro solicitud)
