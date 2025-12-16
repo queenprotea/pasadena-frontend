@@ -163,7 +163,20 @@ public class AuthService
         if (!respuesta.IsSuccessStatusCode)
         {
             var error = await respuesta.Content.ReadAsStringAsync();
-            throw new Exception(error);
+            try
+            {
+                var doc = JsonDocument.Parse(error);
+                var mensaje = doc.RootElement
+                    .GetProperty("detail")[0]
+                    .GetProperty("msg")
+                    .GetString();
+
+                throw new Exception(mensaje);
+            }
+            catch
+            {
+                throw new Exception("Tu nueva contraseña no cumple los requisitos");
+            }
         }
     }
 
