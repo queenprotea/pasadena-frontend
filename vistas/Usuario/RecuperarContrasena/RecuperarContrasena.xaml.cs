@@ -32,11 +32,11 @@ public partial class RecuperarContrasena : ContentPage
         }
         catch (HttpRequestException)
         {
-            await DisplayAlert("Error", "No hay conexion a internet", "OK");
+            await DisplayAlert("Error", "Parece haber un error con el servidor, intente mas tarde", "OK");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await DisplayAlert("Error", ex.Message, "OK");
+            await DisplayAlert("Error", "Ocurrio un error al modificar tu contraseña, intenta mas tarde", "OK");
         }
     }
 
@@ -86,7 +86,7 @@ public partial class RecuperarContrasena : ContentPage
         catch (Exception ex)
         {
             await DisplayAlert("Error",
-                "Ocurrió un error al realizar tu solicitud, intenta mas tarde",
+                "Contraseña invalida. 8 caracteres, 1 numero y una mayuscula.",
                 "OK");
         }
     }

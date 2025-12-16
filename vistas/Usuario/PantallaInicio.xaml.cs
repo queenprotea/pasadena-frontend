@@ -122,6 +122,7 @@ public partial class PantallaInicio : ContentPage
         }
         catch
         {
+            await DisplayAlert("Error", "Hubo un error al cargar tus datos de perfil.", "OK");
             ProfileButton.Source = "user_profile_icon.png";
         }
     }

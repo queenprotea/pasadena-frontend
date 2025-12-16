@@ -27,10 +27,14 @@ public partial class InicioSesion : ContentPage
 
             var usuario = await _authService.ObtenerPerfilUsuarioAsync();
 
-            if (!string.IsNullOrWhiteSpace(usuario.profile_picture))
+            if (usuario != null && !string.IsNullOrWhiteSpace(usuario.profile_picture))
+            {
                 await SecureStorage.SetAsync("profile_picture", usuario.profile_picture);
+            }
             else
+            {
                 SecureStorage.Remove("profile_picture");
+            }
 
             await DisplayAlert("Éxito", "Iniciaste sesión", "Aceptar");
 
@@ -38,11 +42,11 @@ public partial class InicioSesion : ContentPage
         }
         catch (HttpRequestException)
         {
-            await DisplayAlert("Error", "No hay conexion a internet", "OK");
+            await DisplayAlert("Error", "Parece haber un error con el servidor, intente mas tarde", "OK");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await DisplayAlert("Error al iniciar sesion", ex.Message, "Aceptar");
+            await DisplayAlert("Error al iniciar sesion", "Intenta mas tarde", "Aceptar");
         }
     }
 
