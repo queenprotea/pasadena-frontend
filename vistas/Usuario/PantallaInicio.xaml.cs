@@ -27,6 +27,10 @@ public partial class PantallaInicio : ContentPage
     private CancellationTokenSource _cts = new();
     public ObservableCollection<SearchResultClass> SearchResults { get; set; } = new();
     public ObservableCollection<pasadena_vistas.Models.Album> AlbumsRecomendados { get; set; } = new();
+    public ObservableCollection<pasadena_vistas.Models.Song> SongsRecomendadas { get; set; } = new();
+    public ObservableCollection<pasadena_vistas.Models.Song> TopSongsInicio { get; set; } = new();
+
+
     public ObservableCollection<PlaylistItem> Playlists { get; } = new();
     private readonly PlayerService _player;
 
@@ -145,6 +149,9 @@ public partial class PantallaInicio : ContentPage
         try
         {
             await CargarUltimosAlbumesAsync();
+            await CargarUltimasCancionesAsync();
+            await CargarTopCancionesInicioAsync();
+
             bool tokenValido = await _authService.ValidarTokenAsync();
 
             if (tokenValido)
@@ -752,6 +759,105 @@ public partial class PantallaInicio : ContentPage
         {
             Debug.WriteLine("❌ Error cargando álbumes recientes: " + ex.Message);
         }
+    }
+
+    private async Task CargarUltimasCancionesAsync()
+    {
+        try
+        {
+            var client = Services.MetadataService.Client;
+
+            var response = await client.GetLatestSongsAsync(
+                new LatestSongsRequest { Limit = 10 }
+            );
+
+            SongsRecomendadas.Clear();
+
+            foreach (var s in response.Songs)
+            {
+                SongsRecomendadas.Add(new pasadena_vistas.Models.Song
+                {
+                    Id = s.SongId,
+                    title = s.Title,
+                    artist = s.Artist,
+                    album = s.Album,
+                    genre = s.Genre,
+                    duration = s.Duration
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("❌ Error cargando canciones recomendadas: " + ex.Message);
+        }
+    }
+
+    private async void OnSongRecommendationSelected(object sender, SelectionChangedEventArgs e)
+    {
+        var song = e.CurrentSelection.FirstOrDefault() as pasadena_vistas.Models.Song;
+        if (song == null)
+            return;
+
+        if (sender is CollectionView cv)
+            cv.SelectedItem = null;
+
+        await _player.PlaySongAsync(song);
+    }
+
+    private async Task CargarTopCancionesInicioAsync()
+    {
+        try
+        {
+            TopSongsSection.IsVisible = false;
+            TopSongsInicio.Clear();
+
+            var auth = new AuthService();
+            var usuario = await auth.ObtenerPerfilUsuarioAsync();
+
+            // ❌ No hay usuario
+            if (usuario == null)
+                return;
+
+            var client = Services.MetadataService.Client;
+            if (client == null)
+                return;
+
+            var request = new UserStatisticsRequest
+            {
+                UserId = usuario.id.ToString()
+            };
+
+            var response = await client.GetUserStatisticsAsync(request);
+
+            if (response.TopSongs == null || response.TopSongs.Count == 0)
+                return;
+            // 4) TOP 5 canciones
+            foreach (var s in response.TopSongs.Take(5))
+            {
+                TopSongsInicio.Add(new pasadena_vistas.Models.Song
+                {
+                    Id = s.SongId,
+                    title = s.Title,
+                   
+                });
+            }
+            TopSongsSection.IsVisible = true;
+        }
+        catch (Exception ex)
+        {
+            
+        }
+    }
+
+    private async void OnTopSongSelected(object sender, SelectionChangedEventArgs e)
+    {
+        var song = e.CurrentSelection.FirstOrDefault() as pasadena_vistas.Models.Song;
+        if (song == null) return;
+
+        if (sender is CollectionView cv)
+            cv.SelectedItem = null;
+
+        await _player.PlaySongAsync(song);
     }
 
 
