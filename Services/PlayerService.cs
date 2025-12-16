@@ -172,6 +172,7 @@ namespace pasadena_vistas.Services
         // =======================================================
         private async void PlayerEnded(object? sender, EventArgs e)
         {
+            OnPlayStateChanged?.Invoke(false);
             if (_currentSong != null)
             {
                 var seconds = (DateTime.UtcNow - _playStartTime).TotalSeconds;
