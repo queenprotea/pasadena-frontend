@@ -62,7 +62,22 @@ public partial class PantallaInicio : ContentPage
 
     private void ToggleMenu_Clicked(object sender, EventArgs e)
     {
-        LeftMenu.IsVisible = !LeftMenu.IsVisible;
+       
+
+        if (MenuLateral.IsVisible)
+        {
+            LeftMenu.IsVisible = false;
+            MenuLateral.IsVisible = false;
+            MainGrid.ColumnDefinitions[0].Width = new GridLength(0);
+            MainGrid.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Star);
+        }
+        else
+        {
+            LeftMenu.IsVisible = true;
+            MenuLateral.IsVisible = true;
+            MainGrid.ColumnDefinitions[0].Width = new GridLength(220);
+            MainGrid.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Star);
+        }
     }
 
     private async Task CargarBotonCrearPlaylistr()
@@ -117,6 +132,7 @@ public partial class PantallaInicio : ContentPage
 
         try
         {
+            await CargarUltimosAlbumesAsync();
             bool tokenValido = await _authService.ValidarTokenAsync();
 
             if (tokenValido)
@@ -159,7 +175,7 @@ public partial class PantallaInicio : ContentPage
                 PlaylistsCollection.ItemsSource = Playlists;
             }
 
-            await CargarUltimosAlbumesAsync();
+            
         }
         catch (Exception ex)
         {
@@ -468,6 +484,22 @@ public partial class PantallaInicio : ContentPage
     void OnSizeChanged(object? sender, EventArgs e)
     {
         LeftMenu.IsVisible = this.Width > 600; // Desktop only
+
+        double width = this.Width;
+
+        if (width < 600) // Móvil
+        {
+            ButtomStack.HorizontalOptions = LayoutOptions.End;
+            SongName.LineBreakMode = LineBreakMode.TailTruncation;
+            SongArtist.LineBreakMode = LineBreakMode.TailTruncation;
+        }
+        else // Escritorio
+        {
+
+            ButtomStack.HorizontalOptions = LayoutOptions.Center;
+            SongName.LineBreakMode = LineBreakMode.NoWrap;
+            SongArtist.LineBreakMode = LineBreakMode.NoWrap;
+        }
     }
 
     void ToggleMenu(object sender, EventArgs e)

@@ -18,7 +18,7 @@ namespace pasadena_vistas.Services
 
         public PlaylistService()
         {
-            _clienteHttp = new HttpClient();
+            _clienteHttp = HttpClientFactory.Client;
         }
 
         // Registrar nueva playlist

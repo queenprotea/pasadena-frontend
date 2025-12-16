@@ -9,7 +9,7 @@ public class UserService
 
     public UserService()
     {
-        _clienteHttp = new HttpClient();
+        _clienteHttp = HttpClientFactory.Client;
     }
 
     public async Task ActualizarFotoPerfilAsync(int userId, string avatar)

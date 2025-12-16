@@ -23,6 +23,7 @@ public partial class AlbumPage : ContentPage
         album = albumSeleccionado;
 
 
+        SizeChanged += OnSizeChanged;
         /*if (playlistId > 0)
         {
             EditarButton.IsVisible = true;
@@ -47,27 +48,6 @@ public partial class AlbumPage : ContentPage
             PlayButton.IsVisible = true;
         }
     }
-
-    /*protected override async void OnAppearing()
-    {
-        base.OnAppearing();
-
-        if(_playlistId > 0)
-            try
-            {
-                var servicio = new PlaylistService();
-                var playlist = await servicio.ObtenerPlaylistPorId(_playlistId);
-                var coverUrl = await servicio.ObtenerCoverPlaylistAsync(playlist.playlist_cover);
-
-                NameLabel.Text = playlist.name;
-                coverImage.Source = coverUrl;
-
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"No se pudo refrescar la playlist: {ex.Message}", "OK");
-            }
-    }*/
 
     protected override async void OnAppearing()
     {
@@ -102,7 +82,25 @@ public partial class AlbumPage : ContentPage
     }
 
 
+    void OnSizeChanged(object? sender, EventArgs e)
+    {
 
+        double width = this.Width;
+
+        if (width < 600) // Móvil
+        {
+            ButtomStack.HorizontalOptions = LayoutOptions.End;
+            SongName.LineBreakMode = LineBreakMode.TailTruncation;
+            SongArtist.LineBreakMode = LineBreakMode.TailTruncation;
+        }
+        else // Escritorio
+        {
+
+            ButtomStack.HorizontalOptions = LayoutOptions.Center;
+            SongName.LineBreakMode = LineBreakMode.NoWrap;
+            SongArtist.LineBreakMode = LineBreakMode.NoWrap;
+        }
+    }
     private async void BtnVolver_Clicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();

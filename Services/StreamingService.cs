@@ -7,11 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Streaming;
 
+
+
 namespace pasadena_vistas.Services
 {
-    public class StreamingService
+    public static class StreamingService
     {
-        private static Streaming.StreamingService.StreamingServiceClient _client;
+        private static Streaming.StreamingService.StreamingServiceClient? _client;
 
         public static Streaming.StreamingService.StreamingServiceClient Client
         {
@@ -19,12 +21,21 @@ namespace pasadena_vistas.Services
             {
                 if (_client == null)
                 {
-                    var handler = new HttpClientHandler
+                    // Validar que la URL sea válida
+                    if (!Uri.TryCreate(Config.Config.StreamingURL, UriKind.Absolute, out var grpcUri))
+                        throw new InvalidOperationException($"La URL de StreamingService no es válida: {Config.Config.StreamingURL}");
+
+                    // Usar SocketsHttpHandler para compatibilidad con Android
+                    var handler = new SocketsHttpHandler
                     {
-                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                        PooledConnectionIdleTimeout = TimeSpan.FromMinutes(5),
+                        SslOptions =
+                        {
+                            RemoteCertificateValidationCallback = (sender, certificate, chain, errors) => true // solo DEV
+                        }
                     };
 
-                    var channel = GrpcChannel.ForAddress(Config.Config.StreamingURL, new GrpcChannelOptions
+                    var channel = GrpcChannel.ForAddress(grpcUri, new GrpcChannelOptions
                     {
                         HttpHandler = handler
                     });
