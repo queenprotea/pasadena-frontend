@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
 using System.Net.Http.Headers;
 using pasadena_vistas.Config;
+using System.Linq;
 
 namespace pasadena_vistas.vistas.Administrador;
 
@@ -16,7 +17,7 @@ public class UserAdminViewModel : INotifyPropertyChanged
 
     public int UserId { get; set; }                 // ID real del usuario
     public string Username { get; set; }
-    public string ProfilePicture { get; set; } = "user_profile_icon.png"; 
+    public string ProfilePicture { get; set; } = "user_profile_icon.png";
 
     public bool IsBanned
     {
@@ -43,103 +44,135 @@ public class UserAdminViewModel : INotifyPropertyChanged
 
 
 // Lógica principal de la página
-    public partial class GestionarUsuariosPage : ContentPage
+public partial class GestionarUsuariosPage : ContentPage
+{
+    public ObservableCollection<UserAdminViewModel> Users { get; set; }
+
+    // NUEVO: lista base para búsqueda (no se muestra directamente)
+    private readonly ObservableCollection<UserAdminViewModel> _allUsers = new();
+
+    private readonly AuthService _authService = new();
+
+    public GestionarUsuariosPage()
     {
-        public ObservableCollection<UserAdminViewModel> Users { get; set; }
+        InitializeComponent();
+        Users = new ObservableCollection<UserAdminViewModel>();
+        UsersCollectionView.ItemsSource = Users;
 
-        private readonly AuthService _authService = new();   
+        LoadUsers();
+    }
 
-        public GestionarUsuariosPage()
+    private async void LoadUsers()
+    {
+        Users.Clear();
+        _allUsers.Clear();
+
+        try
         {
-            InitializeComponent();
-            Users = new ObservableCollection<UserAdminViewModel>();
-            UsersCollectionView.ItemsSource = Users;
+            var token = await SecureStorage.GetAsync("auth_token");
 
-            LoadUsers(); 
-        }
-
-        private async void LoadUsers()
-        {
-            Users.Clear();
-
-            try
+            if (string.IsNullOrEmpty(token))
             {
-                var token = await SecureStorage.GetAsync("auth_token");
+                await DisplayAlert("Error", "No tienes sesión iniciada.", "OK");
+                return;
+            }
 
-                if (string.IsNullOrEmpty(token))
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            // Llamamos al endpoint
+            var response = await client.GetAsync(Config.Config.AdminUsersList);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errText = await response.Content.ReadAsStringAsync();
+                await DisplayAlert(
+                    "Error",
+                    $"No se pudieron cargar los usuarios ({(int)response.StatusCode}): {errText}",
+                    "OK"
+                );
+                return;
+            }
+
+            var jsonText = await response.Content.ReadAsStringAsync();
+
+            var root = JsonNode.Parse(jsonText);
+
+            if (root is JsonArray arr)
+            {
+                foreach (var node in arr)
                 {
-                    await DisplayAlert("Error", "No tienes sesión iniciada.", "OK");
-                    return;
-                }
+                    if (node is null) continue;
 
-                using var client = new HttpClient();
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token);
+                    int id = node["id"]?.GetValue<int>() ?? 0;
+                    string username = node["username"]?.GetValue<string>() ?? "";
+                    bool isBanned = node["is_banned"]?.GetValue<bool>() ?? false;
 
-                // Llamamos al endpoint
-                var response = await client.GetAsync(Config.Config.AdminUsersList);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    var errText = await response.Content.ReadAsStringAsync();
-                    await DisplayAlert(
-                        "Error",
-                        $"No se pudieron cargar los usuarios ({(int)response.StatusCode}): {errText}",
-                        "OK"
-                    );
-                    return;
-                }
-
-                var jsonText = await response.Content.ReadAsStringAsync();
-
-                var root = JsonNode.Parse(jsonText);
-
-                if (root is JsonArray arr)
-                {
-                    foreach (var node in arr)
+                    var vm = new UserAdminViewModel
                     {
-                        if (node is null) continue;
+                        UserId = id,
+                        Username = username,
+                        IsBanned = isBanned,
+                        ProfilePicture = "ic-admin-default.png"
+                    };
 
-                        int id = node["id"]?.GetValue<int>() ?? 0;
-                        string username = node["username"]?.GetValue<string>() ?? "";
-                        bool isBanned = node["is_banned"]?.GetValue<bool>() ?? false;
-
-                        Users.Add(new UserAdminViewModel
-                        {
-                            UserId = id,
-                            Username = username,
-                            IsBanned = isBanned,
-                            ProfilePicture = "ic-admin-default.png"
-                        });
-                    }
-                }
-                else
-                {
-                    if (root is not null)
-                    {
-                        int id = root["id"]?.GetValue<int>() ?? 0;
-                        string username = root["username"]?.GetValue<string>() ?? "";
-                        bool isBanned = root["is_banned"]?.GetValue<bool>() ?? false;
-
-                        Users.Add(new UserAdminViewModel
-                        {
-                            UserId = id,
-                            Username = username,
-                            IsBanned = isBanned,
-                            ProfilePicture = "ic-admin-default.png"
-                        });
-                    }
+                    _allUsers.Add(vm);
+                    Users.Add(vm);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                await DisplayAlert("Error", $"Ocurrió un error al cargar usuarios: {ex.Message}", "OK");
+                if (root is not null)
+                {
+                    int id = root["id"]?.GetValue<int>() ?? 0;
+                    string username = root["username"]?.GetValue<string>() ?? "";
+                    bool isBanned = root["is_banned"]?.GetValue<bool>() ?? false;
+
+                    var vm = new UserAdminViewModel
+                    {
+                        UserId = id,
+                        Username = username,
+                        IsBanned = isBanned,
+                        ProfilePicture = "ic-admin-default.png"
+                    };
+
+                    _allUsers.Add(vm);
+                    Users.Add(vm);
+                }
             }
         }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Ocurrió un error al cargar usuarios: {ex.Message}", "OK");
+        }
+    }
 
+    // NUEVO: filtro en tiempo real por Username
+    private void UsersSearchBar_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        var text = e.NewTextValue?.Trim() ?? "";
 
-        // Lógica para el botón de Banear/Desbanear 
-        private async void BanButton_Clicked(object sender, EventArgs e)
+        Users.Clear();
+
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            foreach (var u in _allUsers)
+                Users.Add(u);
+
+            return;
+        }
+
+        var filtered = _allUsers.Where(u =>
+            !string.IsNullOrWhiteSpace(u.Username) &&
+            u.Username.Contains(text, StringComparison.OrdinalIgnoreCase));
+
+        foreach (var u in filtered)
+            Users.Add(u);
+    }
+
+    // Lógica para el botón de Banear/Desbanear 
+    private async void BanButton_Clicked(object sender, EventArgs e)
     {
         var button = sender as Button;
         var user = button?.CommandParameter as UserAdminViewModel;
@@ -179,5 +212,4 @@ public class UserAdminViewModel : INotifyPropertyChanged
             await DisplayAlert("Error", ex.Message, "Aceptar");
         }
     }
-
 }
