@@ -24,6 +24,9 @@ namespace pasadena_vistas.Services
 
         private DateTime _playStartTime;
         private pasadena_vistas.Models.Song? _currentSong;
+        public bool IsPlaying => _player?.IsPlaying ?? false;
+        public event Action<bool>? OnPlayStateChanged; // true = reproduciendo, false = pausado
+
 
         // =======================================================
         // MÉTODOS PARA REPRODUCIR
@@ -100,7 +103,14 @@ namespace pasadena_vistas.Services
 
             var song = _queue.Dequeue();
             _currentSong = song;
-
+            if (_currentSong != null)
+            {
+                OnPlayStateChanged?.Invoke(true); // empieza a reproducirse
+            }
+            else
+            {
+                OnPlayStateChanged?.Invoke(false); // cola vacía, poner Play
+            }
             OnSongChanged?.Invoke(song);
             
             try
@@ -147,11 +157,16 @@ namespace pasadena_vistas.Services
             if (_player == null) return;
 
             if (_player.IsPlaying)
+            {
                 _player.Pause();
+                OnPlayStateChanged?.Invoke(false);
+            }
             else
+            {
                 _player.Play();
+                OnPlayStateChanged?.Invoke(true);
+            }
         }
-
         // =======================================================
         // EVENTO CUANDO TERMINA LA CANCIÓN
         // =======================================================

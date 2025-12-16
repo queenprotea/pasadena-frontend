@@ -24,11 +24,13 @@ public partial class AlbumPage : ContentPage
 
 
         SizeChanged += OnSizeChanged;
-        /*if (playlistId > 0)
+        _player.OnPlayStateChanged += (isPlaying) =>
         {
-            EditarButton.IsVisible = true;
-        }*/
-
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                PlayPauseButton.Source = isPlaying ? "icon_pause.png" : "icon_play.png";
+            });
+        };
 
         // Conectamos los datos a la vista
         BindingContext = albumSeleccionado;
@@ -37,7 +39,7 @@ public partial class AlbumPage : ContentPage
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-               
+                PlayPauseButton.Source = "icon_pause.png";
                 SongName.Text = song.title;
                 SongArtist.Text = song.artist;
             });
@@ -139,6 +141,15 @@ public partial class AlbumPage : ContentPage
     private void PlayPause_Clicked(object sender, EventArgs e)
     {
         _player.TogglePlayPause();
+
+        if (_player.IsPlaying)
+        {
+            PlayPauseButton.Source = "icon_pause.png";
+        }
+        else
+        {
+            PlayPauseButton.Source = "icon_play.png";
+        }
     }
 
     private async void NextButton_Clicked(object sender, EventArgs e)

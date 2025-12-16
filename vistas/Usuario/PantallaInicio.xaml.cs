@@ -42,12 +42,23 @@ public partial class PantallaInicio : ContentPage
         _player = player;
 
         SizeChanged += OnSizeChanged;
+
+        _player.OnPlayStateChanged += (isPlaying) =>
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                PlayPauseButton.Source = isPlaying ? "icon_pause.png" : "icon_play.png";
+            });
+        };
+
+
         _player.OnSongChanged += song =>
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 SongName.Text = song.title;
                 SongArtist.Text = song.artist;
+               
             });
         };
 
@@ -510,6 +521,15 @@ public partial class PantallaInicio : ContentPage
     private void PlayPause_Clicked(object sender, EventArgs e)
     {
         _player.TogglePlayPause();
+
+        if (_player.IsPlaying)
+        {
+            PlayPauseButton.Source = "icon_pause.png";
+        }
+        else
+        {
+            PlayPauseButton.Source = "icon_play.png";
+        }
     }
 
     private async void NextButton_Clicked(object sender, EventArgs e)
