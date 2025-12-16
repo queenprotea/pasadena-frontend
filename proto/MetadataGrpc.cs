@@ -87,6 +87,10 @@ namespace Metadata {
     static readonly grpc::Marshaller<global::Metadata.LatestAlbumsRequest> __Marshaller_metadata_LatestAlbumsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.LatestAlbumsRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Metadata.LatestAlbumsResponse> __Marshaller_metadata_LatestAlbumsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.LatestAlbumsResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Metadata.LatestSongsRequest> __Marshaller_metadata_LatestSongsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.LatestSongsRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Metadata.LatestSongsResponse> __Marshaller_metadata_LatestSongsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Metadata.LatestSongsResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Metadata.AddSongRequest, global::Metadata.SongResponse> __Method_AddSong = new grpc::Method<global::Metadata.AddSongRequest, global::Metadata.SongResponse>(
@@ -200,6 +204,14 @@ namespace Metadata {
         __Marshaller_metadata_LatestAlbumsRequest,
         __Marshaller_metadata_LatestAlbumsResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Metadata.LatestSongsRequest, global::Metadata.LatestSongsResponse> __Method_GetLatestSongs = new grpc::Method<global::Metadata.LatestSongsRequest, global::Metadata.LatestSongsResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetLatestSongs",
+        __Marshaller_metadata_LatestSongsRequest,
+        __Marshaller_metadata_LatestSongsResponse);
+
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
@@ -290,6 +302,12 @@ namespace Metadata {
 
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Metadata.LatestAlbumsResponse> GetLatestAlbums(global::Metadata.LatestAlbumsRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Metadata.LatestSongsResponse> GetLatestSongs(global::Metadata.LatestSongsRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -603,6 +621,26 @@ namespace Metadata {
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetLatestAlbums, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Metadata.LatestSongsResponse GetLatestSongs(global::Metadata.LatestSongsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetLatestSongs(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Metadata.LatestSongsResponse GetLatestSongs(global::Metadata.LatestSongsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetLatestSongs, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Metadata.LatestSongsResponse> GetLatestSongsAsync(global::Metadata.LatestSongsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetLatestSongsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Metadata.LatestSongsResponse> GetLatestSongsAsync(global::Metadata.LatestSongsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetLatestSongs, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected override MetadataServiceClient NewInstance(ClientBaseConfiguration configuration)
@@ -630,7 +668,8 @@ namespace Metadata {
           .AddMethod(__Method_RegisterUserPlay, serviceImpl.RegisterUserPlay)
           .AddMethod(__Method_GetUserStatistics, serviceImpl.GetUserStatistics)
           .AddMethod(__Method_GetSongById, serviceImpl.GetSongById)
-          .AddMethod(__Method_GetLatestAlbums, serviceImpl.GetLatestAlbums).Build();
+          .AddMethod(__Method_GetLatestAlbums, serviceImpl.GetLatestAlbums)
+          .AddMethod(__Method_GetLatestSongs, serviceImpl.GetLatestSongs).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the service binding logic.
@@ -654,6 +693,7 @@ namespace Metadata {
       serviceBinder.AddMethod(__Method_GetUserStatistics, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.UserStatisticsRequest, global::Metadata.UserStatisticsResponse>(serviceImpl.GetUserStatistics));
       serviceBinder.AddMethod(__Method_GetSongById, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.GetSongByIdRequest, global::Metadata.GetSongByIdResponse>(serviceImpl.GetSongById));
       serviceBinder.AddMethod(__Method_GetLatestAlbums, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.LatestAlbumsRequest, global::Metadata.LatestAlbumsResponse>(serviceImpl.GetLatestAlbums));
+      serviceBinder.AddMethod(__Method_GetLatestSongs, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Metadata.LatestSongsRequest, global::Metadata.LatestSongsResponse>(serviceImpl.GetLatestSongs));
     }
 
   }

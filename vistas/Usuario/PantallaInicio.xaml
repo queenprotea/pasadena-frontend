@@ -157,9 +157,66 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
+
+                <VerticalStackLayout x:Name="TopSongsSection"
+                     IsVisible="False"
+                     Spacing="12">
+
+                    <Label Text="Tus canciones más escuchadas"
+       Style="{StaticResource TitleLabel}"/>
+
+                <CollectionView ItemsSource="{Binding TopSongsInicio}"
+                HeightRequest="120"
+                SelectionMode="Single"
+                SelectionChanged="OnTopSongSelected">
+
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal"
+                           ItemSpacing="16"/>
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid WidthRequest="220"
+                  Padding="8"
+                  ColumnDefinitions="60,*">
+
+                                <Image Source="song_icon.png"
+                       HeightRequest="48"
+                       WidthRequest="48"
+                       VerticalOptions="Center"/>
+
+                                <StackLayout Grid.Column="1"
+                             VerticalOptions="Center"
+                             Padding="8,0">
+
+                                    <Label Text="{Binding title}"
+                           TextColor="White"
+                           FontAttributes="Bold"
+                           FontSize="14"
+                           LineBreakMode="TailTruncation"/>
+
+                                    <Label Text="{Binding artist}"
+                           TextColor="#B0B0B0"
+                           FontSize="12"
+                           LineBreakMode="TailTruncation"/>
+                                </StackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                </VerticalStackLayout>
+
+
                 <!-- Sección de recomendaciones -->
                 <Label Text="Esto puede gustarte"
                        Style="{StaticResource TitleLabel}"/>
+                <Label Text="ALbums"
+       TextColor="White"
+       FontAttributes="Bold"
+       FontSize="14"
+       LineBreakMode="TailTruncation"
+       Margin="0,8,0,0"/>
 
                 <CollectionView x:Name="AlbumsCollection"
                                 HeightRequest="220"
@@ -200,6 +257,57 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+                <!-- Canciones recomendadas -->
+                <!-- Canciones recomendadas -->
+                <Label Text="Canciones"
+       TextColor="White"
+       FontAttributes="Bold"
+       FontSize="14"
+       LineBreakMode="TailTruncation"
+       Margin="0,8,0,0"/>
+                <CollectionView x:Name="SongsCollection"
+                HeightRequest="120"
+                ItemsSource="{Binding SongsRecomendadas}"
+                SelectionMode="Single"
+                SelectionChanged="OnSongRecommendationSelected">
+
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal"
+                           ItemSpacing="16"/>
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid WidthRequest="220"
+                  Padding="8"
+                  ColumnDefinitions="60,*">
+
+                                <Image Source="song_icon.png"
+                       HeightRequest="48"
+                       WidthRequest="48"
+                       VerticalOptions="Center"/>
+
+                                <StackLayout Grid.Column="1"
+                             Padding="8,0"
+                             VerticalOptions="Center">
+
+                                    <Label Text="{Binding title}"
+                           TextColor="White"
+                           FontAttributes="Bold"
+                           FontSize="14"
+                           LineBreakMode="TailTruncation"/>
+
+                                    <Label Text="{Binding artist}"
+                           TextColor="#B0B0B0"
+                           FontSize="12"
+                           LineBreakMode="TailTruncation"/>
+                                </StackLayout>
+
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
 
             </VerticalStackLayout>
         </ScrollView>
