@@ -4,186 +4,458 @@
              x:Class="pasadena_vistas.vistas.Administrador.AdminDashboardPage"
              Title="Estadísticas"
              BackgroundColor="#121212">
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="25">
 
-            <!-- ================= TÍTULO ================= -->
-            <Label Text="Resumen de la actividad"
-               TextColor="White"
-               FontSize="28"
-               FontAttributes="Bold"
-               Margin="0,10,0,10" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- ================= HEADER WRAPPED ================= -->
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" Margin="0,10,0,0">
+                <Border Grid.RowSpan="2" Grid.Column="0"
+                        StrokeShape="RoundRectangle 18"
+                        Padding="10"
+                        BackgroundColor="#1E1E1E"
+                        VerticalOptions="Center">
+                    <Label Text="🎧"
+                           FontSize="28"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"
+                           TextColor="White"/>
+                </Border>
+
+                <Label Grid.Row="0" Grid.Column="1"
+                       Text="Resumen de la actividad"
+                       TextColor="White"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       Margin="12,0,0,0"/>
+
+                <Border Grid.Row="1" Grid.Column="1"
+                        Margin="12,6,0,0"
+                        StrokeShape="RoundRectangle 999"
+                        Padding="10,6"
+                        HorizontalOptions="Start">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="#1DB954" Offset="0.0"/>
+                            <GradientStop Color="#7B3FE4" Offset="0.5"/>
+                            <GradientStop Color="#1E90FF" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Label Text="WRAPPED • EDICIÓN 2025"
+                           TextColor="Black"
+                           FontAttributes="Bold"
+                           FontSize="12"/>
+                </Border>
+            </Grid>
 
             <!-- ================= TARJETAS ================= -->
             <Grid ColumnDefinitions="*,*"
-              RowDefinitions="Auto,Auto,Auto"
-              ColumnSpacing="15"
-              RowSpacing="15">
+                  RowDefinitions="Auto,Auto,Auto"
+                  ColumnSpacing="15"
+                  RowSpacing="15">
 
                 <!-- Tiempo total -->
                 <Border Grid.Row="0" Grid.Column="0"
-                    Stroke="#333333"
-                    BackgroundColor="#1E1E1E"
-                    StrokeShape="RoundRectangle 12">
-                    <VerticalStackLayout Padding="15">
-                        <Label Text="Tiempo total reproducido (min)"
-                           TextColor="Gray"
-                           FontSize="14"
-                           FontAttributes="Bold"/>
-                        <Label x:Name="lblTotalUsuarios"
-                           Text="-"
-                           TextColor="White"
-                           FontSize="32"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
+                        StrokeShape="RoundRectangle 18"
+                        Padding="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#1DB954" Offset="0.0"/>
+                            <GradientStop Color="#0B6B2F" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,8" Radius="16" Opacity="0.35"/>
+                    </Border.Shadow>
+
+                    <Grid Padding="15" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="10">
+                        <Border Grid.RowSpan="2" Grid.Column="0"
+                                BackgroundColor="#1E1E1E"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="10"
+                                VerticalOptions="Center">
+                            <Label Text="⏱️"
+                                   FontSize="20"
+                                   TextColor="White"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+                        </Border>
+
+                        <Label Grid.Row="0" Grid.Column="1"
+                               Text="Tiempo total reproducido (min)"
+                               TextColor="Black"
+                               FontSize="14"
+                               FontAttributes="Bold"/>
+
+                        <Label Grid.Row="1" Grid.Column="1"
+                               x:Name="lblTotalUsuarios"
+                               Text="-"
+                               TextColor="Black"
+                               FontSize="34"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                    </Grid>
                 </Border>
 
                 <!-- Total canciones -->
                 <Border Grid.Row="0" Grid.Column="1"
-                    Stroke="#333333"
-                    BackgroundColor="#1E1E1E"
-                    StrokeShape="RoundRectangle 12">
-                    <VerticalStackLayout Padding="15">
-                        <Label Text="Total de canciones escuchadas"
-                           TextColor="Gray"
-                           FontSize="14"
-                           FontAttributes="Bold"/>
-                        <Label x:Name="lblTotalCanciones"
-                           Text="-"
-                           TextColor="White"
-                           FontSize="32"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
+                        StrokeShape="RoundRectangle 18"
+                        Padding="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#7B3FE4" Offset="0.0"/>
+                            <GradientStop Color="#3B1C8A" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,8" Radius="16" Opacity="0.35"/>
+                    </Border.Shadow>
+
+                    <Grid Padding="15" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="10">
+                        <Border Grid.RowSpan="2" Grid.Column="0"
+                                BackgroundColor="#1E1E1E"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="10"
+                                VerticalOptions="Center">
+                            <Label Text="🎶"
+                                   FontSize="20"
+                                   TextColor="White"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+                        </Border>
+
+                        <Label Grid.Row="0" Grid.Column="1"
+                               Text="Total de canciones escuchadas"
+                               TextColor="White"
+                               FontSize="14"
+                               FontAttributes="Bold"/>
+
+                        <Label Grid.Row="1" Grid.Column="1"
+                               x:Name="lblTotalCanciones"
+                               Text="-"
+                               TextColor="White"
+                               FontSize="34"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                    </Grid>
                 </Border>
 
                 <!-- Género top -->
                 <Border Grid.Row="1" Grid.Column="0"
-                    Stroke="#333333"
-                    BackgroundColor="#1E1E1E"
-                    StrokeShape="RoundRectangle 12">
-                    <VerticalStackLayout Padding="15">
-                        <Label Text="Género más escuchado"
-                           TextColor="Gray"
-                           FontSize="14"
-                           FontAttributes="Bold"/>
-                        <Label x:Name="lblTopGenero"
-                           Text="-"
-                           TextColor="White"
-                           FontSize="24"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
+                        StrokeShape="RoundRectangle 18"
+                        Padding="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#1E90FF" Offset="0.0"/>
+                            <GradientStop Color="#124B8A" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,8" Radius="16" Opacity="0.35"/>
+                    </Border.Shadow>
+
+                    <Grid Padding="15" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="10">
+                        <Border Grid.RowSpan="2" Grid.Column="0"
+                                BackgroundColor="#1E1E1E"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="10"
+                                VerticalOptions="Center">
+                            <Label Text="🎧"
+                                   FontSize="20"
+                                   TextColor="White"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+                        </Border>
+
+                        <Label Grid.Row="0" Grid.Column="1"
+                               Text="Género más escuchado"
+                               TextColor="White"
+                               FontSize="14"
+                               FontAttributes="Bold"/>
+
+                        <Label Grid.Row="1" Grid.Column="1"
+                               x:Name="lblTopGenero"
+                               Text="-"
+                               TextColor="White"
+                               FontSize="26"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                    </Grid>
                 </Border>
 
                 <!-- Canciones en top -->
                 <Border Grid.Row="1" Grid.Column="1"
-                    Stroke="#333333"
-                    BackgroundColor="#1E1E1E"
-                    StrokeShape="RoundRectangle 12">
-                    <VerticalStackLayout Padding="15">
-                        <Label Text="Canciones en tu Top"
-                           TextColor="Gray"
-                           FontSize="14"
-                           FontAttributes="Bold"/>
-                        <Label x:Name="lblTotalPlaylists"
-                           Text="-"
-                           TextColor="White"
-                           FontSize="32"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
+                        StrokeShape="RoundRectangle 18"
+                        Padding="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#FF4D6D" Offset="0.0"/>
+                            <GradientStop Color="#8A1E33" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,8" Radius="16" Opacity="0.35"/>
+                    </Border.Shadow>
+
+                    <Grid Padding="15" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="10">
+                        <Border Grid.RowSpan="2" Grid.Column="0"
+                                BackgroundColor="#1E1E1E"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="10"
+                                VerticalOptions="Center">
+                            <Label Text="🔥"
+                                   FontSize="20"
+                                   TextColor="White"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+                        </Border>
+
+                        <Label Grid.Row="0" Grid.Column="1"
+                               Text="Canciones en tu Top"
+                               TextColor="White"
+                               FontSize="14"
+                               FontAttributes="Bold"/>
+
+                        <Label Grid.Row="1" Grid.Column="1"
+                               x:Name="lblTotalPlaylists"
+                               Text="-"
+                               TextColor="White"
+                               FontSize="34"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                    </Grid>
                 </Border>
 
                 <!-- Artistas top -->
                 <Border Grid.Row="2" Grid.ColumnSpan="2"
-                    Stroke="#333333"
-                    BackgroundColor="#1E1E1E"
-                    StrokeShape="RoundRectangle 12">
-                    <VerticalStackLayout Padding="15">
-                        <Label Text="Artistas en tu Top"
-                           TextColor="Gray"
-                           FontSize="14"
-                           FontAttributes="Bold"/>
-                        <Label x:Name="lblTotalArtistas"
-                           Text="-"
-                           TextColor="White"
-                           FontSize="32"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
+                        StrokeShape="RoundRectangle 18"
+                        Padding="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#FF8C42" Offset="0.0"/>
+                            <GradientStop Color="#9A4A1D" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,8" Radius="16" Opacity="0.35"/>
+                    </Border.Shadow>
+
+                    <Grid Padding="15" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="10">
+                        <Border Grid.RowSpan="2" Grid.Column="0"
+                                BackgroundColor="#1E1E1E"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="10"
+                                VerticalOptions="Center">
+                            <Label Text="👤"
+                                   FontSize="20"
+                                   TextColor="White"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+                        </Border>
+
+                        <Label Grid.Row="0" Grid.Column="1"
+                               Text="Artistas en tu Top"
+                               TextColor="Black"
+                               FontSize="14"
+                               FontAttributes="Bold"/>
+
+                        <Label Grid.Row="1" Grid.Column="1"
+                               x:Name="lblTotalArtistas"
+                               Text="-"
+                               TextColor="Black"
+                               FontSize="34"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                    </Grid>
                 </Border>
+
             </Grid>
 
+            <!-- ================= SEPARADOR ================= -->
+            <Border StrokeShape="RoundRectangle 999" HeightRequest="6" Margin="0,6,0,0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#1DB954" Offset="0.0"/>
+                        <GradientStop Color="#7B3FE4" Offset="0.5"/>
+                        <GradientStop Color="#FF4D6D" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+
             <!-- ================= TOP CANCIONES ================= -->
-            <Label Text="Top canciones"
-               TextColor="White"
-               FontSize="20"
-               FontAttributes="Bold"/>
+            <Grid ColumnDefinitions="Auto,*" Margin="0,6,0,0">
+                <Label Grid.Column="0" Text="🎵" FontSize="20" TextColor="White" VerticalOptions="Center"/>
+                <Label Grid.Column="1" Text="Top canciones"
+                       TextColor="White"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       Margin="10,0,0,0"/>
+            </Grid>
 
             <CollectionView ItemsSource="{Binding TopSongs}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid ColumnDefinitions="*,Auto" Padding="8">
-                            <Label Text="{Binding Title}"
-                               TextColor="White"/>
-                            <Label Grid.Column="1"
-                               Text="{Binding PlayCount}"
-                               TextColor="Gray"/>
-                        </Grid>
+                        <Border StrokeShape="RoundRectangle 14"
+                                Padding="12"
+                                Margin="0,6">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#1E1E1E" Offset="0.0"/>
+                                    <GradientStop Color="#242424" Offset="1.0"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.Shadow>
+                                <Shadow Brush="#000000" Offset="0,6" Radius="14" Opacity="0.25"/>
+                            </Border.Shadow>
+
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                                <Border BackgroundColor="#1DB954"
+                                        StrokeShape="RoundRectangle 10"
+                                        Padding="8"
+                                        VerticalOptions="Center">
+                                    <Label Text="▶️" FontSize="14" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Border>
+
+                                <Label Grid.Column="1"
+                                       Text="{Binding Title}"
+                                       TextColor="White"
+                                       LineBreakMode="TailTruncation"
+                                       VerticalOptions="Center"/>
+
+                                <Border Grid.Column="2"
+                                        StrokeShape="RoundRectangle 999"
+                                        Padding="10,6"
+                                        VerticalOptions="Center">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#1DB954" Offset="0.0"/>
+                                            <GradientStop Color="#7B3FE4" Offset="1.0"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Label Text="{Binding PlayCount}"
+                                           TextColor="Black"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
             <!-- ================= TOP ARTISTAS ================= -->
-            <Label Text="Top artistas"
-               TextColor="White"
-               FontSize="20"
-               FontAttributes="Bold"/>
+            <Grid ColumnDefinitions="Auto,*" Margin="0,10,0,0">
+                <Label Grid.Column="0" Text="👑" FontSize="20" TextColor="White" VerticalOptions="Center"/>
+                <Label Grid.Column="1" Text="Top artistas"
+                       TextColor="White"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       Margin="10,0,0,0"/>
+            </Grid>
 
             <CollectionView ItemsSource="{Binding TopArtists}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid ColumnDefinitions="*,Auto" Padding="8">
-                            <Label Text="{Binding Name}"
-                               TextColor="White"/>
-                            <Label Grid.Column="1"
-                               Text="{Binding PlayCount}"
-                               TextColor="Gray"/>
-                        </Grid>
+                        <Border StrokeShape="RoundRectangle 14"
+                                Padding="12"
+                                Margin="0,6">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#1E1E1E" Offset="0.0"/>
+                                    <GradientStop Color="#242424" Offset="1.0"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.Shadow>
+                                <Shadow Brush="#000000" Offset="0,6" Radius="14" Opacity="0.25"/>
+                            </Border.Shadow>
+
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                                <Border BackgroundColor="#7B3FE4"
+                                        StrokeShape="RoundRectangle 10"
+                                        Padding="8"
+                                        VerticalOptions="Center">
+                                    <Label Text="⭐" FontSize="14" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Border>
+
+                                <Label Grid.Column="1"
+                                       Text="{Binding Name}"
+                                       TextColor="White"
+                                       LineBreakMode="TailTruncation"
+                                       VerticalOptions="Center"/>
+
+                                <Border Grid.Column="2"
+                                        StrokeShape="RoundRectangle 999"
+                                        Padding="10,6"
+                                        VerticalOptions="Center">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#7B3FE4" Offset="0.0"/>
+                                            <GradientStop Color="#1E90FF" Offset="1.0"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Label Text="{Binding PlayCount}"
+                                           TextColor="White"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
             <!-- ================= ÚLTIMAS REPRODUCCIONES ================= -->
-            <Label Text="Últimas reproducciones"
-               TextColor="White"
-               FontSize="20"
-               FontAttributes="Bold"/>
+            <Grid ColumnDefinitions="Auto,*" Margin="0,10,0,0">
+                <Label Grid.Column="0" Text="🕒" FontSize="20" TextColor="White" VerticalOptions="Center"/>
+                <Label Grid.Column="1" Text="Últimas reproducciones"
+                       TextColor="White"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       Margin="10,0,0,0"/>
+            </Grid>
 
             <CollectionView ItemsSource="{Binding LastPlayed}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <VerticalStackLayout Padding="8">
-                            <Label Text="{Binding Title}"
-                               TextColor="White"/>
-                            <Label Text="{Binding LastPlay}"
-                               TextColor="Gray"
-                               FontSize="12"/>
-                        </VerticalStackLayout>
+                        <Border StrokeShape="RoundRectangle 14"
+                                Padding="12"
+                                Margin="0,6"
+                                BackgroundColor="#1E1E1E">
+                            <Border.Shadow>
+                                <Shadow Brush="#000000" Offset="0,6" Radius="14" Opacity="0.25"/>
+                            </Border.Shadow>
+
+                            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Border Grid.RowSpan="2"
+                                        BackgroundColor="#FF4D6D"
+                                        StrokeShape="RoundRectangle 10"
+                                        Padding="8"
+                                        VerticalOptions="Center">
+                                    <Label Text="🎧" FontSize="14" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Border>
+
+                                <Label Grid.Column="1"
+                                       Text="{Binding Title}"
+                                       TextColor="White"
+                                       LineBreakMode="TailTruncation"/>
+
+                                <Label Grid.Row="1" Grid.Column="1"
+                                       Text="{Binding LastPlay}"
+                                       TextColor="Gray"
+                                       FontSize="12"/>
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
             <!-- ================= VOLVER ================= -->
             <Button Text="Volver al inicio"
-                BackgroundColor="#222222"
-                TextColor="Gray"
-                Margin="0,20,0,0"
-                Clicked="Volver_Clicked"/>
+                    BackgroundColor="#222222"
+                    TextColor="Gray"
+                    Margin="0,20,0,0"
+                    Clicked="Volver_Clicked"/>
 
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>
