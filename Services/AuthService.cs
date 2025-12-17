@@ -59,7 +59,7 @@ public class AuthService
     {
         var url = Config.Config.UserByUsername(username);
 
-        using var client = new HttpClient();
+        using var client = HttpClientFactory.Client;
 
         var response = await client.GetAsync(url);
 

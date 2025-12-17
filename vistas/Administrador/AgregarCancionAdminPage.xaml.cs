@@ -64,11 +64,10 @@ public partial class AgregarCancionAdminPage : ContentPage
                  await DisplayAlert("Aviso", "No se ha detectado carátula. Puedes continuar, pero el campo quedará vacío.", "OK");
              }
 
-             // ✅ Crear cliente gRPC y enviar la canción
-             using var channel = Grpc.Net.Client.GrpcChannel.ForAddress("http://localhost:50051"); // Cambia al host/puerto de tu backend
-             var client = new MetadataService.MetadataServiceClient(channel);
+            // ✅ Crear cliente gRPC y enviar la canción
+            var client = Services.MetadataService.Client;
 
-     var request = new AddSongRequest
+            var request = new AddSongRequest
       {
           FileData = Google.Protobuf.ByteString.CopyFrom(newSong.file_data ?? Array.Empty<byte>()),
           Title = newSong.title,
