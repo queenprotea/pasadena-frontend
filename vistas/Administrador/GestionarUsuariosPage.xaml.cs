@@ -77,7 +77,7 @@ public partial class GestionarUsuariosPage : ContentPage
                 return;
             }
 
-            using var client = new HttpClient();
+            using var client = HttpClientFactory.Client;
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 
