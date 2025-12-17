@@ -47,7 +47,7 @@ public partial class GestionarCancionesPage : ContentPage
             await client.DeleteSongAsync(new SongRequest {SongId = modelo.Id});
             await servicio.RemoverReferenciasDeCancionAsync(modelo.Id);
 
-            await DisplayAlert("Éxito", "Canción eliminada (simulación)", "Aceptar");
+            await DisplayAlert("Éxito", "Canción eliminada", "Aceptar");
         }
     }
 
