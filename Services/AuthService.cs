@@ -59,7 +59,7 @@ public class AuthService
     {
         var url = Config.Config.UserByUsername(username);
 
-        using var client = HttpClientFactory.Client;
+        var client = HttpClientFactory.Client;
 
         var response = await client.GetAsync(url);
 
@@ -84,7 +84,7 @@ public class AuthService
             if (string.IsNullOrEmpty(token))
                 return null;
 
-            using var request = new HttpRequestMessage(HttpMethod.Get, urlProfile);
+            var request = new HttpRequestMessage(HttpMethod.Get, urlProfile);
             request.Headers.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 

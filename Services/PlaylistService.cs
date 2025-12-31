@@ -300,21 +300,38 @@ namespace pasadena_vistas.Services
         // Obtener playlists activas y publicas por owner_id
         public async Task<List<PlaylistRespuesta>> ObtenerPlaylistsActivasPublicasPorOwnerAsync(int ownerId)
         {
-
-            var url = Config.Config.PlaylistActivePublicByOwner(ownerId);
-
-            var respuesta = await _clienteHttp.GetAsync(url);
-
-            if (!respuesta.IsSuccessStatusCode)
+            try
             {
-                var error = await respuesta.Content.ReadAsStringAsync();
+                var url = Config.Config.PlaylistActivePublicByOwner(ownerId);
 
-                throw new Exception($"Error al obtener playlists: {respuesta.StatusCode} - {error}");
+                var respuesta = await _clienteHttp.GetAsync(url);
+
+                if (!respuesta.IsSuccessStatusCode)
+                {
+                    var error = await respuesta.Content.ReadAsStringAsync();
+
+                    // 🔴 Log para ti (debug)
+                    Console.WriteLine($"Error al obtener playlists: {respuesta.StatusCode} - {error}");
+
+                    // 🟢 Para la app: lista vacía
+                    return new List<PlaylistRespuesta>();
+                }
+
+                var playlists = await respuesta.Content.ReadFromJsonAsync<List<PlaylistRespuesta>>();
+                return playlists ?? new List<PlaylistRespuesta>();
             }
-
-            var playlists = await respuesta.Content.ReadFromJsonAsync<List<PlaylistRespuesta>>();
-            return playlists ?? new List<PlaylistRespuesta>();
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error de red: {ex.Message}");
+                return new List<PlaylistRespuesta>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado: {ex.Message}");
+                return new List<PlaylistRespuesta>();
+            }
         }
+
 
         // Obtener playlists activas por owner_id
         public async Task<List<PlaylistRespuesta>> ObtenerPlaylistsActivasPorOwnerAsync(int ownerId)
