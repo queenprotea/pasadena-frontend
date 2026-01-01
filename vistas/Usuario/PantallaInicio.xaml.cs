@@ -151,6 +151,8 @@ public partial class PantallaInicio : ContentPage
             await CargarUltimosAlbumesAsync();
             await CargarUltimasCancionesAsync();
             await CargarTopCancionesInicioAsync();
+            await CargarFotoUsuario();
+            await CargarBotonCrearPlaylistr();
 
             bool tokenValido = await _authService.ValidarTokenAsync();
 
