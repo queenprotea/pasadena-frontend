@@ -211,12 +211,12 @@
                 <!-- Sección de recomendaciones -->
                 <Label Text="Esto puede gustarte"
                        Style="{StaticResource TitleLabel}"/>
-                <Label Text="ALbums"
-       TextColor="White"
-       FontAttributes="Bold"
-       FontSize="14"
-       LineBreakMode="TailTruncation"
-       Margin="0,8,0,0"/>
+                <Label Text="Albums"
+                       TextColor="White"
+                       FontAttributes="Bold"
+                       FontSize="14"
+                       LineBreakMode="TailTruncation"
+                       Margin="0,8,0,0"/>
 
                 <CollectionView x:Name="AlbumsCollection"
                                 HeightRequest="220"
@@ -258,13 +258,13 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
                 <!-- Canciones recomendadas -->
-                <!-- Canciones recomendadas -->
+
                 <Label Text="Canciones"
-       TextColor="White"
-       FontAttributes="Bold"
-       FontSize="14"
-       LineBreakMode="TailTruncation"
-       Margin="0,8,0,0"/>
+           TextColor="White"
+           FontAttributes="Bold"
+           FontSize="14"
+           LineBreakMode="TailTruncation"
+           Margin="0,8,0,0"/>   
                 <CollectionView x:Name="SongsCollection"
                 HeightRequest="120"
                 ItemsSource="{Binding SongsRecomendadas}"

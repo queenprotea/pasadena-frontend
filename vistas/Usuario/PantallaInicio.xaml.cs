@@ -409,7 +409,7 @@ public partial class PantallaInicio : ContentPage
         catch (Grpc.Core.RpcException ex)
         {
            
-            // opcional: DisplayAlert("Error", "No se pudo conectar al servidor.", "OK");
+            //  DisplayAlert("Error", "No se pudo conectar al servidor.", "OK");
         }
 
         // ========== BUSCAR ARTISTAS ==========
@@ -750,7 +750,7 @@ public partial class PantallaInicio : ContentPage
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    Artist = "", // si luego quieres mostrar artista, lo agregamos
+                    Artist = "", 
                     CoverUrl = a.Cover != null && a.Cover.Length > 0
                         ? ImageSource.FromStream(() => new MemoryStream(a.Cover.ToByteArray()))
                         : ImageSource.FromFile("default_album.png")
@@ -834,14 +834,32 @@ public partial class PantallaInicio : ContentPage
             if (response.TopSongs == null || response.TopSongs.Count == 0)
                 return;
             // 4) TOP 5 canciones
-            foreach (var s in response.TopSongs.Take(5))
+            foreach (var top in response.TopSongs.Take(5))
             {
-                TopSongsInicio.Add(new pasadena_vistas.Models.Song
+                try
                 {
-                    Id = s.SongId,
-                    title = s.Title,
-                   
-                });
+                    // ✅ Obtener metadata completa por ID
+                    var songResponse = await client.GetSongByIdAsync(
+                        new GetSongByIdRequest
+                        {
+                            SongId = top.SongId
+                        });
+
+                    var song = songResponse.Song;
+                    if (song == null)
+                        continue;
+
+                    TopSongsInicio.Add(new pasadena_vistas.Models.Song
+                    {
+                        Id = song.SongId,
+                        title = song.Title,
+                        artist = song.Artist
+                    });
+                }
+                catch
+                {
+                    // Ignorar error individual para no romper todo el TOP
+                }
             }
             TopSongsSection.IsVisible = true;
         }

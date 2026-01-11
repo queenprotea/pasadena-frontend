@@ -11,10 +11,13 @@ service MetadataService {
   rpc SearchArtists (SearchRequest) returns (SearchArtistsResponse);
   rpc SearchAlbums (SearchRequest) returns (SearchAlbumsResponse);
   rpc SearchGenres (SearchRequest) returns (SearchGenresResponse);
+
   rpc UpdateSong (UpdateSongRequest) returns (SongResponse);
   rpc GetAlbumById(GetAlbumByIdRequest) returns (GetAlbumByIdResponse);
+
   rpc RegisterUserPlay(UserPlayRequest) returns (UserPlayResponse);
   rpc GetUserStatistics(UserStatisticsRequest) returns (UserStatisticsResponse);
+
   rpc GetSongById(GetSongByIdRequest) returns (GetSongByIdResponse);
   rpc GetLatestAlbums (LatestAlbumsRequest) returns (LatestAlbumsResponse);
   rpc GetLatestSongs  (LatestSongsRequest)  returns (LatestSongsResponse);
